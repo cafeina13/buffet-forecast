@@ -142,6 +142,11 @@
     return p;
   }
 
+  // True when the published data comes from the semi-synthetic seasons (real bookings, weather, matches).
+  function grounded() {
+    return demo.metrics.season_report.mode === "grounded";
+  }
+
   function clamp(v, [lo, hi]) {
     return Math.min(hi, Math.max(lo, v));
   }
@@ -372,7 +377,9 @@
     document.getElementById("child-val").textContent = pct0(sc.child);
     document.getElementById("child-note").textContent =
       (outside ? `(eğitim aralığı %${Math.ceil(lo * 100)}–${Math.floor(hi * 100)} dışında; model bu aralığın dışında değişmez) ` : "") +
-      "Bu sentetik veride çocuk payı mevsimle birlikte düzgün bir eğri izlediği için model etkisini güvenilir öğrenemedi (yemeklerin bir kısmında yönü ters); gerçek rezervasyon verisiyle kurulan sonraki sürümde düzeltilecek.";
+      (grounded()
+        ? "Çocuk payı gerçek rezervasyonlardan geliyor ve günden güne değişiyor; model etkisini doğru yönde öğrendi."
+        : "Bu sentetik veride çocuk payı mevsimle birlikte düzgün bir eğri izlediği için model etkisini güvenilir öğrenemedi (yemeklerin bir kısmında yönü ters).");
     // Effective temperature change after keeping it within the training range.
     const tx = service.guest_x[gIdx.temperature];
     const tEff = clamp(tx + state.temp, demo.support.temperature) - tx;
@@ -556,7 +563,7 @@
     const positive = avoided > 0;
     const [from, to] = rep.period.split("..").map(parseDate);
     box.appendChild(el("p", { class: "report-head" }, [
-      el("b", { text: `Test sezonunun açık kısmı (${from.getDate()} ${MONTH_NAMES[from.getMonth()]}–${to.getDate()} ${MONTH_NAMES[to.getMonth()]} ${to.getFullYear()}, sentetik)` }),
+      el("b", { text: `Test sezonunun açık kısmı (${from.getDate()} ${MONTH_NAMES[from.getMonth()]}–${to.getDate()} ${MONTH_NAMES[to.getMonth()]} ${to.getFullYear()}, ${grounded() ? "yarı sentetik" : "sentetik"})` }),
       ` · risk ayarı ${pct0(state.risk)} · simüle şefin sabit planıyla karşılaştırma`]));
     const tiles = el("div", { class: "report-tiles" });
     const tile = (label, value, note) => el("div", { class: "report-tile" }, [
@@ -604,7 +611,7 @@
 
     const unrounded = demo.metrics.method_facts.plan_short_unrounded[String(state.risk)];
     box.appendChild(el("p", { class: "note", text:
-      `Risk ayarı, talebin önerilen toplam miktarı aşması için hedeflenen olasılıktır. Gerçekleşen oran aya göre ayarın altında ya da üstünde olabilir; iki etki ters yönde çalışır: aralıklar henüz kalibre olmadığı için yuvarlanmamış miktarı talep daha sık aşar (sezonda ${pct(unrounded)}), miktar yarım birime yukarı yuvarlandığı için daha seyrek aşar (sezonda ${pct(lvl.plan_short_rate)}). Rapor şu varsayımla hesaplandı: önerilen miktarın tamamı servis boyunca hazırlanır; talep bunu aşarsa mutfak, planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar ek pişirme yapar (gerektiği anda, tam birimler halinde). Simüle şefin planı sabittir (geçmiş servisler × güvenlik payı) ve aynı ek pişirme kuralına tabidir. Ekrandaki parti zamanlaması ve “yedek (gerekirse)” kısmı bu hesaba katılmadı; yedeğin yalnızca gerektiğinde pişirilmesi atığı burada gösterilenden düşük tutabilir, zamanında hazırlanamazsa tükenmeyi artırabilir. Sentetik test sezonunda, modelin görmediği günlerde hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
+      `Risk ayarı, talebin önerilen toplam miktarı aşması için hedeflenen olasılıktır. Gerçekleşen oran aya göre ayarın altında ya da üstünde olabilir; iki etki ters yönde çalışır: aralıklar henüz kalibre olmadığı için yuvarlanmamış miktarı talep daha sık aşar (sezonda ${pct(unrounded)}), miktar yarım birime yukarı yuvarlandığı için daha seyrek aşar (sezonda ${pct(lvl.plan_short_rate)}). Rapor şu varsayımla hesaplandı: önerilen miktarın tamamı servis boyunca hazırlanır; talep bunu aşarsa mutfak, planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar ek pişirme yapar (gerektiği anda, tam birimler halinde). Simüle şefin planı sabittir (geçmiş servisler × güvenlik payı) ve aynı ek pişirme kuralına tabidir. Ekrandaki parti zamanlaması ve “yedek (gerekirse)” kısmı bu hesaba katılmadı; yedeğin yalnızca gerektiğinde pişirilmesi atığı burada gösterilenden düşük tutabilir, zamanında hazırlanamazsa tükenmeyi artırabilir. ${grounded() ? "Yarı sentetik" : "Sentetik"} test sezonunda, modelin görmediği günlerde hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
   }
 
   function renderTabs() {

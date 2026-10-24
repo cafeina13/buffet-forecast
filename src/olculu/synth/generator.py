@@ -63,7 +63,9 @@ def _menu_for(dishes, meal, d: date, rng):
         if freq == "daily":
             on = True
         elif freq == "new":
-            on = d >= date.fromisoformat(dish["new_from"]) and rng.random() < dish["new_prob"]
+            # Month and day only, so a dish "new from mid-July" is new in any season's year.
+            start = date.fromisoformat(dish["new_from"])
+            on = (d.month, d.day) >= (start.month, start.day) and rng.random() < dish["new_prob"]
         elif "weekly" in freq:
             on = d.weekday() in freq["weekly"]
         else:

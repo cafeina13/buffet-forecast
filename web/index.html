@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Traycast</title>
-<meta name="description" content="Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ. Prototip; sentetik veri.">
+<meta name="description" content="Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ. Prototip; yarı sentetik veri.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
@@ -13,7 +13,7 @@
 </head>
 <body data-page-title="Büfe üretim tahmini">
 
-<div class="synthetic-banner" role="note">SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
+<div class="synthetic-banner" role="note">YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
 
 <header class="site-header">
   <div class="wrap">
@@ -98,20 +98,20 @@
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
           <h3>Misafir modeli</h3>
-          <p class="muted">Ön büro kayıtlarından (tur, a la carte, geç gelen ve erken ayrılan misafir sayıları) öğünde otelde kaç kişi olduğu bir kuralla hesaplanır; model bunların ne kadarının büfeye geleceğini öğrenir. Sentetik veride model maç ve tema gecesi etkilerini öğrendi (kongreyi öğrenemedi); kazancın çoğu kuraldan geliyor, ama sentetik veri de aynı kuralla üretildiği için bu kazanç döngüsel, gerçek veride sınanacak.</p>
+          <p class="muted">Ön büro kayıtlarından (tur, a la carte, geç gelen ve erken ayrılan misafir sayıları) öğünde otelde kaç kişi olduğu bir kuralla hesaplanır; model bunların ne kadarının büfeye geleceğini öğrenir. Otelde kalan, gelen ve ayrılan misafir sayıları gerçek bir resortun rezervasyonlarından [5]; model maç, tema gecesi ve kongre etkilerini zayıf da olsa öğrendi. Kazancın çoğu kuraldan geliyor, ama katılım da aynı kuralla üretildiği için bu kazanç döngüsel, gerçek veride sınanacak.</p>
         </div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card">
         <p class="step">EĞİTİLEN MODEL 2</p>
         <h3>Tüketim modeli</h3>
-        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); sentetik testte bu düzeltmenin belirgin bir etkisi görülmedi.</p>
+        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); yarı sentetik testte sık tükenen yemeklerde küçük bir iyileşme görüldü (%85,1 → %86,8, 363 yemek servisi; ipucu, kanıt değil).</p>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,4 kg (tükenen servisler düzeltilerek); sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; sentetik veri de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin 29 Haziran 2024’teki Almanya–Danimarka maçı akşamı mercimek çorbası için: “568 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,6 kg (tükenen servisler düzeltilerek); sıcak hava (36 °C) talebi azaltıyor (ılık bir güne göre −%18).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; simüle edilen yemek talebi de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
       </div>
     </div>
     <div class="callout">
@@ -134,8 +134,8 @@
     </div>
     <div class="prototype-note" style="background:var(--green-2);border-color:var(--clay-light);margin-top:32px">
       <p class="eyebrow">PROTOTİP HAKKINDA</p>
-      <h3>Bu prototip sentetik veriyle çalışıyor</h3>
-      <p>Henüz gerçek otel verimiz yok. Prototip, varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Varsayımların çoğu ekip varsayımı; öğün, çocuk ve ilk öğün etkilerinin yönü tabak atığı bulgularından [1], sıcaklığın önemli bir etken olduğu bir yemekhane çalışmasından [3] (yönü değil, önemi) esinlendi; yalnızca CO₂ katsayısı doğrudan bir kaynaktan [1] alındı. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
+      <h3>Bu prototip yarı sentetik veriyle çalışıyor</h3>
+      <p>Henüz bir pilot otelden verimiz yok. Prototipte gerçek olan girdiler: otelde kalan, gelen ve ayrılan misafir sayıları ile çocuk payı, Portekiz’deki bir resort otelin kamuya açık, anonim rezervasyon kayıtlarından [5]; Antalya’nın gerçek günlük sıcaklıkları [6]; Türkiye, Almanya ve İngiltere’nin Euro 2016 ve Euro 2024’teki gerçek akşam maçları [7]. Yemek talebi, tur ve a la carte rezervasyonları ve milliyet karışımı hâlâ varsayımlarla simüle ediliyor. Bu varsayımların çoğu ekip varsayımı; öğün, çocuk ve ilk öğün etkilerinin yönü tabak atığı bulgularından [1], sıcaklığın önemli bir etken olduğu bir yemekhane çalışmasından [3] (yönü değil, önemi) esinlendi; CO₂ katsayısı doğrudan bir kaynaktan [1]. Bu bir doğruluk kanıtı değildir: simüle edilen kısımda model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek otel verisinden ve ayrılmış haftalardan hesaplanacak.</p>
     </div>
   </div>
 </section>
@@ -175,10 +175,13 @@
       <h2>Kaynakça</h2>
     </div>
     <ol>
-      <li><a href="https://doi.org/10.1016/j.annale.2021.100010" rel="noopener">Juvan, E., Grün, B., Zabukovec Baruca, P., Dolnicar, S. (2021). Drivers of plate waste at buffets: A comprehensive conceptual model based on observational data and staff insights. Annals of Tourism Research Empirical Insights, 2(1), 100010.</a> <span>(şefin ekranındaki aylık rapordaki CO₂ katsayısı: 1 kg gıda atığı ≈ 1,9 kg CO₂ eşdeğeri, BIO Intelligence 2010 aktarımıyla)</span></li>
+      <li><a href="https://doi.org/10.1016/j.annale.2021.100010" rel="noopener">Juvan, E., Grün, B., Zabukovec Baruca, P., Dolnicar, S. (2021). Drivers of plate waste at buffets: A comprehensive conceptual model based on observational data and staff insights. Annals of Tourism Research Empirical Insights, 2(1), 100010.</a> <span>(şefin ekranındaki sezon raporundaki CO₂ katsayısı: 1 kg gıda atığı ≈ 1,9 kg CO₂ eşdeğeri, BIO Intelligence 2010 aktarımıyla)</span></li>
       <li><a href="https://tezara.org/theses/440587" rel="noopener">Erinci, F. (2016). Her şey dahil sisteminde yiyecek içecek miktarlarının yapay sinir ağları ile tahmini, Alanya’da bir uygulama. Akdeniz Üniversitesi, doktora tezi.</a></li>
       <li><a href="https://acikerisim.gtu.edu.tr/items/d86c9a0d-a072-4d2b-a5bc-b77e4fa4b4d6" rel="noopener">Aydın, B. (2025). Makine öğrenmesi teknikleri ile yemekhanelerde yemek talep tahmini. Gebze Teknik Üniversitesi, yüksek lisans tezi.</a></li>
       <li><a href="https://avesis.hacettepe.edu.tr/yayin/8283dca0-f836-43f7-88a0-25f7ea7bcdd1/predicting-food-demand-in-food-courts-by-decision-tree-approaches" rel="noopener">Bozkır, A. S., Sezer, E. A. (2010). Predicting food demand in food courts by decision tree approaches. Procedia Computer Science, 3 (WCIT 2010). doi:10.1016/j.procs.2010.12.125</a></li>
+      <li><a href="https://doi.org/10.1016/j.dib.2018.11.126" rel="noopener">Antonio, N., de Almeida, A., Nunes, L. (2019). Hotel booking demand datasets. Data in Brief, 22, 41–49.</a> <span>(Portekiz’de bir resort otelin anonim rezervasyonları, 2015–2017; CC BY 4.0)</span></li>
+      <li><a href="https://open-meteo.com/en/docs/historical-weather-api" rel="noopener">Open-Meteo, Historical Weather API (ERA5 tabanlı).</a> <span>(Antalya, günlük en yüksek sıcaklık, 2016 ve 2024)</span></li>
+      <li><a href="https://github.com/openfootball/euro" rel="noopener">openfootball: Euro 2016 ve Euro 2024 fikstürleri.</a> <span>(CC0 1.0)</span></li>
     </ol>
   </div>
 </section>
@@ -187,8 +190,8 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><b>SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
-    <p>Bu sitedeki demo ve grafikler sentetik veriyle üretilmiştir; gerçek bir otelin verisi değildir.</p>
+    <p><b>YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
+    <p>Bu sitedeki demo ve grafikler yarı sentetik veriyle üretilmiştir: misafir akışı, hava ve maçlar gerçek kaynaklardan, yemek talebi simülasyondan. Demo otel kurgusaldır.</p>
     <p><span data-product-name>Traycast</span> · 2026</p>
   </div>
 </footer>
