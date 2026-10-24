@@ -66,7 +66,7 @@ Audits 1 / 2 / 3: 43 / 35 / 28 findings, 4 / 2 / 1 errors.
 - 2.2 (student's choice a): the demo report is now a season report over the open test season with a
   per-month table at the chosen setting. It shows that at 10% the model saves 1.9 t but costs ≈ 60 bin TL more
   (extra waste on dearer dishes); the TL tile is signed.
-- 2.5 (student's decision): the child slider stays. Diagnosis (`/tmp` probe, numbers in README): the generator's
+- 2.5 (student's decision): the child slider stays. Diagnosis (`../scripts/audit3/child_probe.py <record>`): the generator's
   child share has almost no day-to-day variation (residual sd 0.0005, corr with temperature 0.74), so the effect is
   unidentifiable; with real bookings (semi-synthetic branch, residual sd 0.011) the model learns +6.4% vs +5.2% true,
   wrong sign on 1% of dishes. The page now says so next to the slider.
