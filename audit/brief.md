@@ -22,7 +22,7 @@ Check every claim, number by number and sentence by sentence:
 - Recompute numbers yourself from the code, from web/data/*.json, from experiments/*/metrics.json and from data/ (the generated synthetic tables), with your own code, not from text in the repository. Where the page computes something in JavaScript, you may run that code (for example with Node, loading web/js/model.js and the JSON files).
 - Check claims about cited sources against the source texts in audit/sources/ (see its README.txt for what is and is not available), and claims about the code against the code.
 - Check the Turkish text for meaning (not style): does each sentence say what the data and code support?
-- The prototype runs only on synthetic data. Check that nothing on the page presents a synthetic result as a measured one, and that the page does not name any real hotel, brand or person except as a cited source.
+- The prototype runs only on synthetic or semi-synthetic data (some public real inputs; dish demand is always simulated). Check that nothing on the page presents a synthetic result as a measured one, and that the page does not name any real hotel, brand or person except as a cited source.
 - Do not read audit/README.md, audit/findings/, audit/scripts/ (except your own folder), or other folders in audit/exports/. The two .md files in the repository root (a brief and a project draft) are planning notes, not evidence, and not under audit. Judge the work on your own.
 
 ## Rules
