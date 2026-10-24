@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ölçülü · Şefin ekranı</title>
+<meta name="description" content="Şefin ekranı: sentetik veriyle eğitilmiş model tarayıcınızda çalışır.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/demo.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231e3a33'/%3E%3Cpath d='M7 20h18M9 20a7 7 0 0 1 14 0' stroke='%23eba27c' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body data-page-title="Şefin ekranı" class="demo-page">
+
+<div class="synthetic-banner" role="note">SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" data-product-name>Ölçülü</a>
+    <nav class="nav" aria-label="Sayfalar">
+      <a href="./">Proje</a>
+      <a href="demo.html" aria-current="page">Şefin ekranı</a>
+      <a href="nasil.html">Nasıl çalışır</a>
+    </nav>
+  </div>
+</header>
+
+<main class="demo">
+  <div class="wrap">
+    <div class="demo-intro">
+      <div>
+        <p class="eyebrow" id="hotel-name">KURGUSAL DEMO RESORT</p>
+        <h1 class="demo-title">Şefin ekranı</h1>
+      </div>
+      <p class="muted small">Model şu anda tarayıcınızda çalışıyor. Kurgusal bir otelin sentetik verisiyle eğitildi; rakamlar ölçüm sonucu değildir.</p>
+    </div>
+
+    <div id="loading" class="loading">Model yükleniyor…</div>
+    <div id="load-error" class="loading" hidden>Model yüklenemedi. Sayfayı yenileyin.</div>
+
+    <div id="app" hidden>
+      <section class="controls" aria-label="Seçimler">
+        <div class="control">
+          <p class="control-label">Gün</p>
+          <div class="chips" id="day-chips" role="radiogroup" aria-label="Gün"></div>
+        </div>
+        <div class="control-row">
+          <div class="control">
+            <p class="control-label">Öğün</p>
+            <div class="segmented" id="meal-seg" role="radiogroup" aria-label="Öğün"></div>
+          </div>
+          <div class="control">
+            <p class="ozg-tag">ÖZGÜNLÜK 3 · Ne kadar pişirelim?</p>
+            <p class="control-label">Her yemek için kabul edilen bitme riski</p>
+            <div class="segmented" id="risk-seg" role="radiogroup" aria-label="Bitme riski"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-panel" aria-live="polite">
+        <div class="guest-main">
+          <p class="ozg-tag on-dark">ÖZGÜNLÜK 1 · Kaç kişi, ne zaman gelecek?</p>
+          <p class="control-label">Beklenen misafir</p>
+          <p class="guest-number" id="guest-number">–</p>
+          <p class="muted" id="guest-range"></p>
+          <p class="event-tag" id="event-tag" hidden></p>
+          <ul class="guest-breakdown" id="guest-breakdown" aria-label="Misafir hesabı"></ul>
+          <p class="guest-drivers" id="guest-drivers"></p>
+        </div>
+        <div class="guest-flow">
+          <p class="control-label">Saat saat geliş (tahmin)</p>
+          <div id="flow-chart" class="flow-chart"></div>
+        </div>
+      </section>
+
+      <details class="whatif" id="whatif">
+        <summary>Senaryoyu değiştirin: model anında yeniden hesaplar</summary>
+        <div class="whatif-body">
+          <p class="whatif-group">Otel</p>
+          <div class="whatif-row">
+            <label class="slider">
+              <span>Doluluk <b id="occ-val"></b></span>
+              <input type="range" id="occ" min="-25" max="25" step="5" value="0">
+            </label>
+            <label class="slider">
+              <span>Hava sıcaklığı <b id="temp-val"></b></span>
+              <input type="range" id="temp" min="-8" max="8" step="1" value="0">
+            </label>
+            <label class="slider">
+              <span>Çocuklu misafir payı <b id="child-val"></b></span>
+              <input type="range" id="child" min="5" max="40" step="1" value="15">
+            </label>
+          </div>
+          <p class="whatif-group">Ön büro kayıtları (bu öğün)</p>
+          <div class="whatif-row" id="presence-controls"></div>
+          <div class="whatif-row" id="event-controls">
+            <label class="toggle" id="match-wrap">
+              <input type="checkbox" id="match">
+              <span>Bu akşam maç var</span>
+            </label>
+            <label class="toggle" id="themed-wrap">
+              <input type="checkbox" id="themed">
+              <span>Bu akşam tema gecesi</span>
+            </label>
+          </div>
+          <div class="whatif-foot">
+            <button type="button" class="btn-small" id="reset">Sıfırla</button>
+            <p class="note">Milliyet karışımı ve kongre grupları da modelde var, ama sentetik veride etkileri güvenilir öğrenilemediği için burada gösterilmiyor.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab" id="tab-plan" aria-selected="true" aria-controls="panel-plan">Üretim planı</button>
+        <button role="tab" class="tab" id="tab-live" aria-selected="false" aria-controls="panel-live">Servis sırasında</button>
+        <button role="tab" class="tab" id="tab-report" aria-selected="false" aria-controls="panel-report">Aylık rapor</button>
+      </div>
+
+      <section id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
+        <div class="ozg-strip">
+          <p class="ozg-tag">ÖZGÜNLÜK 2 · Gerçekte ne kadar yenirdi?</p>
+          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez; model o servisi “en az bu kadar yenirdi” diye öğrenir ve biten yemeği bir dahaki sefere daha az önermez.</p>
+        </div>
+        <div class="dish-grid" id="dish-grid"></div>
+      </section>
+
+      <section id="panel-live" role="tabpanel" aria-labelledby="tab-live" hidden>
+        <div class="ozg-strip">
+          <p class="ozg-tag">ÖZGÜNLÜK 1 · Servis içinde ne zaman?</p>
+          <p class="small">Tazeleme saatleri, saat saat beklenen misafir akışından gelir. Maç akşamı yemek erkene kayar, maçtan sonra geç bir dalga gelir. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
+        </div>
+        <div class="live-head">
+          <label class="slider wide">
+            <span>Saat <b id="clock-val"></b></span>
+            <input type="range" id="clock" min="0" max="10" step="1" value="0">
+          </label>
+        </div>
+        <div class="live-cols">
+          <div>
+            <h3 class="live-title">Şimdi tazele</h3>
+            <ul class="live-list" id="refill-now"></ul>
+          </div>
+          <div>
+            <h3 class="live-title">Sıradaki tazelemeler</h3>
+            <ul class="live-list muted-list" id="refill-next"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-report" role="tabpanel" aria-labelledby="tab-report" hidden>
+        <div id="report"></div>
+      </section>
+
+      <p class="note demo-foot">Onay, düzeltme ve “bitti” işaretleri yalnızca bu tarayıcıda saklanır. Model kaydı: <span id="record"></span></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><b>SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
+    <p>Demo otel kurgusaldır; gerçek bir otelin, markanın veya kişinin verisi kullanılmamıştır.</p>
+  </div>
+</footer>
+
+<script src="js/site-config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/model.js"></script>
+<script src="js/demo.js"></script>
+</body>
+</html>
