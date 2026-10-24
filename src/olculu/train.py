@@ -25,6 +25,8 @@ from olculu.newsvendor import round_up_half_unit, simulate
 from olculu.synth.generator import arrival_profile, slot_times
 
 RISKS = [0.5, 0.4, 0.3, 0.2, 0.15, 0.1, 0.05]
+# Every setting the demo's risk slider can reach (5% to 30% in 1-point steps), for the season report.
+SLIDER_RISKS = [round(r / 100, 2) for r in range(5, 31)]
 
 
 def load_run(name):
@@ -163,7 +165,7 @@ def main():
             "services_with_stockout": services_with_stockout(chef["stockout"][mask], mask),
             "plan_short_rate": float(np.mean(y[mask] > plan_chef[mask])),
             "production_kg": float(chef["production"][mask].sum())}, "levels": []}
-        for r in [0.2, 0.1, 0.05]:
+        for r in SLIDER_RISKS:
             rec = round_up_half_unit(interpolate_quantile(q_kg[mask], DISH_QUANTILES, 1 - r), units[mask])
             sim = simulate(rec, y[mask], units[mask], refill)
             avoided = out["chef"]["waste_kg"] - float(sim["waste"].sum())
@@ -202,7 +204,7 @@ def main():
         "conference_lunches_in_training": int(((s_tr["meal"] == "lunch") & (s_tr["event"] == "conference")).sum()),
         # Share of dish-servings where demand exceeds the unrounded (1 - risk) quantile, before rounding up.
         "plan_short_unrounded": {str(r): float(np.mean(y > interpolate_quantile(q_kg, DISH_QUANTILES, 1 - r)))
-                                 for r in [0.2, 0.1, 0.05]},
+                                 for r in SLIDER_RISKS},
     }
 
     metrics = {

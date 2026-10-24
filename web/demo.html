@@ -54,8 +54,15 @@
           <div class="control">
             <p class="ozg-tag">ÖZGÜNLÜK 3 · Ne kadar pişirelim?</p>
             <p class="control-label">Hedeflenen risk: talebin önerilen toplam miktarı aşması (her yemek için)</p>
-            <div class="segmented" id="risk-seg" role="radiogroup" aria-label="Hedeflenen risk"></div>
-            <p class="note risk-note">Mutfak gerekirse biraz ek pişirebildiği için yemeğin gerçekten bitme oranı bundan düşüktür; ayrıntı ve varsayımlar “Sezon raporu”nda.</p>
+            <div class="risk-slider">
+              <p class="risk-head"><b id="risk-val">%10</b> <span id="risk-effect"></span></p>
+              <div class="risk-track">
+                <input type="range" id="risk" min="5" max="30" step="1" value="10" aria-label="Hedeflenen risk" aria-describedby="risk-effect">
+                <div class="chef-marker" id="chef-marker" aria-hidden="true"><span>Klasik plan</span></div>
+              </div>
+              <div class="risk-scale" aria-hidden="true"><span>%5 · daha güvenli, daha çok atık</span><span>%30 · daha az atık</span></div>
+            </div>
+            <p class="note risk-note">Mutfak gerekirse biraz ek pişirebildiği için yemeğin gerçekten bitme oranı ayardan düşüktür. “Klasik plan” işareti, simüle şefin planının bu ölçüye göre denk düştüğü yerdir. Ayrıntı ve varsayımlar “Sezon raporu”nda.</p>
           </div>
         </div>
       </section>

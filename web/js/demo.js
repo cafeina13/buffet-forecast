@@ -4,7 +4,6 @@
   "use strict";
 
   const M = window.OlculuModel;
-  const RISKS = [0.2, 0.1, 0.05];
   const MEALS = [
     { id: "breakfast", label: "Kahvaltı" },
     { id: "lunch", label: "Öğle" },
@@ -320,17 +319,53 @@
       onclick: () => { state.meal = m.id; state.clock = 0; resetService(); render(); },
     })));
 
-    const risks = document.getElementById("risk-seg");
-    risks.innerHTML = "";
-    RISKS.forEach((r) => risks.appendChild(el("button", {
-      type: "button", role: "radio", class: "seg", "aria-checked": String(state.risk === r), text: pct(r),
-      onclick: () => { state.risk = r; render(); },
-    })));
+    renderRiskControl();
 
     document.getElementById("match-wrap").hidden = state.meal !== "dinner";
     document.getElementById("themed-wrap").hidden = state.meal !== "dinner";
     document.getElementById("occ-val").textContent = (state.occ > 0 ? "+" : "") + state.occ + " puan";
     document.getElementById("temp-val").textContent = (state.temp > 0 ? "+" : "") + state.temp + " °C";
+  }
+
+  function reportLevel(risk) {
+    return demo.metrics.season_report.levels.find((l) => Math.abs(l.risk - risk) < 1e-6);
+  }
+
+  // The setting at which the model's demand-above-plan rate equals the simulated chef's, by interpolation
+  // over the precomputed season levels. That is where the chef's classic plan sits on the slider.
+  function chefEquivalentRisk() {
+    const rep = demo.metrics.season_report;
+    const target = rep.chef.plan_short_rate;
+    const levels = [...rep.levels].sort((a, b) => a.risk - b.risk);
+    for (let i = 1; i < levels.length; i++) {
+      const a = levels[i - 1], b = levels[i];
+      if ((a.plan_short_rate - target) * (b.plan_short_rate - target) <= 0) {
+        const t = (target - a.plan_short_rate) / (b.plan_short_rate - a.plan_short_rate || 1);
+        return a.risk + t * (b.risk - a.risk);
+      }
+    }
+    return null;
+  }
+
+  function renderRiskControl() {
+    const slider = document.getElementById("risk");
+    slider.value = String(Math.round(state.risk * 100));
+    document.getElementById("risk-val").textContent = pct0(state.risk);
+    const rep = demo.metrics.season_report;
+    const lvl = reportLevel(state.risk);
+    const change = lvl.waste_kg / rep.chef.waste_kg - 1;
+    document.getElementById("risk-effect").textContent =
+      `tükenen yemek payı ≈ ${pct(lvl.stockout_rate)} · atık şefe göre ${change >= 0 ? "+" : "−"}%${nf0.format(Math.abs(change) * 100)} (simüle şef: tükenen ${pct(rep.chef.stockout_rate)}; sezon geneli)`;
+    const marker = document.getElementById("chef-marker");
+    const chefRisk = chefEquivalentRisk();
+    marker.hidden = chefRisk === null;
+    if (chefRisk !== null) {
+      const min = Number(slider.min) / 100, max = Number(slider.max) / 100;
+      // The thumb's centre travels inside the track, so offset by half a thumb at each end.
+      const frac = (chefRisk - min) / (max - min);
+      marker.style.left = `calc(15px + (100% - 30px) * ${frac.toFixed(4)})`;
+      marker.querySelector("span").textContent = `Klasik plan ≈ ${pct0(chefRisk)}`;
+    }
   }
 
   function resetService() {
@@ -555,7 +590,7 @@
 
   function renderReport() {
     const rep = demo.metrics.season_report;
-    const lvl = rep.levels.find((l) => Math.abs(l.risk - state.risk) < 1e-9);
+    const lvl = reportLevel(state.risk);
     const box = document.getElementById("report");
     box.innerHTML = "";
     const avoided = lvl.avoided_kg;
@@ -659,6 +694,7 @@
     if (params.get("whatif")) document.getElementById("whatif").open = true;
     if (["breakfast", "lunch", "dinner"].includes(params.get("meal"))) state.meal = params.get("meal");
 
+    document.getElementById("risk").addEventListener("input", (e) => { state.risk = Number(e.target.value) / 100; render(); });
     document.getElementById("occ").addEventListener("input", (e) => { state.occ = Number(e.target.value); render(); });
     document.getElementById("temp").addEventListener("input", (e) => { state.temp = Number(e.target.value); render(); });
     document.getElementById("match").addEventListener("change", (e) => {

@@ -85,7 +85,10 @@ front-office counts -> presence rule x guest rate model -------+        -> risk 
 - **Consumption model** (`models.fit_dish_models`): one LightGBM per quantile, target = kg per 100 predicted guests.
   The guest prediction used for training is out-of-fold (grouped by week), so the quantiles include guest-forecast error.
   Quantile crossing is fixed by sorting each row; the number of fixed rows is reported in `metrics.json`.
-- **Risk setting**: the chef picks one level for all dishes. It is the targeted probability that demand exceeds
+- **Risk setting**: the chef picks one level for all dishes with a slider from 5% to 30% (1-point steps; the
+  season report is precomputed for every step). A marker shows where the simulated chef's classic plan sits: the
+  setting at which the model's demand-above-plan rate equals the chef's (about 21%), interpolated from the
+  season report. The level is the targeted probability that demand exceeds
   the recommended total amount (the (1 − risk) quantile, interpolated in `models.interpolate_quantile`, rounded
   up to half a unit; `newsvendor.py` holds the rounding and the service simulation). The realised rate differs
   from the setting through two effects in opposite directions: the quantiles are not yet calibrated (demand
