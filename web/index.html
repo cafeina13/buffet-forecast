@@ -71,12 +71,12 @@
       <div class="card">
         <p class="step">4 · AY SONUNDA</p>
         <h3>Otomatik rapor</h3>
-        <p class="muted">Pilotta: ilk haftalarda ölçülen başlangıç atığına göre önlenen atık (kg), maliyeti (TL), CO₂ eşdeğeri [1] ve tükenme oranları raporlanır. Demodaki rapor, simüle bir şefle aynı risk ayarında yapılan bir karşılaştırmadır.</p>
+        <p class="muted">Pilotta: ilk haftalarda ölçülen başlangıç atığına göre önlenen atık (kg), maliyeti (TL), CO₂ eşdeğeri [1] ve tükenme oranları raporlanır. Demodaki sezon raporu ise modelin ekranda seçilen risk ayarındaki planını simüle şefin sabit planıyla karşılaştırır; tükenme oranları eşit değildir, yan yana gösterilir.</p>
       </div>
     </div>
     <div class="callout two">
       <p><b>Ekran için ek donanım gerekmez:</b> otelin mevcut tableti veya telefonu yeter.</p>
-      <p><b>Ama ölçüm gerekir:</b> artanlar mutfak terazisiyle ya da fotoğrafla ölçülecek; pilotta model de tasarruf hesabı da bu ölçümden beslenecek (prototipte bu ölçüm adımı simüle edilmedi).</p>
+      <p><b>Ama ölçüm gerekir:</b> artanlar mutfak terazisiyle ya da fotoğrafla ölçülecek; pilotta model de tasarruf hesabı da bu ölçümden beslenecek (prototipte artanlar ±%3 tartı hatasıyla simüle edildi ama model ve rapor bu ölçümü kullanmıyor; tüketimin hatasız bilindiği varsayıldı).</p>
     </div>
   </div>
 </section>
@@ -111,11 +111,11 @@
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,4 kg (tükenen servisler düzeltilerek); sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve mutfak beklentisiyle aynı yöndeyse yazılır.</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,4 kg (tükenen servisler düzeltilerek); sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; sentetik veri de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
       </div>
     </div>
     <div class="callout">
-      <p><b>Başarı ölçütü:</b> aynı tükenme oranında şefin kendi planından ne kadar daha az atık. Yalnızca modelin hiç görmediği haftalarda, gerçek otel verisiyle ölçülecek. (Demodaki aylık rapor ise aynı risk ayarında karşılaştırır; tükenme oranları orada ayrıca gösterilir.)</p>
+      <p><b>Başarı ölçütü:</b> aynı tükenen yemek oranında (servis edilen yemeklerin tükenen payı) şefin kendi planından ne kadar daha az atık. Yalnızca modelin hiç görmediği haftalarda, gerçek otel verisiyle ölçülecek. (Demodaki sezon raporu ise ekranda seçilen risk ayarını şefin sabit planıyla karşılaştırır; tükenme oranları orada yan yana gösterilir.)</p>
       <p class="small muted">Türkiye’de öncül çalışmalar var: her şey dahil sistemde yiyecek-içecek miktarlarının yapay sinir ağlarıyla tahmini üzerine, Alanya’da uygulanmış bir doktora tezi [2]; yemekhane talebinin XGBoost, LSTM ve Prophet ile tahmin edildiği ve israfın %6,2 azaltılabileceğinin hesaplandığı bir yüksek lisans tezi [3]; yemekhane talebinde karar ağaçlarıyla R² 0,83’e varan doğruluk [4].</p>
     </div>
   </div>
@@ -135,7 +135,7 @@
     <div class="prototype-note" style="background:var(--green-2);border-color:var(--clay-light);margin-top:32px">
       <p class="eyebrow">PROTOTİP HAKKINDA</p>
       <h3>Bu prototip sentetik veriyle çalışıyor</h3>
-      <p>Henüz gerçek otel verimiz yok. Prototip, çoğu ekip varsayımı olan, birkaçının yönü literatürdeki tabak atığı bulgularından esinlenmiş varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
+      <p>Henüz gerçek otel verimiz yok. Prototip, varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Varsayımların çoğu ekip varsayımı; öğün, çocuk ve ilk öğün etkilerinin yönü tabak atığı bulgularından [1], sıcaklığın önemli bir etken olduğu bir yemekhane çalışmasından [3] (yönü değil, önemi) esinlendi; yalnızca CO₂ katsayısı doğrudan bir kaynaktan [1] alındı. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
     </div>
   </div>
 </section>

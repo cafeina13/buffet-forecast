@@ -60,3 +60,16 @@ Checked by the auditor: the chef comparison barely changes without the circular 
 | Total | about 490k | 28 | 1 |
 
 Audits 1 / 2 / 3: 43 / 35 / 28 findings, 4 / 2 / 1 errors.
+
+## Fixes applied (2026-10-25, deployed; record `2026-10-24-audit3-fixes`, models identical)
+
+- 2.2 (student's choice a): the demo report is now a season report over the open test season with a
+  per-month table at the chosen setting. It shows that at 10% the model saves 1.9 t but costs ≈ 60 bin TL more
+  (extra waste on dearer dishes); the TL tile is signed.
+- 2.5 (student's decision): the child slider stays. Diagnosis (`/tmp` probe, numbers in README): the generator's
+  child share has almost no day-to-day variation (residual sd 0.0005, corr with temperature 0.74), so the effect is
+  unidentifiable; with real bookings (semi-synthetic branch, residual sd 0.011) the model learns +6.4% vs +5.2% true,
+  wrong sign on 1% of dishes. The page now says so next to the slider.
+- 3.1, 3.8: train.py writes `method_facts` (censoring factors, learned event effects, conference count,
+  unrounded exceedance); both causes of the realised-vs-setting gap are named on the demo, nasıl and README.
+- All other accepted findings fixed as listed. Tests 8/8, parity 8 models, scripted browser test without errors.

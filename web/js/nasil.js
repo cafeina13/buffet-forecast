@@ -2,6 +2,9 @@
 (function () {
   "use strict";
   const nf = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 1 });
+  // One fixed decimal in tables and cards, so "46,0 t" sits next to "65,5 t".
+  const nf1 = new Intl.NumberFormat("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const pct1 = (x) => "%" + nf1.format(x * 100);
   const nf0 = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 0 });
   const pct = (x) => "%" + nf.format(x * 100);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -39,8 +42,8 @@
     const rows = [["Simüle şef", m.chef]].concat(
       m.risk_curve.filter((c) => [0.2, 0.1, 0.05].includes(c.risk)).map((c) => [`Model, %${nf0.format(c.risk * 100)} risk`, c]));
     document.getElementById("risk-table").innerHTML = `<table class="data-table">
-      <thead><tr><th></th><th>Üretim fazlası</th><th>Talebin planı aştığı yemekler</th><th>Ek pişirmeye rağmen tükenen yemekler</th><th>En az bir yemeği biten öğünler</th></tr></thead>
-      <tbody>${rows.map(([name, c]) => `<tr><th>${name}</th><td>${nf.format(c.waste_kg / 1000)} t</td><td>${pct(c.plan_short_rate)}</td><td>${pct(c.stockout_rate)}</td><td>${pct(c.services_with_stockout)}</td></tr>`).join("")}</tbody>
+      <thead><tr><th></th><th>Üretim fazlası</th><th>Talebin planı aştığı yemek servisleri</th><th>Ek pişirmeye rağmen tükenen yemekler</th><th>En az bir yemeği biten öğünler</th></tr></thead>
+      <tbody>${rows.map(([name, c]) => `<tr><th>${name}</th><td>${nf1.format(c.waste_kg / 1000)} t</td><td>${pct1(c.plan_short_rate)}</td><td>${pct1(c.stockout_rate)}</td><td>${pct1(c.services_with_stockout)}</td></tr>`).join("")}</tbody>
     </table>`;
 
     const c20 = m.risk_curve.find((c) => c.risk === 0.2);
@@ -52,7 +55,7 @@
   function guestCards(m) {
     const g = m.guest;
     const card = (step, value, text) =>
-      `<div class="card"><p class="step">${step}</p><p class="stat">${nf.format(value)}</p><p>${text}</p></div>`;
+      `<div class="card"><p class="step">${step}</p><p class="stat">${nf1.format(value)}</p><p>${text}</p></div>`;
     document.getElementById("guest-cards").innerHTML =
       card("OTELDE KONAKLAYAN MİSAFİR × ÖĞÜNÜN ORTALAMA ORANI", g.mae_in_house_times_meal_rate, "kişi ortalama mutlak hata; en basit kural") +
       card("ÖN BÜRO KURALI × ÖĞÜNÜN ORTALAMA ORANI", g.mae_presence_rule_times_meal_rate, "kişi ortalama mutlak hata; model yok") +

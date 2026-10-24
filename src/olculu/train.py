@@ -141,38 +141,69 @@ def main():
         "n_soldout_prone_rows": int(sold_prone.sum()),
     }
 
-    # Monthly report: July of the test season, model at three risk levels vs the chef's plan.
+    # Season report: the whole open test season, model at three risk levels vs the chef's fixed plan,
+    # plus a per-month breakdown so no single month stands in for the season.
     costs = cfg["costs"]["try_per_kg"]
     co2 = cfg["costs"]["co2_per_kg_waste"]
-    july = (ev["date"].dt.month == 7).to_numpy()
-    groups = ev["group"].to_numpy()
-    price = np.array([costs[g] for g in groups])
-    chef_waste_try = float((chef["waste"][july] * price[july]).sum())
-    report = {"month": "Temmuz 2026 (sentetik test sezonu)", "chef": {
-        "waste_kg": float(chef["waste"][july].sum()), "stockout_rate": float(chef["stockout"][july].mean()),
-        "services_with_stockout": services_with_stockout(chef["stockout"][july], july),
-        "plan_short_rate": float(np.mean(y[july] > ev["plan_kg"].to_numpy()[july])),
-        "production_kg": float(chef["production"][july].sum())}, "levels": []}
-    for r in [0.2, 0.1, 0.05]:
-        rec = round_up_half_unit(interpolate_quantile(q_kg[july], DISH_QUANTILES, 1 - r), units[july])
-        sim = simulate(rec, y[july], units[july], refill)
-        avoided = report["chef"]["waste_kg"] - float(sim["waste"].sum())
-        report["levels"].append({
-            "risk": r, "waste_kg": float(sim["waste"].sum()), "stockout_rate": float(sim["stockout"].mean()),
-            "services_with_stockout": services_with_stockout(sim["stockout"], july),
-            "plan_short_rate": float(np.mean(y[july] > rec)),
-            "production_kg": float(sim["production"].sum()),
-            # Cost of the avoided waste only; the cost of extra stock-outs is not netted out.
-            "avoided_kg": avoided, "avoided_try": chef_waste_try - float((sim["waste"] * price[july]).sum()),
-            "avoided_co2_kg": avoided * co2,
-        })
+    price = np.array([costs[g] for g in ev["group"].to_numpy()])
+    plan_chef = ev["plan_kg"].to_numpy()
+    month = ev["date"].dt.month.to_numpy()
+
+    def report_for(mask):
+        chef_waste_try = float((chef["waste"][mask] * price[mask]).sum())
+        out = {"chef": {
+            "waste_kg": float(chef["waste"][mask].sum()), "stockout_rate": float(chef["stockout"][mask].mean()),
+            "services_with_stockout": services_with_stockout(chef["stockout"][mask], mask),
+            "plan_short_rate": float(np.mean(y[mask] > plan_chef[mask])),
+            "production_kg": float(chef["production"][mask].sum())}, "levels": []}
+        for r in [0.2, 0.1, 0.05]:
+            rec = round_up_half_unit(interpolate_quantile(q_kg[mask], DISH_QUANTILES, 1 - r), units[mask])
+            sim = simulate(rec, y[mask], units[mask], refill)
+            avoided = out["chef"]["waste_kg"] - float(sim["waste"].sum())
+            out["levels"].append({
+                "risk": r, "waste_kg": float(sim["waste"].sum()), "stockout_rate": float(sim["stockout"].mean()),
+                "services_with_stockout": services_with_stockout(sim["stockout"], mask),
+                "plan_short_rate": float(np.mean(y[mask] > rec)),
+                "production_kg": float(sim["production"].sum()),
+                # Cost of the avoided waste only; the cost of extra stock-outs is not netted out.
+                "avoided_kg": avoided, "avoided_try": chef_waste_try - float((sim["waste"] * price[mask]).sum()),
+                "avoided_co2_kg": avoided * co2,
+            })
+        return out
+
+    all_rows = np.ones(len(ev), dtype=bool)
+    report = {"period": f"{ev['date'].min().date()}..{ev['date'].max().date()}", **report_for(all_rows),
+              "months": [{"month": int(m), **report_for(month == m)} for m in sorted(set(month))]}
+
+    # Method facts quoted on the site, computed here so every number has a record.
+    sold_tr = f_tr["stockout_time"].notna()
+    dinners = s_te[open_te & (s_te["meal"] == "dinner")]
+    lunches = s_te[open_te & (s_te["meal"] == "lunch")]
+
+    def event_effect(rows, flag):
+        on, off = rows[GUEST_FEATURES].copy(), rows[GUEST_FEATURES].copy()
+        on[flag], off[flag] = 1, 0
+        return float(np.mean(guest_models[0.5].predict(on) / guest_models[0.5].predict(off) - 1))
+
+    method_facts = {
+        "censoring_factor_median": float((f_tr.loc[sold_tr, "target_kg"] / f_tr.loc[sold_tr, "observed_kg"]).median()),
+        "true_over_observed_median": float((f_tr.loc[sold_tr, "true_demand_kg"] / f_tr.loc[sold_tr, "observed_kg"]).median()),
+        "guest_effect_match": event_effect(dinners, "event_match"),
+        "guest_effect_themed": event_effect(dinners, "event_themed"),
+        "guest_effect_conference": event_effect(lunches, "event_conference"),
+        "conference_lunches_in_training": int(((s_tr["meal"] == "lunch") & (s_tr["event"] == "conference")).sum()),
+        # Share of dish-servings where demand exceeds the unrounded (1 - risk) quantile, before rounding up.
+        "plan_short_unrounded": {str(r): float(np.mean(y > interpolate_quantile(q_kg, DISH_QUANTILES, 1 - r)))
+                                 for r in [0.2, 0.1, 0.05]},
+    }
 
     metrics = {
         "note": "Synthetic data. Not evidence of accuracy.",
         "embeddings": args.embeddings,
         "guest": guest_metrics, "quantile_crossing_rows": {"guest": crossed_g, "dish": crossed_d},
         "dish": {"coverage": coverage, "pinball": pinballs, "mae_median_kg": mae_median, "rows": int(len(ev))},
-        "risk_curve": curve, "chef": chef_point, "censoring": censoring_metrics, "monthly_report": report,
+        "risk_curve": curve, "chef": chef_point, "censoring": censoring_metrics, "season_report": report,
+        "method_facts": method_facts,
     }
 
     record = ROOT / "experiments" / f"{date.today().isoformat()}-{args.name}"
@@ -265,7 +296,7 @@ def export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, 
         "map": [{"id": d["id"], "x": float(xy[i, 0]), "y": float(xy[i, 1])} for i, d in enumerate(catalogue["dishes"])],
         "profiles": profiles,
         "services": services,
-        "metrics": {k: metrics[k] for k in ["risk_curve", "chef", "monthly_report", "guest", "censoring", "dish"]},
+        "metrics": {k: metrics[k] for k in ["risk_curve", "chef", "season_report", "guest", "censoring", "dish", "method_facts"]},
     })
 
 

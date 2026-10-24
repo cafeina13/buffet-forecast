@@ -281,7 +281,8 @@
       const finalUnits = action && action.units ? action.units : recUnits;
       return {
         id: d.id, info, q, recKg, recUnits, finalUnits, action, isNew: !hasHistory(x),
-        lowUnits: roundHalf(q[0] / info.kg_per_unit), highUnits: roundHalf(interp(D.quantiles, q, 0.9) / info.kg_per_unit),
+        // Range rounded the same way as the recommendation, so the amount never sits above its own range.
+        lowUnits: roundHalf(q[0] / info.kg_per_unit), highUnits: roundHalfUp(interp(D.quantiles, q, 0.9) / info.kg_per_unit),
         chefUnits: d.chef_plan_kg / info.kg_per_unit,
         reason: explain(x, info, guests),
         refill: refillPlan(finalUnits, q[1], info.kg_per_unit, profile),
@@ -362,16 +363,22 @@
   }
 
   function updateScenarioLabels(sc) {
+    const service = currentService();
     document.querySelectorAll("#presence-controls [data-val]").forEach((b) => {
       b.textContent = `${nf0.format(sc.presence[b.dataset.val])} kişi`;
     });
     const [lo, hi] = demo.support.child_share;
     const outside = sc.child > hi + 1e-9 || sc.child < lo - 1e-9;
     document.getElementById("child-val").textContent = pct0(sc.child);
-    document.getElementById("child-note").textContent = outside
-      ? `(eğitim aralığı %${nf0.format(lo * 100)}–${nf0.format(hi * 100)} dışında; model bu aralığın dışında değişmez)` : "";
+    document.getElementById("child-note").textContent =
+      (outside ? `(eğitim aralığı %${Math.ceil(lo * 100)}–${Math.floor(hi * 100)} dışında; model bu aralığın dışında değişmez) ` : "") +
+      "Bu sentetik veride çocuk payı mevsimle birlikte düzgün bir eğri izlediği için model etkisini güvenilir öğrenemedi (yemeklerin bir kısmında yönü ters); gerçek rezervasyon verisiyle kurulan sonraki sürümde düzeltilecek.";
+    // Effective temperature change after keeping it within the training range.
+    const tx = service.guest_x[gIdx.temperature];
+    const tEff = clamp(tx + state.temp, demo.support.temperature) - tx;
+    document.getElementById("temp-val").textContent = (state.temp > 0 ? "+" : "") + state.temp + " °C" +
+      (Math.abs(tEff - state.temp) >= 0.05 ? ` (etkin: ${tEff >= 0 ? "+" : "−"}${nf.format(Math.abs(tEff))} °C)` : "");
     // Effective occupancy change after the 100% cap, in points.
-    const service = currentService();
     const occ = service.guest_x[gIdx.occupancy];
     const eff = Math.min(1, Math.max(0.05, occ + state.occ / 100)) - occ;
     document.getElementById("occ-val").textContent = (state.occ > 0 ? "+" : "") + state.occ + " puan" +
@@ -534,28 +541,41 @@
     }
   }
 
+  const MONTH_NAMES = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+  function fmtThousands(tl) {
+    return `${nf0.format(Math.round(Math.abs(tl) / 1000))} bin TL`;
+  }
+
   function renderReport() {
-    const rep = demo.metrics.monthly_report;
+    const rep = demo.metrics.season_report;
     const lvl = rep.levels.find((l) => Math.abs(l.risk - state.risk) < 1e-9);
     const box = document.getElementById("report");
     box.innerHTML = "";
     const avoided = lvl.avoided_kg;
     const positive = avoided > 0;
+    const [from, to] = rep.period.split("..").map(parseDate);
     box.appendChild(el("p", { class: "report-head" }, [
-      el("b", { text: rep.month }), ` · risk ayarı ${pct0(state.risk)} · simüle şef planıyla karşılaştırma`]));
+      el("b", { text: `Test sezonunun açık kısmı (${from.getDate()} ${MONTH_NAMES[from.getMonth()]}–${to.getDate()} ${MONTH_NAMES[to.getMonth()]} ${to.getFullYear()}, sentetik)` }),
+      ` · risk ayarı ${pct0(state.risk)} · simüle şefin sabit planıyla karşılaştırma`]));
     const tiles = el("div", { class: "report-tiles" });
     const tile = (label, value, note) => el("div", { class: "report-tile" }, [
       el("p", { class: "control-label", text: label }), el("p", { class: "report-value", text: value }),
       note ? el("p", { class: "note", text: note }) : null]);
+    const costNote = "Yemek grubuna göre kg maliyeti varsayımı (kaba tahmin); tükenmenin maliyeti dahil değil";
     if (positive) {
       tiles.appendChild(tile("Önlenen atık", `${nf0.format(avoided)} kg`));
-      tiles.appendChild(tile("Önlenen atığın maliyeti", `${nf0.format(lvl.avoided_try)} TL`,
-        "Yemek grubuna göre kg maliyeti varsayımı; tükenmenin maliyeti dahil değil"));
+      if (lvl.avoided_try >= 0) {
+        tiles.appendChild(tile("Önlenen atığın maliyeti", `≈ ${fmtThousands(lvl.avoided_try)}`, costNote));
+      } else {
+        tiles.appendChild(tile("Atık maliyeti farkı", `≈ +${fmtThousands(lvl.avoided_try)}`,
+          `Kilogram olarak daha az atık olsa da model daha pahalı yemeklerde daha fazla atıyor. ${costNote}`));
+      }
       tiles.appendChild(tile("Önlenen CO₂ eşdeğeri", `${nf0.format(lvl.avoided_co2_kg)} kg`, "Önlenen atık × 1,9"));
     } else {
       tiles.appendChild(tile("Ek atık", `${nf0.format(-avoided)} kg`, "Bu kadar güvenli bir ayarda model şeften fazla pişirir ve fazla atar."));
     }
-    tiles.appendChild(tile("Talebin planı aştığı yemekler", `${pct(lvl.plan_short_rate)}`,
+    tiles.appendChild(tile("Talebin planı aştığı yemek servisleri", `${pct(lvl.plan_short_rate)}`,
       `Hedeflenen: %${nf0.format(state.risk * 100)}. Simüle şef: ${pct(rep.chef.plan_short_rate)}`));
     tiles.appendChild(tile("Tükenen yemek oranı", `${pct(lvl.stockout_rate)}`,
       `Servis edilen yemeklerin tükenen payı. Simüle şef: ${pct(rep.chef.stockout_rate)}`));
@@ -569,8 +589,22 @@
     else if (lessWaste) tradeoff = "Bu ayarda atık azalıyor ama şeften daha fazla öğünde en az bir yemek bitiyor: riski düşürmek bu dengeyi değiştirir.";
     else tradeoff = "Bu ayarda yemek daha az bitiyor ama atık şeften fazla: riski yükseltmek bu dengeyi değiştirir.";
     box.appendChild(el("p", { class: "report-tradeoff", text: tradeoff }));
+
+    // Month by month at the chosen setting, so no single month stands in for the season.
+    const idx = rep.levels.indexOf(lvl);
+    const rows = rep.months.map((m) => {
+      const ml = m.levels[idx];
+      const change = ml.waste_kg / m.chef.waste_kg - 1;
+      return `<tr><th>${MONTH_NAMES[m.month - 1]}</th><td>${change >= 0 ? "+" : "−"}%${nf.format(Math.abs(change) * 100)}</td><td>${pct(ml.plan_short_rate)}</td><td>${pct(ml.stockout_rate)} <span class="muted">(şef ${pct(m.chef.stockout_rate)})</span></td></tr>`;
+    }).join("");
+    const table = el("div", { class: "month-table" });
+    table.innerHTML = `<table><thead><tr><th>Ay</th><th>Atık, şefe göre</th><th>Talebin planı aştığı yemek servisleri</th><th>Tükenen yemek oranı</th></tr></thead><tbody>${rows}</tbody></table>`;
+    box.appendChild(el("p", { class: "control-label", text: `Aylara göre (risk ayarı ${pct0(state.risk)})` }));
+    box.appendChild(table);
+
+    const unrounded = demo.metrics.method_facts.plan_short_unrounded[String(state.risk)];
     box.appendChild(el("p", { class: "note", text:
-      `Risk ayarı, talebin önerilen toplam miktarı aşması için hedeflenen olasılıktır; modelin aralıkları henüz kalibre olmadığı için gerçekleşen oran biraz daha yüksek (yukarıdaki ilk kutu). Rapor şu varsayımla hesaplandı: önerilen miktarın tamamı servis boyunca hazırlanır; talep bunu aşarsa mutfak, planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar ek pişirme yapar (ek pişirme, gerektiği anda ve gerektiği kadar). Aynı kural simüle şefe de uygulandı. Ekrandaki parti zamanlaması ve “yedek (gerekirse)” kısmı bu hesaba katılmadı; yedeğin yalnızca gerektiğinde pişirilmesi atığı burada gösterilenden düşük tutabilir, zamanında hazırlanamazsa tükenmeyi artırabilir. Sentetik test sezonunda, modelin görmediği günlerde hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
+      `Risk ayarı, talebin önerilen toplam miktarı aşması için hedeflenen olasılıktır. Gerçekleşen oran aya göre ayarın altında ya da üstünde olabilir; iki etki ters yönde çalışır: aralıklar henüz kalibre olmadığı için yuvarlanmamış miktarı talep daha sık aşar (sezonda ${pct(unrounded)}), miktar yarım birime yukarı yuvarlandığı için daha seyrek aşar (sezonda ${pct(lvl.plan_short_rate)}). Rapor şu varsayımla hesaplandı: önerilen miktarın tamamı servis boyunca hazırlanır; talep bunu aşarsa mutfak, planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar ek pişirme yapar (gerektiği anda, tam birimler halinde). Simüle şefin planı sabittir (geçmiş servisler × güvenlik payı) ve aynı ek pişirme kuralına tabidir. Ekrandaki parti zamanlaması ve “yedek (gerekirse)” kısmı bu hesaba katılmadı; yedeğin yalnızca gerektiğinde pişirilmesi atığı burada gösterilenden düşük tutabilir, zamanında hazırlanamazsa tükenmeyi artırabilir. Sentetik test sezonunda, modelin görmediği günlerde hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
   }
 
   function renderTabs() {
