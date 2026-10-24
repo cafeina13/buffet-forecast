@@ -1,13 +1,13 @@
-# Trycast (prototype)
+# Traycast (prototype)
 
 > **These results come from synthetic data and are not evidence of accuracy.**
 > A model trained on synthetic data learns back the assumptions of whoever generated the data.
 
-Trycast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of all-inclusive resorts, and
+Traycast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of all-inclusive resorts, and
 suggests refill times during service with a simple rule. This repository holds the synthetic data
 generator, the two models, and the static prototype website.
 
-Live site: https://trycast.vercel.app (the old address https://olculu.vercel.app serves the same site)
+Live site: https://traycast.vercel.app (the old address https://olculu.vercel.app serves the same site)
 
 ## Setup and running
 
