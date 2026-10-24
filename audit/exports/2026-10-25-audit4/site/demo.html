@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traycast · Şefin ekranı</title>
+<meta name="description" content="Şefin ekranı: yarı sentetik veriyle eğitilmiş model tarayıcınızda çalışır.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/demo.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231e3a33'/%3E%3Cpath d='M7 20h18M9 20a7 7 0 0 1 14 0' stroke='%23eba27c' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body data-page-title="Şefin ekranı" class="demo-page">
+
+<div class="synthetic-banner" role="note">YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" data-product-name>Traycast</a>
+    <nav class="nav" aria-label="Sayfalar">
+      <a href="./">Proje</a>
+      <a href="demo.html" aria-current="page">Şefin ekranı</a>
+      <a href="nasil.html">Nasıl çalışır</a>
+    </nav>
+  </div>
+</header>
+
+<main class="demo">
+  <div class="wrap">
+    <div class="demo-intro">
+      <div>
+        <p class="eyebrow" id="hotel-name">KURGUSAL DEMO RESORT</p>
+        <h1 class="demo-title">Şefin ekranı</h1>
+      </div>
+      <p class="muted small">Model şu anda tarayıcınızda çalışıyor. Otel kurgusal; misafir akışı gerçek bir resortun anonim rezervasyonlarından, hava ve maç akşamları gerçek (2024), yemek talebi simülasyon. Rakamlar ölçüm sonucu değildir.</p>
+    </div>
+
+    <div id="loading" class="loading">Model yükleniyor…</div>
+    <div id="load-error" class="loading" hidden>Model yüklenemedi. Sayfayı yenileyin.</div>
+
+    <div id="app" hidden>
+      <section class="controls" aria-label="Seçimler">
+        <div class="control">
+          <p class="control-label">Gün</p>
+          <div class="chips" id="day-chips" role="radiogroup" aria-label="Gün"></div>
+        </div>
+        <div class="control-row">
+          <div class="control">
+            <p class="control-label">Öğün</p>
+            <div class="segmented" id="meal-seg" role="radiogroup" aria-label="Öğün"></div>
+          </div>
+          <div class="control">
+            <p class="ozg-tag">ÖZGÜNLÜK 3 · Ne kadar pişirelim?</p>
+            <p class="control-label">Hedeflenen risk: talebin önerilen toplam miktarı aşması (her yemek için)</p>
+            <div class="risk-slider">
+              <p class="risk-head"><b id="risk-val">%10</b> <span id="risk-effect"></span></p>
+              <div class="risk-track">
+                <input type="range" id="risk" min="5" max="30" step="1" value="10" aria-label="Hedeflenen risk" aria-describedby="risk-effect">
+                <div class="chef-marker" id="chef-marker" aria-hidden="true"><span>Klasik plan</span></div>
+              </div>
+              <div class="risk-scale" aria-hidden="true"><span>%5 · daha güvenli, daha çok atık</span><span>%30 · daha az atık</span></div>
+            </div>
+            <p class="note risk-note">Mutfak gerekirse biraz ek pişirebildiği için yemeğin gerçekten bitme oranı ayardan düşüktür. “Klasik plan” işareti, simüle şefin planının bu ölçüye göre denk düştüğü yerdir. Ayrıntı ve varsayımlar “Sezon raporu”nda.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-panel" aria-live="polite">
+        <div class="guest-main">
+          <p class="ozg-tag on-dark">ÖZGÜNLÜK 1 · Kaç kişi gelecek?</p>
+          <p class="control-label">Beklenen misafir</p>
+          <p class="guest-number" id="guest-number">–</p>
+          <p class="muted" id="guest-range"></p>
+          <p class="event-tag" id="event-tag" hidden></p>
+          <ul class="guest-breakdown" id="guest-breakdown" aria-label="Misafir hesabı"></ul>
+          <p class="guest-drivers" id="guest-drivers"></p>
+        </div>
+        <div class="guest-flow">
+          <p class="control-label">Geliş profili (15 dakikalık dilimler; varsayılan, henüz öğrenilmiyor)</p>
+          <div id="flow-chart" class="flow-chart"></div>
+        </div>
+      </section>
+
+      <details class="whatif" id="whatif">
+        <summary>Senaryoyu değiştirin: model anında yeniden hesaplar</summary>
+        <div class="whatif-body">
+          <p class="whatif-group">Otel</p>
+          <div class="whatif-row">
+            <label class="slider">
+              <span>Doluluk <b id="occ-val"></b></span>
+              <input type="range" id="occ" min="-25" max="25" step="5" value="0">
+            </label>
+            <label class="slider">
+              <span>Hava sıcaklığı <b id="temp-val"></b> <span class="base">(eğitim verisindeki aralıkta tutulur)</span></span>
+              <input type="range" id="temp" min="-8" max="8" step="1" value="0">
+            </label>
+            <label class="slider">
+              <span>Misafirler içinde çocuk payı <b id="child-val"></b> <span class="base" id="child-note"></span></span>
+              <input type="range" id="child" min="5" max="40" step="1" value="15">
+            </label>
+          </div>
+          <p class="whatif-group">Ön büro kayıtları (bu öğün)</p>
+          <div class="whatif-row" id="presence-controls"></div>
+          <div class="whatif-row" id="event-controls">
+            <label class="toggle" id="match-wrap">
+              <input type="checkbox" id="match">
+              <span>Bu akşam maç var</span>
+            </label>
+            <label class="toggle" id="themed-wrap">
+              <input type="checkbox" id="themed">
+              <span>Bu akşam tema gecesi</span>
+            </label>
+          </div>
+          <div class="whatif-foot">
+            <button type="button" class="btn-small" id="reset">Sıfırla</button>
+            <p class="note">Milliyet karışımı modelde var ama hâlâ simülasyon ve yemeklere etkisi güvenilir öğrenilemedi; kongre etkisi az gün olduğu için zayıf öğrenildi. İkisi de burada gösterilmiyor.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab" id="tab-plan" aria-selected="true" aria-controls="panel-plan">Üretim planı</button>
+        <button role="tab" class="tab" id="tab-live" aria-selected="false" aria-controls="panel-live">Servis sırasında</button>
+        <button role="tab" class="tab" id="tab-report" aria-selected="false" aria-controls="panel-report">Sezon raporu</button>
+      </div>
+
+      <section id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
+        <div class="ozg-strip">
+          <p class="ozg-tag">ÖZGÜNLÜK 2 · Gerçekte ne kadar yenirdi?</p>
+          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez: gözlenen tüketim olduğundan düşük kalır. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak; amaç biten yemeğin her sezon daha az önerilmesini önlemek. Yarı sentetik testte düzeltme, sık tükenen yemeklerde aralığın talebi karşılama oranını biraz artırdı (%85,1’den %86,8’e; 363 yemek servisi, kanıt değil ipucu); gerçek etkisi pilotta ölçülecek. Bu demoda kayıt yalnızca tarayıcınızda tutulur.</p>
+        </div>
+        <p class="note plan-note">Gerekçeler: beklenen misafir sayısı ve yemeğin bu öğündeki ortalama talebi. Hava etkisi yalnızca gün 27 °C’den en az 3 °C farklıysa, ılık bir güne göre etki en az %5 ise ve yemek kataloğundaki beklenen yönle (ekip varsayımı; simüle edilen yemek talebi de aynı varsayımla üretildi) aynıysa yazılır; katalogda sıcaklığa belirgin tepkisi olmayan yemeklerde hiç yazılmaz.</p>
+        <div class="dish-grid" id="dish-grid"></div>
+      </section>
+
+      <section id="panel-live" role="tabpanel" aria-labelledby="tab-live" hidden>
+        <div class="ozg-strip">
+          <p class="ozg-tag">Servis içinde ne zaman? (varsayılan geliş profili)</p>
+          <p class="small">Tazeleme saatleri bir kuralla hesaplanır: önce miktarın yaklaşık %40’ı (tam birime yukarı yuvarlanır), kalanı yaklaşık beşte birlik partiler halinde; her parti, büfedeki miktarın yarım birime inmesinin beklendiği 15 dakikalık dilimin başından 15 dakika önce (servis başından önce olamaz). Tipik (medyan) bir talepte gerekmeyecek güvenlik payı “yedek (gerekirse)” olarak gösterilir. Geliş profili şimdilik varsayılandır (maç akşamı erkene kayar, maçtan sonra geç bir dalga gelir); pilotta kasa verisinden öğrenilecek. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
+        </div>
+        <div class="live-head">
+          <label class="slider wide">
+            <span>Saat <b id="clock-val"></b></span>
+            <input type="range" id="clock" min="0" max="10" step="1" value="0">
+          </label>
+        </div>
+        <div class="live-cols">
+          <div>
+            <h3 class="live-title">Şimdi tazele</h3>
+            <ul class="live-list" id="refill-now"></ul>
+          </div>
+          <div>
+            <h3 class="live-title">Sıradaki tazelemeler</h3>
+            <ul class="live-list muted-list" id="refill-next"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-report" role="tabpanel" aria-labelledby="tab-report" hidden>
+        <div id="report"></div>
+      </section>
+
+      <p class="note demo-foot">Onay, düzeltme ve “bitti” işaretleri yalnızca bu tarayıcıda saklanır. Model kaydı: <span id="record"></span></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><b>YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
+    <p>Demo otel kurgusaldır. Misafir akışı, adı açıklanmayan bir Portekiz resort otelinin kamuya açık, anonim rezervasyon kayıtlarından ölçeklendi (Antonio ve ark. 2019, CC BY 4.0); hava Open-Meteo, maçlar openfootball. Kaynaklar “Nasıl çalışır” sayfasında.</p>
+  </div>
+</footer>
+
+<script src="js/site-config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/model.js"></script>
+<script src="js/demo.js"></script>
+</body>
+</html>
