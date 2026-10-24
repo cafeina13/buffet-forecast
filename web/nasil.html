@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ölçülü · Nasıl çalışır</title>
+<meta name="description" content="Modelin mantığı: risk ve atık eğrisi, yemek benzerlik haritası. Sentetik veri.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/charts.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231e3a33'/%3E%3Cpath d='M7 20h18M9 20a7 7 0 0 1 14 0' stroke='%23eba27c' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body data-page-title="Nasıl çalışır">
+
+<div class="synthetic-banner" role="note">SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" data-product-name>Ölçülü</a>
+    <nav class="nav" aria-label="Sayfalar">
+      <a href="./">Proje</a>
+      <a href="nasil.html" aria-current="page">Nasıl çalışır</a>
+      <a href="demo.html" class="nav-cta">Şefin ekranı</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">NASIL ÇALIŞIR</p>
+        <h1 class="page-title">Modelin mantığı, grafiklerle</h1>
+        <p class="lead">Aşağıdaki grafikler kurgusal bir otelin sentetik verisinden üretildi. Amaç yöntemi göstermek; doğruluk iddiası değildir.</p>
+      </div>
+      <div class="prototype-note">
+        <p class="eyebrow">VERİ NASIL ÜRETİLDİ?</p>
+        <p>Bir sezon (Nisan–Ekim) boyunca 420 odalı kurgusal bir resort için doluluk, milliyet karışımı, uçuş saatleri, tur ve a la carte rezervasyonları, maç geceleri, hava sıcaklığı ve 67 yemeğin gerçek talebi simüle edildi. Her varsayım kaynağıyla birlikte bir yapılandırma dosyasında; kaynağı olmayanlar “ekip varsayımı” olarak işaretli. Modeller bir sezonla eğitildi, <b>farklı ayarlarla üretilmiş ikinci bir sezonla</b> test edildi. Test sezonunun son üç haftası kör test olarak ayrıldı ve henüz açılmadı.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ÖZGÜNLÜK 3 · RİSK AYARI</p>
+        <h2>Risk düştükçe atık artar; şef dengeyi seçer</h2>
+        <p class="lead">Her nokta, modelin farklı bir bitme riski ayarıyla bütün test sezonunda ürettiği toplam atığı ve tükenen servis oranını gösterir. Turuncu nokta, simüle şefin klasik planı.</p>
+      </div>
+      <div class="chart-card" id="risk-chart" role="img" aria-label="Risk ayarına göre toplam atık ve tükenme oranı"></div>
+      <p class="note" id="risk-note" style="margin-top:14px"></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ÖZGÜNLÜK 1 · KAÇ KİŞİ GELECEK</p>
+        <h2>Önce kim otelde, sonra kaçı büfeye gelir</h2>
+        <p class="lead">Misafir tahmini iki adımdır. Önce ön büro kayıtlarından öğünde otelde kaç kişi olduğu hesaplanır: tura çıkan öğlen, a la carte rezervasyonu olan akşam, gece geç inen akşam yemeğinde yoktur. Bu bir kuraldır, öğrenilmez. Sonra model, otelde olanların ne kadarının büfeye geleceğini; maç, tema gecesi, hava ve doluluğa göre öğrenir.</p>
+      </div>
+      <div class="grid grid-2" id="guest-cards"></div>
+      <p class="note" style="margin-top:14px">Ortalama mutlak hata: tahmin edilen ve gerçekleşen öğün misafir sayısı arasındaki ortalama fark. Dikkat: sentetik veri de aynı kuralla üretildiği için bu fark sentetik veride kendiliğinden çıkar ve kanıt sayılmaz. Gerçek otelde kuralın ne kadar tuttuğu pilotta ölçülecek. Milliyet karışımı ve kongre grupları modelde var, ama sentetik veride etkileri güvenilir öğrenilemedi.</p>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">YEMEK EMBEDDING’İ</p>
+        <h2>Benzer yemekler haritada yan yana</h2>
+        <p class="lead">Her yemeğin adı ve malzemeleri bir vektöre çevrildi ve iki boyuta indirildi. Menüye yeni giren bir yemek (turuncu), ilk günden komşularının tüketiminden tahmin alır.</p>
+      </div>
+      <div class="chart-card" id="map-chart" role="img" aria-label="Yemek benzerlik haritası"></div>
+      <p class="note" style="margin-top:14px">Bu prototipte vektörler karakter n-gram TF-IDF ile üretildi (çevrimdışı yöntem). Çok dilli hazır metin modeliyle karşılaştırma mentorluk döneminde yapılacak.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ÖZGÜNLÜK 2 · TÜKENME KAYDI</p>
+        <h2>Geri besleme döngüsü deneyi: hazırlanıyor</h2>
+        <p class="lead">Tükenme kaydını hesaba katan ve katmayan modellerin sezon boyunca nasıl ayrıştığını gösteren deney mentorluk döneminde tamamlanacak ve buraya eklenecek. Bu prototipte model, tükenen servisleri servis içi misafir akışına göre “en az bu kadar” olarak düzeltiyor.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><b>SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
+    <p>Model kaydı: <span id="record"></span></p>
+  </div>
+</footer>
+
+<script src="js/site-config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/nasil.js"></script>
+</body>
+</html>

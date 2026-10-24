@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+/data/
+.env*
+.vercel
+experiments/*/models/
+# Local preview helpers for headless screenshots, not part of the site.
+web/_*.html
+# Copyrighted source texts used by auditors.
+audit/sources/
+# Planning notes kept outside the repository.
+OLCULU_PROTOTYPE_BRIEF.md
+Proje Taslağı Ölçülü.md

@@ -1,0 +1,112 @@
+{
+  "note": "Synthetic data. Not evidence of accuracy.",
+  "embeddings": "tfidf",
+  "guest": {
+    "mae_full": 16.505588628817193,
+    "mae_occupancy_only": 18.428944994573172,
+    "coverage_q10_q90": 0.6096718480138169
+  },
+  "quantile_crossing_rows": {
+    "guest": 104,
+    "dish": 288
+  },
+  "dish": {
+    "coverage": {
+      "0.1": 0.10508628519527702,
+      "0.5": 0.49673024523160764,
+      "0.8": 0.7884650317892825,
+      "0.9": 0.8822888283378747,
+      "0.95": 0.9281562216167121
+    },
+    "pinball": {
+      "0.1": 0.6396356765184152,
+      "0.5": 1.6037494342250058,
+      "0.8": 1.2274056079067261,
+      "0.9": 0.8060594274557307,
+      "0.95": 0.5093009472316691
+    },
+    "mae_median_kg": 3.2074988684500116,
+    "rows": 11010
+  },
+  "risk_curve": [
+    {
+      "risk": 0.5,
+      "waste_kg": 21556.434999999998,
+      "stockout_rate": 0.24341507720254316
+    },
+    {
+      "risk": 0.4,
+      "waste_kg": 29056.515,
+      "stockout_rate": 0.16594005449591281
+    },
+    {
+      "risk": 0.3,
+      "waste_kg": 37909.81,
+      "stockout_rate": 0.10862851952770208
+    },
+    {
+      "risk": 0.2,
+      "waste_kg": 47549.295,
+      "stockout_rate": 0.06884650317892825
+    },
+    {
+      "risk": 0.15,
+      "waste_kg": 56285.71,
+      "stockout_rate": 0.04632152588555858
+    },
+    {
+      "risk": 0.1,
+      "waste_kg": 65697.14,
+      "stockout_rate": 0.02997275204359673
+    },
+    {
+      "risk": 0.05,
+      "waste_kg": 80236.065,
+      "stockout_rate": 0.01698455949137148
+    }
+  ],
+  "chef": {
+    "waste_kg": 65541.09,
+    "stockout_rate": 0.0782016348773842
+  },
+  "censoring": {
+    "coverage_q90_aware_all": 0.8822888283378747,
+    "coverage_q90_naive_all": 0.871843778383288,
+    "coverage_q90_aware_soldout_prone": 0.8697916666666666,
+    "coverage_q90_naive_soldout_prone": 0.8697916666666666,
+    "n_soldout_prone_rows": 192
+  },
+  "monthly_report": {
+    "month": "Temmuz 2026 (sentetik test sezonu)",
+    "chef": {
+      "waste_kg": 12421.765,
+      "stockout_rate": 0.08222222222222222
+    },
+    "levels": [
+      {
+        "risk": 0.2,
+        "waste_kg": 8255.84,
+        "stockout_rate": 0.08833333333333333,
+        "avoided_kg": 4165.924999999999,
+        "avoided_try": 596321.7,
+        "avoided_co2_kg": 7915.257499999998
+      },
+      {
+        "risk": 0.1,
+        "waste_kg": 11759.269999999999,
+        "stockout_rate": 0.034444444444444444,
+        "avoided_kg": 662.4950000000008,
+        "avoided_try": 26292.0,
+        "avoided_co2_kg": 1258.7405000000015
+      },
+      {
+        "risk": 0.05,
+        "waste_kg": 14317.39,
+        "stockout_rate": 0.023333333333333334,
+        "avoided_kg": -1895.625,
+        "avoided_try": -393877.6000000001,
+        "avoided_co2_kg": -3601.6875
+      }
+    ]
+  }
+}

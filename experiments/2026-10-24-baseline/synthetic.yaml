@@ -1,0 +1,105 @@
+# Every numeric assumption of the synthetic generator, with its source.
+# "team assumption" = no source yet; to be replaced with pilot data.
+# Plate-waste findings (Juvan et al. 2021) concern plate waste, not production;
+# they are used only as directional hints and are labelled as such.
+
+season:
+  start: {value: "2026-04-01", source: "brief: one season April to October", type: assumption}
+  end: {value: "2026-10-31", source: "brief: one season April to October", type: assumption}
+  blind_test_weeks: {value: 3, source: "brief: last 3 weeks held out", type: design}
+
+hotel:
+  rooms: {value: 420, source: "team assumption (mid-size Antalya resort)", type: assumption}
+  guests_per_room: {value: 2.3, source: "team assumption", type: assumption}
+  avg_stay_nights: {value: 7, source: "team assumption (one-week package holidays)", type: assumption}
+
+occupancy:
+  # Seasonal curve: low in April, peak in July-August.
+  low: {value: 0.48, source: "team assumption (brief: low in April)", type: assumption}
+  peak: {value: 0.96, source: "team assumption (brief: peak July-August)", type: assumption}
+  peak_day_of_season: {value: 125, source: "team assumption (early August)", type: assumption}
+  width_days: {value: 70, source: "team assumption", type: assumption}
+  daily_noise_sd: {value: 0.025, source: "team assumption", type: assumption}
+
+guest_mix:
+  nationalities: {value: ["DE", "RU", "UK", "TR", "OTHER"], source: "brief", type: design}
+  base_shares: {value: [0.30, 0.28, 0.14, 0.18, 0.10], source: "team assumption", type: assumption}
+  tr_summer_boost: {value: 0.08, source: "team assumption (domestic share rises in July-August)", type: assumption}
+  share_noise_sd: {value: 0.02, source: "team assumption", type: assumption}
+  child_share_base: {value: 0.14, source: "team assumption", type: assumption}
+  child_share_summer: {value: 0.26, source: "team assumption (school holidays)", type: assumption}
+
+arrivals:
+  night_arrival_share: {value: 0.35, source: "team assumption (charter flights landing late)", type: assumption}
+  early_departure_share: {value: 0.40, source: "team assumption (departures before lunch)", type: assumption}
+  very_early_departure_share: {value: 0.15, source: "team assumption (departures before breakfast)", type: assumption}
+
+activities:
+  excursion_share: {value: 0.07, source: "team assumption (guests away for lunch)", type: assumption}
+  excursion_share_sd: {value: 0.025, source: "team assumption", type: assumption}
+  alacarte_share: {value: 0.06, source: "team assumption (guests skipping main buffet dinner)", type: assumption}
+  alacarte_share_sd: {value: 0.015, source: "team assumption", type: assumption}
+
+attendance:
+  # Share of in-house guests who eat at the main buffet, per meal.
+  breakfast: {value: 0.86, source: "team assumption", type: assumption}
+  lunch: {value: 0.62, source: "team assumption", type: assumption}
+  dinner: {value: 0.82, source: "team assumption", type: assumption}
+  noise_sd: {value: 0.03, source: "team assumption", type: assumption}
+
+events:
+  match_prob: {value: 0.06, source: "team assumption (football nights)", type: assumption}
+  match_dinner_attendance: {value: -0.06, source: "team assumption (some guests leave the hotel)", type: assumption}
+  conference_prob: {value: 0.04, source: "team assumption", type: assumption}
+  conference_lunch_attendance: {value: 0.10, source: "team assumption (outside delegates join lunch)", type: assumption}
+  themed_night_prob: {value: 0.12, source: "team assumption", type: assumption}
+  themed_dinner_attendance: {value: 0.05, source: "team assumption", type: assumption}
+
+temperature:
+  # Daily maximum temperature, degrees C.
+  april_mean: {value: 21.0, source: "team assumption (Antalya climate, approximate)", type: assumption}
+  august_mean: {value: 34.5, source: "team assumption (Antalya climate, approximate)", type: assumption}
+  noise_sd: {value: 1.8, source: "team assumption", type: assumption}
+
+meals:
+  # Service windows (start hour, end hour) and arrival-profile shape.
+  breakfast: {value: {start: 7.0, end: 10.5, peak: 8.6, spread: 0.75}, source: "team assumption", type: assumption}
+  lunch: {value: {start: 12.5, end: 14.5, peak: 13.2, spread: 0.5}, source: "team assumption", type: assumption}
+  dinner: {value: {start: 19.0, end: 21.5, peak: 20.0, spread: 0.6}, source: "team assumption", type: assumption}
+  slot_minutes: {value: 15, source: "design", type: design}
+  match_dinner_shift_hours: {value: -0.45, source: "team assumption (early rush before match)", type: assumption}
+  match_late_wave_share: {value: 0.15, source: "team assumption (late wave after match)", type: assumption}
+
+demand:
+  # Grams taken from the buffet per attending guest, before dish effects.
+  meal_scale: {value: {breakfast: 2.0, lunch: 1.0, dinner: 1.15}, source: "team assumption (breakfast catalogue lists only the main hot and cold items); direction from Juvan et al. 2021 (dinner > breakfast, plate waste only)", type: assumption}
+  nationality_affinity_exponent: {value: 1.0, source: "team assumption (1 = use dish affinities as written)", type: assumption}
+  child_effect: {value: 0.10, source: "team assumption; direction from Juvan et al. 2021 (children raise plate waste)", type: assumption}
+  first_meal_effect: {value: 0.12, source: "team assumption; direction from Juvan et al. 2021 (first meal raises plate waste)", type: assumption}
+  temperature_ref: {value: 27.0, source: "team assumption", type: assumption}
+  temperature_effect_per_deg: {value: 0.022, source: "team assumption; temperature as dominant factor per Aydin 2025 (GTU thesis)", type: assumption}
+  competition_strength: {value: 0.18, source: "team assumption (each similar dish on the menu takes share)", type: assumption}
+  nb_dispersion: {value: 25.0, source: "team assumption (negative binomial size on portions)", type: assumption}
+
+chef:
+  history_services: {value: 4, source: "team assumption (last few similar services)", type: assumption}
+  buffer_low: {value: 1.25, source: "brief: safety buffer 1.25-1.4", type: assumption}
+  buffer_high: {value: 1.40, source: "brief: safety buffer 1.25-1.4", type: assumption}
+  plan_noise_sd: {value: 0.06, source: "team assumption", type: assumption}
+
+service:
+  max_refill_share: {value: 0.12, source: "team assumption (kitchen can add at most this share of the plan during service)", type: assumption}
+  scale_noise: {value: 0.03, source: "brief: +-3% scale measurement noise", type: assumption}
+
+costs:
+  # Cost per kg of food by dish group, TRY. Used for the TRY savings figure.
+  try_per_kg: {value: {soup: 60, red_meat: 520, chicken: 210, fish: 380, vegetables: 90, rice_pasta: 70, salad: 80, dessert: 150, breakfast: 160}, source: "team assumption (rough 2026 wholesale estimates)", type: assumption}
+  understock_cost_ratio: {value: 4.0, source: "team assumption (Cu/Co for the newsvendor critical ratio)", type: assumption}
+  co2_per_kg_waste: {value: 1.9, source: "BIO Intelligence 2010, cited in Juvan et al. 2021 (EU average, kg CO2e per kg food waste)", type: sourced}
+
+test_shift:
+  # The test season is a separate run with slightly shifted parameters.
+  occupancy_peak: {value: 0.93, source: "design: shifted for test run", type: design}
+  child_share_summer: {value: 0.29, source: "design: shifted for test run", type: design}
+  temperature_august_mean: {value: 35.5, source: "design: shifted for test run", type: design}
+  excursion_share: {value: 0.08, source: "design: shifted for test run", type: design}

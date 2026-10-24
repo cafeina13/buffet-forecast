@@ -1,0 +1,14 @@
+.page-title { font-size: clamp(36px, 5.5vw, 56px); }
+.chart-card { background: var(--paper); border-radius: var(--radius); padding: 16px; color: var(--ink); }
+.chart-card svg { width: 100%; height: auto; display: block; }
+.chart-card text { font-family: var(--sans); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; margin-top: 8px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: currentColor; }
+.legend .lg-model { color: var(--green); }
+.legend .lg-chef { color: var(--clay); }
+.legend .lg-new { color: var(--clay); }
+.legend .lg-dish { color: var(--green); }
+.legend span { color: var(--ink); }
+.legend .lg-model::before { background: var(--green); }
+.legend .lg-chef::before, .legend .lg-new::before { background: var(--clay); }
+.legend .lg-dish::before { background: #7a9a8c; }
