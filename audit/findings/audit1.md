@@ -44,4 +44,37 @@ Claude's checks: `../scripts/audit1/v_claude_part2.js`.
 | 2.14 | MINOR | Breakdown rounding (748 × %78 = 580) | Accepted | One decimal or note rounding |
 | 2.15 | MINOR | "Çocuklu misafir payı" vs share of children; "Bugün" on every day | Accepted | "Çocuk payı"; drop "Bugün" |
 
+## Part 3: "Nasıl çalışır" and README (144k tokens, 15 findings)
+
+Claude's checks: `../scripts/audit1/v_claude_part3.py`, `../scripts/audit1/v_claude_part3b.py`.
+
+| # | Class | Finding | Verdict | Change (pending) |
+| --- | --- | --- | --- | --- |
+| 3.1 | MISLABEL | Risk chart axis "Tükenen servis oranı"; README "7.4% vs 7.8% of services" are shares of dish-servings | Confirmed, and it changes the headline: meals with at least one dish run out: chef 63.7%, model 20% 69.4%, 10% 40.6%, 5% 26.8% (dishes run out 7.8 / 7.4 / 3.2 / 1.8%) | Relabel; report both rates; restate the trade-off |
+| 3.2 | MISLABEL | "Risk" is P(demand > first cook), not P(dish runs out) | Confirmed (refills up to +12% follow) | Define the setting; explain the gap |
+| 3.3 | OVERSTATEMENT | "Benzer yemekler haritada yan yana" | Confirmed: 2-D PCA keeps 8.7% of variance; true top-3 neighbours median 2-D rank 14, 32% in the 2-D top 5; Gözleme's neighbours rank 39, 37; neighbours spelling-based (Pelmeni -> Dondurma) | Draw neighbour links; say spelling-based; drop "ilk günden" (see 2.2) |
+| 3.4 | OVERSTATEMENT | Guest rate model learns from weather and occupancy | Confirmed (same as 1.5): presence rule × constant meal rate gives MAE 14.04 vs model 13.10; match −4.7% (gen −6%), themed +4.0% (gen +5%), conference 0 | Say what was learned (events) and how little the model adds |
+| 3.5 | INCONSISTENCY | README "the generator gives [nationality] no effect" | Confirmed: dish affinities exist in dishes.yaml; README contradicts itself | Correct the rationale |
+| 3.6 | OVERSTATEMENT | "Her varsayım … bir yapılandırma dosyasında" | Confirmed: several numeric assumptions are hard-coded in generator.py (seasonal curves, noise, first-meal fractions, chef's attendance estimate) | "Ana varsayımlar"; list the hard-coded ones in the README |
+| 3.7 | INCONSISTENCY | "bütün test sezonunda" excludes the blind weeks | Confirmed | "açık kısmında" |
+| 3.8 | MINOR | "uçuş saatleri" not simulated (counts only) | Confirmed | Reword |
+| 3.9 | MINOR | Nationality has no attendance effect to learn | Confirmed | Reword the note |
+| 3.10 | MINOR | "±" on a mean; occupancy-only baseline weaker than a trivial rule | Confirmed: trivial in_house × meal rate MAE 16.92 vs 17.86 | Drop "±"; give the trivial baseline |
+| 3.11 | MINOR | README "4–5× too weakly" depends on perturbation size (2–5×) | Accepted | "2–5×, depending on the change" |
+| 3.12 | MINOR | README setup would overwrite the cited baseline record | Confirmed | Document `--name` |
+| 3.13 | MINOR | js_parity.py checks q0.5 only; picks the record alphabetically | Confirmed | Check every quantile; choose the record explicitly |
+| 3.14 | MINOR | first_meal_share divides by actual attendance (same-meal leak); tests miss it | Confirmed (generator: first_meal / attendance) | Note in README (small); fix when retraining |
+| 3.15 | MINOR | Interpolation is in models.py, not newsvendor.py | Confirmed | Fix |
+
+## Round summary
+
+| Part | Tokens | Findings | Errors |
+| --- | --- | --- | --- |
+| 1 | 148k | 13 | 1 |
+| 2 | 168k | 15 | 3 |
+| 3 | 144k | 15 | 0 (3.1 changes the headline) |
+| Total | about 460k | 43 | 4 |
+
+Rejected: one sub-point of 1.3. Not changed: the contact placeholder (the student's decision).
+
 Noted for the other parts (not passed to their auditors): the monthly report compares at a fixed risk, and in July at 20% the model's stock-out rate (10.3%) is above the chef's (8.2%).
