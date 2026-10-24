@@ -9,11 +9,11 @@ grounding:
     bookings_year: {value: 2016, source: "Hotel Booking Demand, Resort Hotel H1 (Antonio, Almeida & Nunes 2019, Data in Brief 22, CC BY 4.0)", type: sourced}
     calendar_year: {value: 2016, source: "design: same year for bookings, weather and fixtures", type: design}
     weather_file: {value: "antalya_weather_2016.json", source: "Open-Meteo historical weather API (ERA5), Antalya 36.90N 30.71E, daily max temperature", type: sourced}
-    fixtures_file: {value: "euro2016.txt", source: "openfootball/euro, Euro 2016 fixtures (public domain)", type: sourced}
+    fixtures_file: {value: "euro2016.txt", source: "openfootball/euro, Euro 2016 fixtures (CC0 1.0)", type: sourced}
   test:
     start: {value: "2024-04-01", source: "design", type: design}
     end: {value: "2024-08-31", source: "design: the booking data ends in August 2017", type: design}
     bookings_year: {value: 2017, source: "Hotel Booking Demand, Resort Hotel H1 (Antonio, Almeida & Nunes 2019, Data in Brief 22, CC BY 4.0)", type: sourced}
     calendar_year: {value: 2024, source: "design: 2017 bookings placed on the 2024 calendar by month and day", type: design}
     weather_file: {value: "antalya_weather_2024.json", source: "Open-Meteo historical weather API (ERA5), Antalya 36.90N 30.71E, daily max temperature", type: sourced}
-    fixtures_file: {value: "euro2024.json", source: "openfootball/euro.json, Euro 2024 fixtures (public domain)", type: sourced}
+    fixtures_file: {value: "euro2024.json", source: "openfootball/euro.json, Euro 2024 fixtures (CC0 1.0)", type: sourced}
