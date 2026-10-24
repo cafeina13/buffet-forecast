@@ -377,9 +377,8 @@
     document.getElementById("child-val").textContent = pct0(sc.child);
     document.getElementById("child-note").textContent =
       (outside ? `(eğitim aralığı %${Math.ceil(lo * 100)}–${Math.floor(hi * 100)} dışında; model bu aralığın dışında değişmez) ` : "") +
-      (grounded()
-        ? "Çocuk payı gerçek rezervasyonlardan geliyor ve günden güne değişiyor; model etkisini doğru yönde öğrendi."
-        : "Bu sentetik veride çocuk payı mevsimle birlikte düzgün bir eğri izlediği için model etkisini güvenilir öğrenemedi (yemeklerin bir kısmında yönü ters).");
+      // The fully synthetic data could not teach the child effect (no day-to-day variation); say so only there.
+      (grounded() ? "" : "Bu sentetik veride çocuk payı mevsimle birlikte düzgün bir eğri izlediği için model etkisini güvenilir öğrenemedi (yemeklerin bir kısmında yönü ters).");
     // Effective temperature change after keeping it within the training range.
     const tx = service.guest_x[gIdx.temperature];
     const tEff = clamp(tx + state.temp, demo.support.temperature) - tx;
