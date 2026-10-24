@@ -85,3 +85,18 @@ for r in [0.2, 0.1, 0.05]:
 print("first test date", s["date"].min(), "train first", pd.read_csv(ROOT/'data/train/services.csv')['date'].min())
 # censoring effect on dish-servings: how often stock-outs in July (observed)
 print("chef observed stockouts July (data)", ev.loc[jul, "stockout_time"].notna().mean())
+
+# Per-month comparison: is July typical?
+print("\nper month (open test): month, chef waste, then per risk: waste change %, model plan_short, model svc_stockout vs chef")
+months = ev["date"].dt.month.to_numpy()
+for mo in sorted(set(months)):
+    k = months == mo
+    kk = ev.loc[k, ["date", "meal"]].astype(str).agg("|".join, axis=1).to_numpy()
+    _, cwm, csm = sim(ev["plan_kg"].to_numpy()[k], y[k], units[k])
+    line = [f"{mo:2d} chef {cwm.sum():8.0f} svc {pd.Series(csm).groupby(kk).any().mean():.2f}"]
+    for r in [0.2, 0.1, 0.05]:
+        rec_kg = np.array([np.interp(1 - r, Q, row) for row in qkg[k]])
+        rec = np.maximum(units[k] * 0.5, np.ceil(rec_kg / units[k] * 2) / 2 * units[k])
+        _, w, so = sim(rec, y[k], units[k])
+        line.append(f"r{r}: waste {100*(w.sum()/cwm.sum()-1):+5.1f}% short {np.mean(y[k] > rec):.3f} svc {pd.Series(so).groupby(kk).any().mean():.2f}")
+    print(" | ".join(line))

@@ -55,7 +55,7 @@
             <p class="ozg-tag">ÖZGÜNLÜK 3 · Ne kadar pişirelim?</p>
             <p class="control-label">Hedeflenen risk: talebin önerilen toplam miktarı aşması (her yemek için)</p>
             <div class="segmented" id="risk-seg" role="radiogroup" aria-label="Hedeflenen risk"></div>
-            <p class="note risk-note">Mutfak gerekirse biraz ek pişirebildiği için yemeğin gerçekten bitme oranı bundan düşüktür; ayrıntı ve varsayımlar “Aylık rapor”da.</p>
+            <p class="note risk-note">Mutfak gerekirse biraz ek pişirebildiği için yemeğin gerçekten bitme oranı bundan düşüktür; ayrıntı ve varsayımlar “Sezon raporu”nda.</p>
           </div>
         </div>
       </section>
@@ -116,7 +116,7 @@
       <div class="tabs" role="tablist">
         <button role="tab" class="tab" id="tab-plan" aria-selected="true" aria-controls="panel-plan">Üretim planı</button>
         <button role="tab" class="tab" id="tab-live" aria-selected="false" aria-controls="panel-live">Servis sırasında</button>
-        <button role="tab" class="tab" id="tab-report" aria-selected="false" aria-controls="panel-report">Aylık rapor</button>
+        <button role="tab" class="tab" id="tab-report" aria-selected="false" aria-controls="panel-report">Sezon raporu</button>
       </div>
 
       <section id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
@@ -124,14 +124,14 @@
           <p class="ozg-tag">ÖZGÜNLÜK 2 · Gerçekte ne kadar yenirdi?</p>
           <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez: gözlenen tüketim olduğundan düşük kalır. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak; amaç biten yemeğin her sezon daha az önerilmesini önlemek. Sentetik veride bu düzeltmenin belirgin bir etkisi görülmedi; gerçek etkisi pilotta ölçülecek. Bu demoda kayıt yalnızca tarayıcınızda tutulur.</p>
         </div>
-        <p class="note plan-note">Gerekçeler: beklenen misafir sayısı ve yemeğin bu öğündeki ortalama talebi. Hava etkisi yalnızca ılık bir güne (27 °C) göre en az %5 ise ve mutfak beklentisiyle aynı yöndeyse yazılır; sıcaklığa belirgin tepkisi beklenmeyen yemeklerde hiç yazılmaz.</p>
+        <p class="note plan-note">Gerekçeler: beklenen misafir sayısı ve yemeğin bu öğündeki ortalama talebi. Hava etkisi yalnızca gün 27 °C’den en az 3 °C farklıysa, ılık bir güne göre etki en az %5 ise ve yemek kataloğundaki beklenen yönle (ekip varsayımı; sentetik veri de aynı varsayımla üretildi) aynıysa yazılır; katalogda sıcaklığa belirgin tepkisi olmayan yemeklerde hiç yazılmaz.</p>
         <div class="dish-grid" id="dish-grid"></div>
       </section>
 
       <section id="panel-live" role="tabpanel" aria-labelledby="tab-live" hidden>
         <div class="ozg-strip">
           <p class="ozg-tag">Servis içinde ne zaman? (varsayılan geliş profili)</p>
-          <p class="small">Tazeleme saatleri bir kuralla hesaplanır: önce miktarın yaklaşık %40’ı (tam birime yukarı yuvarlanır), kalanı yaklaşık beşte birlik partiler halinde; her parti, büfedeki miktarın yarım birime inmesinin beklendiği 15 dakikalık dilimin başından 15 dakika önce (servis başından önce olamaz). Ortalama bir talepte gerekmeyecek güvenlik payı “yedek (gerekirse)” olarak gösterilir. Geliş profili şimdilik varsayılandır (maç akşamı erkene kayar, maçtan sonra geç bir dalga gelir); pilotta kasa verisinden öğrenilecek. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
+          <p class="small">Tazeleme saatleri bir kuralla hesaplanır: önce miktarın yaklaşık %40’ı (tam birime yukarı yuvarlanır), kalanı yaklaşık beşte birlik partiler halinde; her parti, büfedeki miktarın yarım birime inmesinin beklendiği 15 dakikalık dilimin başından 15 dakika önce (servis başından önce olamaz). Tipik (medyan) bir talepte gerekmeyecek güvenlik payı “yedek (gerekirse)” olarak gösterilir. Geliş profili şimdilik varsayılandır (maç akşamı erkene kayar, maçtan sonra geç bir dalga gelir); pilotta kasa verisinden öğrenilecek. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
         </div>
         <div class="live-head">
           <label class="slider wide">

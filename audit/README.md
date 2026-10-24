@@ -30,4 +30,4 @@ Brief: `brief.md`.
 | --- | --- | --- | --- |
 | 1 | 2026-10-24 | three partitioned agents, no hints | 43 findings, 4 errors (explanations, new-dish claim, guest drivers, embedding claim); fixed: `findings/audit1.md` |
 | 2 | 2026-10-24 | three partitioned agents, no hints | 35 findings, 2 errors (both introduced by audit-1 fixes); fixed: `findings/audit2.md` |
-| 3 | 2026-10-25 | three partitioned agents, no hints | running |
+| 3 | 2026-10-25 | three partitioned agents, no hints | 28 findings, 1 error (cause of the realised-vs-setting gap); fixed: `findings/audit3.md` |
