@@ -1,6 +1,6 @@
 """Train both models on the training season, evaluate on the test season, export for the site.
 
-Usage: uv run python -m olculu.train [--embeddings tfidf|st]
+Usage: uv run python -m olculu.train [--embeddings tfidf|berturk|minilm|category|st] [--name NAME]
 
 The last weeks of the test season are the blind test. They are excluded here and
 never used for the demo; they are opened once, at the very end, by a separate command.
@@ -51,7 +51,7 @@ def attach_guest_pred(frame, services, pred_col):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--embeddings", choices=["tfidf", "st"], default="tfidf")
+    parser.add_argument("--embeddings", choices=embeddings.BACKENDS, default="tfidf")
     parser.add_argument("--name", default="baseline")
     args = parser.parse_args()
 
@@ -109,6 +109,22 @@ def main():
     coverage = {str(q): float(np.mean(y <= q_kg[:, i])) for i, q in enumerate(DISH_QUANTILES)}
     pinballs = {str(q): pinball(y, q_kg[:, i], q) for i, q in enumerate(DISH_QUANTILES)}
     mae_median = float(np.mean(np.abs(y - q_kg[:, 1])))
+
+    # Dishes on days when they have no history yet in that meal: where the dish vector has to carry the forecast.
+    no_hist = ev["hist_per100"].isna().to_numpy()
+    groups_by_id = [d["group"] for d in catalogue["dishes"]]
+    embedding_metrics = {
+        "backend": args.embeddings,
+        "no_history_rows": int(no_hist.sum()),
+        "no_history_mae_median_kg": float(np.mean(np.abs(y[no_hist] - q_kg[no_hist, 1]))) if no_hist.any() else None,
+        "no_history_mape_median": float(np.median(np.abs(y[no_hist] - q_kg[no_hist, 1]) / np.maximum(y[no_hist], 1e-9)))
+        if no_hist.any() else None,
+        "no_history_pinball_0.9": pinball(y[no_hist], q_kg[no_hist, 3], 0.9) if no_hist.any() else None,
+        "with_history_mape_median": float(np.median(np.abs(y[~no_hist] - q_kg[~no_hist, 1]) / np.maximum(y[~no_hist], 1e-9))),
+        # Share of each dish's 3 nearest neighbours that belong to its own dish group.
+        "neighbours_same_group_top3": float(np.mean([[groups_by_id[j] == groups_by_id[i] for j in neighbours[i, :3]]
+                                                     for i in range(len(groups_by_id))])),
+    }
 
     units = ev["dish_id"].map(unit_kg).to_numpy()
     service_key = [ev["date"].to_numpy(), ev["meal"].to_numpy()]
@@ -212,6 +228,7 @@ def main():
         "embeddings": args.embeddings,
         "guest": guest_metrics, "quantile_crossing_rows": {"guest": crossed_g, "dish": crossed_d},
         "dish": {"coverage": coverage, "pinball": pinballs, "mae_median_kg": mae_median, "rows": int(len(ev))},
+        "embedding": embedding_metrics,
         "risk_curve": curve, "chef": chef_point, "censoring": censoring_metrics, "season_report": report,
         "method_facts": method_facts,
     }

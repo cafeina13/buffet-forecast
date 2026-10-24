@@ -1,0 +1,1933 @@
+{
+  "note": "Synthetic data. Not evidence of accuracy.",
+  "embeddings": "category",
+  "guest": {
+    "mae_full": 14.112927754252208,
+    "mae_occupancy_only": 21.24158214886716,
+    "coverage_q10_q90": 0.6944444444444444,
+    "mae_in_house_times_meal_rate": 20.19602057239834,
+    "mae_presence_rule_times_meal_rate": 15.173539894057335
+  },
+  "quantile_crossing_rows": {
+    "guest": 2,
+    "dish": 246
+  },
+  "dish": {
+    "coverage": {
+      "0.1": 0.108266376140542,
+      "0.5": 0.4894457306278088,
+      "0.8": 0.776113305188615,
+      "0.9": 0.8650415361568841,
+      "0.95": 0.9215579463434563
+    },
+    "pinball": {
+      "0.1": 0.6187946986009859,
+      "0.5": 1.5477212874945807,
+      "0.8": 1.1832919398565371,
+      "0.9": 0.7986841292519408,
+      "0.95": 0.504127536533069
+    },
+    "mae_median_kg": 3.0954425749891614,
+    "rows": 7343
+  },
+  "embedding": {
+    "backend": "category",
+    "no_history_rows": 95,
+    "no_history_mae_median_kg": 3.7101827467074355,
+    "no_history_mape_median": 0.2758539663401866,
+    "no_history_pinball_0.9": 1.0333500585879536,
+    "with_history_mape_median": 0.16237149659633637,
+    "neighbours_same_group_top3": 1.0
+  },
+  "risk_curve": [
+    {
+      "risk": 0.5,
+      "waste_kg": 13815.535,
+      "stockout_rate": 0.2451314176766989,
+      "services_with_stockout": 0.9949494949494949,
+      "plan_short_rate": 0.41604248944573063
+    },
+    {
+      "risk": 0.4,
+      "waste_kg": 18427.77,
+      "stockout_rate": 0.16968541468064824,
+      "services_with_stockout": 0.9393939393939394,
+      "plan_short_rate": 0.31785373825411956
+    },
+    {
+      "risk": 0.3,
+      "waste_kg": 23731.235,
+      "stockout_rate": 0.11493939806618549,
+      "services_with_stockout": 0.8560606060606061,
+      "plan_short_rate": 0.23518997684869944
+    },
+    {
+      "risk": 0.2,
+      "waste_kg": 29654.340000000004,
+      "stockout_rate": 0.07422034590766717,
+      "services_with_stockout": 0.7222222222222222,
+      "plan_short_rate": 0.17172817649462072
+    },
+    {
+      "risk": 0.15,
+      "waste_kg": 34620.119999999995,
+      "stockout_rate": 0.05106904534931227,
+      "services_with_stockout": 0.6035353535353535,
+      "plan_short_rate": 0.1323709655454174
+    },
+    {
+      "risk": 0.1,
+      "waste_kg": 39817.8,
+      "stockout_rate": 0.03595260792591584,
+      "services_with_stockout": 0.4898989898989899,
+      "plan_short_rate": 0.09968677652185755
+    },
+    {
+      "risk": 0.05,
+      "waste_kg": 49649.965,
+      "stockout_rate": 0.018793408688546915,
+      "services_with_stockout": 0.29797979797979796,
+      "plan_short_rate": 0.05638022606564075
+    }
+  ],
+  "chef": {
+    "waste_kg": 40383.145,
+    "stockout_rate": 0.09492033228925507,
+    "services_with_stockout": 0.7121212121212122,
+    "plan_short_rate": 0.1751327795179082
+  },
+  "censoring": {
+    "coverage_q90_aware_all": 0.8650415361568841,
+    "coverage_q90_naive_all": 0.8476099686776521,
+    "coverage_q90_aware_soldout_prone": 0.8760330578512396,
+    "coverage_q90_naive_soldout_prone": 0.837465564738292,
+    "n_soldout_prone_rows": 363
+  },
+  "season_report": {
+    "period": "2024-04-01..2024-08-10",
+    "mode": "grounded",
+    "chef": {
+      "waste_kg": 40383.145,
+      "stockout_rate": 0.09492033228925507,
+      "services_with_stockout": 0.7121212121212122,
+      "plan_short_rate": 0.1751327795179082,
+      "production_kg": 156656.96000000002
+    },
+    "levels": [
+      {
+        "risk": 0.05,
+        "waste_kg": 49649.965,
+        "stockout_rate": 0.018793408688546915,
+        "services_with_stockout": 0.29797979797979796,
+        "plan_short_rate": 0.05638022606564075,
+        "production_kg": 167513.72,
+        "avoided_kg": -9266.82,
+        "avoided_try": -1771409.0,
+        "avoided_co2_kg": -17606.958
+      },
+      {
+        "risk": 0.06,
+        "waste_kg": 47585.875,
+        "stockout_rate": 0.0221980117118344,
+        "services_with_stockout": 0.3409090909090909,
+        "plan_short_rate": 0.06291706387035272,
+        "production_kg": 165400.84,
+        "avoided_kg": -7202.730000000003,
+        "avoided_try": -1423917.9000000004,
+        "avoided_co2_kg": -13685.187000000005
+      },
+      {
+        "risk": 0.07,
+        "waste_kg": 45639.225,
+        "stockout_rate": 0.02505787825139589,
+        "services_with_stockout": 0.3838383838383838,
+        "plan_short_rate": 0.06945390167506468,
+        "production_kg": 163396.59000000003,
+        "avoided_kg": -5256.080000000002,
+        "avoided_try": -1099312.0,
+        "avoided_co2_kg": -9986.552000000003
+      },
+      {
+        "risk": 0.08,
+        "waste_kg": 43672.395000000004,
+        "stockout_rate": 0.028053928911888872,
+        "services_with_stockout": 0.41919191919191917,
+        "plan_short_rate": 0.07748876481002315,
+        "production_kg": 161368.22,
+        "avoided_kg": -3289.2500000000073,
+        "avoided_try": -767341.4000000004,
+        "avoided_co2_kg": -6249.5750000000135
+      },
+      {
+        "risk": 0.09,
+        "waste_kg": 41668.405,
+        "stockout_rate": 0.03186708429797085,
+        "services_with_stockout": 0.45202020202020204,
+        "plan_short_rate": 0.0890644150892006,
+        "production_kg": 159272.89,
+        "avoided_kg": -1285.260000000002,
+        "avoided_try": -428488.60000000056,
+        "avoided_co2_kg": -2441.994000000004
+      },
+      {
+        "risk": 0.1,
+        "waste_kg": 39817.8,
+        "stockout_rate": 0.03595260792591584,
+        "services_with_stockout": 0.4898989898989899,
+        "plan_short_rate": 0.09968677652185755,
+        "production_kg": 157342.64,
+        "avoided_kg": 565.3449999999939,
+        "avoided_try": -117455.5,
+        "avoided_co2_kg": 1074.1554999999883
+      },
+      {
+        "risk": 0.11,
+        "waste_kg": 38747.32,
+        "stockout_rate": 0.038540106223614326,
+        "services_with_stockout": 0.5025252525252525,
+        "plan_short_rate": 0.10431703663352854,
+        "production_kg": 156201.85,
+        "avoided_kg": 1635.824999999997,
+        "avoided_try": 69203.59999999963,
+        "avoided_co2_kg": 3108.067499999994
+      },
+      {
+        "risk": 0.12,
+        "waste_kg": 37661.69,
+        "stockout_rate": 0.04167234100503881,
+        "services_with_stockout": 0.5303030303030303,
+        "plan_short_rate": 0.1103091379545145,
+        "production_kg": 155065.91,
+        "avoided_kg": 2721.4549999999945,
+        "avoided_try": 239549.69999999925,
+        "avoided_co2_kg": 5170.764499999989
+      },
+      {
+        "risk": 0.13,
+        "waste_kg": 36624.02,
+        "stockout_rate": 0.044123655181805804,
+        "services_with_stockout": 0.5454545454545454,
+        "plan_short_rate": 0.11548413454991148,
+        "production_kg": 153979.77000000002,
+        "avoided_kg": 3759.125,
+        "avoided_try": 421952.80000000075,
+        "avoided_co2_kg": 7142.3375
+      },
+      {
+        "risk": 0.14,
+        "waste_kg": 35624.09,
+        "stockout_rate": 0.04711970584229879,
+        "services_with_stockout": 0.5732323232323232,
+        "plan_short_rate": 0.12242952471741794,
+        "production_kg": 152934.68,
+        "avoided_kg": 4759.055,
+        "avoided_try": 581467.2000000011,
+        "avoided_co2_kg": 9042.2045
+      },
+      {
+        "risk": 0.15,
+        "waste_kg": 34620.119999999995,
+        "stockout_rate": 0.05106904534931227,
+        "services_with_stockout": 0.6035353535353535,
+        "plan_short_rate": 0.1323709655454174,
+        "production_kg": 151839.57,
+        "avoided_kg": 5763.0250000000015,
+        "avoided_try": 748140.5,
+        "avoided_co2_kg": 10949.747500000003
+      },
+      {
+        "risk": 0.16,
+        "waste_kg": 33611.575,
+        "stockout_rate": 0.053928911888873755,
+        "services_with_stockout": 0.6212121212121212,
+        "plan_short_rate": 0.13863543510826637,
+        "production_kg": 150754.46,
+        "avoided_kg": 6771.57,
+        "avoided_try": 914211.0999999996,
+        "avoided_co2_kg": 12865.982999999998
+      },
+      {
+        "risk": 0.17,
+        "waste_kg": 32651.635000000002,
+        "stockout_rate": 0.058150619637750235,
+        "services_with_stockout": 0.6338383838383839,
+        "plan_short_rate": 0.14503608879204685,
+        "production_kg": 149719.44,
+        "avoided_kg": 7731.509999999995,
+        "avoided_try": 1069047.0999999996,
+        "avoided_co2_kg": 14689.86899999999
+      },
+      {
+        "risk": 0.18,
+        "waste_kg": 31646.574999999997,
+        "stockout_rate": 0.06346180035407871,
+        "services_with_stockout": 0.6565656565656566,
+        "plan_short_rate": 0.1555222661037723,
+        "production_kg": 148622.12,
+        "avoided_kg": 8736.57,
+        "avoided_try": 1229551.5,
+        "avoided_co2_kg": 16599.483
+      },
+      {
+        "risk": 0.19,
+        "waste_kg": 30686.079999999998,
+        "stockout_rate": 0.0679558763448182,
+        "services_with_stockout": 0.6843434343434344,
+        "plan_short_rate": 0.16328476099686776,
+        "production_kg": 147550.03999999998,
+        "avoided_kg": 9697.064999999999,
+        "avoided_try": 1384885.0,
+        "avoided_co2_kg": 18424.423499999997
+      },
+      {
+        "risk": 0.2,
+        "waste_kg": 29654.340000000004,
+        "stockout_rate": 0.07422034590766717,
+        "services_with_stockout": 0.7222222222222222,
+        "plan_short_rate": 0.17172817649462072,
+        "production_kg": 146425.40999999997,
+        "avoided_kg": 10728.804999999993,
+        "avoided_try": 1553054.4000000004,
+        "avoided_co2_kg": 20384.729499999987
+      },
+      {
+        "risk": 0.21,
+        "waste_kg": 29017.475,
+        "stockout_rate": 0.07816968541468065,
+        "services_with_stockout": 0.73989898989899,
+        "plan_short_rate": 0.17622225248536022,
+        "production_kg": 145717.59000000003,
+        "avoided_kg": 11365.669999999998,
+        "avoided_try": 1658142.6999999993,
+        "avoided_co2_kg": 21594.772999999997
+      },
+      {
+        "risk": 0.22,
+        "waste_kg": 28395.905,
+        "stockout_rate": 0.08171047255889963,
+        "services_with_stockout": 0.7575757575757576,
+        "plan_short_rate": 0.18166961732262019,
+        "production_kg": 145031.4,
+        "avoided_kg": 11987.239999999998,
+        "avoided_try": 1751253.5,
+        "avoided_co2_kg": 22775.755999999994
+      },
+      {
+        "risk": 0.23,
+        "waste_kg": 27820.244999999995,
+        "stockout_rate": 0.08593218030777611,
+        "services_with_stockout": 0.7676767676767676,
+        "plan_short_rate": 0.18766171864360615,
+        "production_kg": 144377.52000000002,
+        "avoided_kg": 12562.900000000001,
+        "avoided_try": 1839265.4000000004,
+        "avoided_co2_kg": 23869.510000000002
+      },
+      {
+        "risk": 0.24,
+        "waste_kg": 27203.454999999998,
+        "stockout_rate": 0.0902900721775841,
+        "services_with_stockout": 0.7803030303030303,
+        "plan_short_rate": 0.19270053111807164,
+        "production_kg": 143656.89,
+        "avoided_kg": 13179.689999999999,
+        "avoided_try": 1940117.0,
+        "avoided_co2_kg": 25041.410999999996
+      },
+      {
+        "risk": 0.25,
+        "waste_kg": 26620.174999999996,
+        "stockout_rate": 0.09464796404739208,
+        "services_with_stockout": 0.8005050505050505,
+        "plan_short_rate": 0.1997821054065096,
+        "production_kg": 142984.80000000002,
+        "avoided_kg": 13762.970000000001,
+        "avoided_try": 2032730.0,
+        "avoided_co2_kg": 26149.643
+      },
+      {
+        "risk": 0.26,
+        "waste_kg": 26054.245,
+        "stockout_rate": 0.09955059240092605,
+        "services_with_stockout": 0.8232323232323232,
+        "plan_short_rate": 0.20849788914612555,
+        "production_kg": 142312.90999999997,
+        "avoided_kg": 14328.899999999998,
+        "avoided_try": 2112436.1999999997,
+        "avoided_co2_kg": 27224.909999999996
+      },
+      {
+        "risk": 0.27,
+        "waste_kg": 25431.825,
+        "stockout_rate": 0.10241045894048754,
+        "services_with_stockout": 0.8308080808080808,
+        "plan_short_rate": 0.21380906986245404,
+        "production_kg": 141606.28,
+        "avoided_kg": 14951.319999999996,
+        "avoided_try": 2208023.6,
+        "avoided_co2_kg": 28407.50799999999
+      },
+      {
+        "risk": 0.28,
+        "waste_kg": 24863.065,
+        "stockout_rate": 0.10690453493122702,
+        "services_with_stockout": 0.8434343434343434,
+        "plan_short_rate": 0.2212991965136865,
+        "production_kg": 140954.74,
+        "avoided_kg": 15520.079999999998,
+        "avoided_try": 2295774.9,
+        "avoided_co2_kg": 29488.151999999995
+      },
+      {
+        "risk": 0.29,
+        "waste_kg": 24296.504999999997,
+        "stockout_rate": 0.110990058559172,
+        "services_with_stockout": 0.851010101010101,
+        "plan_short_rate": 0.22865313904398746,
+        "production_kg": 140308.54,
+        "avoided_kg": 16086.64,
+        "avoided_try": 2382309.4000000004,
+        "avoided_co2_kg": 30564.615999999998
+      },
+      {
+        "risk": 0.3,
+        "waste_kg": 23731.235,
+        "stockout_rate": 0.11493939806618549,
+        "services_with_stockout": 0.8560606060606061,
+        "plan_short_rate": 0.23518997684869944,
+        "production_kg": 139624.16,
+        "avoided_kg": 16651.909999999996,
+        "avoided_try": 2473602.3,
+        "avoided_co2_kg": 31638.62899999999
+      }
+    ],
+    "months": [
+      {
+        "month": 4,
+        "chef": {
+          "waste_kg": 7871.195,
+          "stockout_rate": 0.11919315403422982,
+          "services_with_stockout": 0.7555555555555555,
+          "plan_short_rate": 0.19193154034229828,
+          "production_kg": 30516.46
+        },
+        "levels": [
+          {
+            "risk": 0.05,
+            "waste_kg": 9786.77,
+            "stockout_rate": 0.030562347188264057,
+            "services_with_stockout": 0.43333333333333335,
+            "plan_short_rate": 0.0678484107579462,
+            "production_kg": 32866.3,
+            "avoided_kg": -1915.5750000000007,
+            "avoided_try": -346550.8999999999,
+            "avoided_co2_kg": -3639.592500000001
+          },
+          {
+            "risk": 0.06,
+            "waste_kg": 9422.259999999998,
+            "stockout_rate": 0.03361858190709047,
+            "services_with_stockout": 0.4666666666666667,
+            "plan_short_rate": 0.07212713936430318,
+            "production_kg": 32486.71,
+            "avoided_kg": -1551.0649999999987,
+            "avoided_try": -282347.80000000005,
+            "avoided_co2_kg": -2947.0234999999975
+          },
+          {
+            "risk": 0.07,
+            "waste_kg": 9045.29,
+            "stockout_rate": 0.035452322738386305,
+            "services_with_stockout": 0.4888888888888889,
+            "plan_short_rate": 0.08068459657701711,
+            "production_kg": 32095.480000000003,
+            "avoided_kg": -1174.0950000000012,
+            "avoided_try": -216454.0,
+            "avoided_co2_kg": -2230.780500000002
+          },
+          {
+            "risk": 0.08,
+            "waste_kg": 8675.2,
+            "stockout_rate": 0.03973105134474328,
+            "services_with_stockout": 0.5444444444444444,
+            "plan_short_rate": 0.08618581907090464,
+            "production_kg": 31713.88,
+            "avoided_kg": -804.005000000001,
+            "avoided_try": -150217.0,
+            "avoided_co2_kg": -1527.6095000000018
+          },
+          {
+            "risk": 0.09,
+            "waste_kg": 8284.259999999998,
+            "stockout_rate": 0.04339853300733496,
+            "services_with_stockout": 0.5666666666666667,
+            "plan_short_rate": 0.09229828850855745,
+            "production_kg": 31299.360000000004,
+            "avoided_kg": -413.0649999999987,
+            "avoided_try": -80442.1000000001,
+            "avoided_co2_kg": -784.8234999999975
+          },
+          {
+            "risk": 0.1,
+            "waste_kg": 7945.17,
+            "stockout_rate": 0.04645476772616137,
+            "services_with_stockout": 0.6,
+            "plan_short_rate": 0.10452322738386308,
+            "production_kg": 30943.22,
+            "avoided_kg": -73.97500000000036,
+            "avoided_try": -26190.09999999986,
+            "avoided_co2_kg": -140.5525000000007
+          },
+          {
+            "risk": 0.11,
+            "waste_kg": 7747.54,
+            "stockout_rate": 0.05012224938875306,
+            "services_with_stockout": 0.6111111111111112,
+            "plan_short_rate": 0.11063569682151589,
+            "production_kg": 30733.75,
+            "avoided_kg": 123.65499999999975,
+            "avoided_try": 4246.600000000093,
+            "avoided_co2_kg": 234.9444999999995
+          },
+          {
+            "risk": 0.12,
+            "waste_kg": 7517.3,
+            "stockout_rate": 0.054400977995110025,
+            "services_with_stockout": 0.6333333333333333,
+            "plan_short_rate": 0.11430317848410758,
+            "production_kg": 30482.519999999997,
+            "avoided_kg": 353.8949999999995,
+            "avoided_try": 37175.799999999814,
+            "avoided_co2_kg": 672.400499999999
+          },
+          {
+            "risk": 0.13,
+            "waste_kg": 7314.52,
+            "stockout_rate": 0.05806845965770171,
+            "services_with_stockout": 0.6555555555555556,
+            "plan_short_rate": 0.12102689486552567,
+            "production_kg": 30267.649999999998,
+            "avoided_kg": 556.6749999999993,
+            "avoided_try": 74688.8999999999,
+            "avoided_co2_kg": 1057.6824999999985
+          },
+          {
+            "risk": 0.14,
+            "waste_kg": 7127.16,
+            "stockout_rate": 0.06051344743276284,
+            "services_with_stockout": 0.6555555555555556,
+            "plan_short_rate": 0.1265281173594132,
+            "production_kg": 30068.38,
+            "avoided_kg": 744.0349999999999,
+            "avoided_try": 103467.20000000019,
+            "avoided_co2_kg": 1413.6664999999996
+          },
+          {
+            "risk": 0.15,
+            "waste_kg": 6916.83,
+            "stockout_rate": 0.06418092909535453,
+            "services_with_stockout": 0.6666666666666666,
+            "plan_short_rate": 0.13753056234718827,
+            "production_kg": 29835.09,
+            "avoided_kg": 954.3649999999998,
+            "avoided_try": 136088.3999999999,
+            "avoided_co2_kg": 1813.2934999999995
+          },
+          {
+            "risk": 0.16,
+            "waste_kg": 6720.530000000001,
+            "stockout_rate": 0.06723716381418093,
+            "services_with_stockout": 0.6777777777777778,
+            "plan_short_rate": 0.14180929095354522,
+            "production_kg": 29624.85,
+            "avoided_kg": 1150.664999999999,
+            "avoided_try": 169333.30000000005,
+            "avoided_co2_kg": 2186.263499999998
+          },
+          {
+            "risk": 0.17,
+            "waste_kg": 6502.91,
+            "stockout_rate": 0.06907090464547677,
+            "services_with_stockout": 0.6777777777777778,
+            "plan_short_rate": 0.14853300733496333,
+            "production_kg": 29396.1,
+            "avoided_kg": 1368.2849999999999,
+            "avoided_try": 204057.8999999999,
+            "avoided_co2_kg": 2599.7414999999996
+          },
+          {
+            "risk": 0.18,
+            "waste_kg": 6295.86,
+            "stockout_rate": 0.0745721271393643,
+            "services_with_stockout": 0.6888888888888889,
+            "plan_short_rate": 0.1558679706601467,
+            "production_kg": 29169.019999999997,
+            "avoided_kg": 1575.335,
+            "avoided_try": 234088.3999999999,
+            "avoided_co2_kg": 2993.1365
+          },
+          {
+            "risk": 0.19,
+            "waste_kg": 6067.5599999999995,
+            "stockout_rate": 0.0776283618581907,
+            "services_with_stockout": 0.6888888888888889,
+            "plan_short_rate": 0.16198044009779952,
+            "production_kg": 28923.659999999996,
+            "avoided_kg": 1803.6350000000002,
+            "avoided_try": 268369.9,
+            "avoided_co2_kg": 3426.9065
+          },
+          {
+            "risk": 0.2,
+            "waste_kg": 5875.280000000001,
+            "stockout_rate": 0.0843520782396088,
+            "services_with_stockout": 0.7222222222222222,
+            "plan_short_rate": 0.17359413202933985,
+            "production_kg": 28712.010000000002,
+            "avoided_kg": 1995.914999999999,
+            "avoided_try": 298143.79999999993,
+            "avoided_co2_kg": 3792.238499999998
+          },
+          {
+            "risk": 0.21,
+            "waste_kg": 5752.87,
+            "stockout_rate": 0.08863080684596578,
+            "services_with_stockout": 0.7444444444444445,
+            "plan_short_rate": 0.17787286063569682,
+            "production_kg": 28569.72,
+            "avoided_kg": 2118.325,
+            "avoided_try": 319312.6,
+            "avoided_co2_kg": 4024.8174999999997
+          },
+          {
+            "risk": 0.22,
+            "waste_kg": 5638.24,
+            "stockout_rate": 0.09168704156479218,
+            "services_with_stockout": 0.7666666666666667,
+            "plan_short_rate": 0.18337408312958436,
+            "production_kg": 28435.5,
+            "avoided_kg": 2232.955,
+            "avoided_try": 336796.69999999995,
+            "avoided_co2_kg": 4242.6145
+          },
+          {
+            "risk": 0.23,
+            "waste_kg": 5550.15,
+            "stockout_rate": 0.09352078239608802,
+            "services_with_stockout": 0.7777777777777778,
+            "plan_short_rate": 0.18948655256723718,
+            "production_kg": 28329.63,
+            "avoided_kg": 2321.045,
+            "avoided_try": 348968.4,
+            "avoided_co2_kg": 4409.9855
+          },
+          {
+            "risk": 0.24,
+            "waste_kg": 5428.9400000000005,
+            "stockout_rate": 0.09718826405867971,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.1949877750611247,
+            "production_kg": 28188.309999999998,
+            "avoided_kg": 2442.254999999999,
+            "avoided_try": 365863.0,
+            "avoided_co2_kg": 4640.284499999998
+          },
+          {
+            "risk": 0.25,
+            "waste_kg": 5313.3099999999995,
+            "stockout_rate": 0.10146699266503667,
+            "services_with_stockout": 0.8111111111111111,
+            "plan_short_rate": 0.2011002444987775,
+            "production_kg": 28055.58,
+            "avoided_kg": 2557.885,
+            "avoided_try": 383347.59999999986,
+            "avoided_co2_kg": 4859.9815
+          },
+          {
+            "risk": 0.26,
+            "waste_kg": 5194.63,
+            "stockout_rate": 0.10635696821515893,
+            "services_with_stockout": 0.8222222222222222,
+            "plan_short_rate": 0.21210268948655256,
+            "production_kg": 27917.96,
+            "avoided_kg": 2676.5649999999996,
+            "avoided_try": 402093.1,
+            "avoided_co2_kg": 5085.473499999999
+          },
+          {
+            "risk": 0.27,
+            "waste_kg": 5071.5599999999995,
+            "stockout_rate": 0.10757946210268948,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.2176039119804401,
+            "production_kg": 27778.239999999998,
+            "avoided_kg": 2799.635,
+            "avoided_try": 421423.8999999999,
+            "avoided_co2_kg": 5319.306500000001
+          },
+          {
+            "risk": 0.28,
+            "waste_kg": 4964.79,
+            "stockout_rate": 0.1100244498777506,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.22677261613691932,
+            "production_kg": 27656.54,
+            "avoided_kg": 2906.4049999999997,
+            "avoided_try": 440487.79999999993,
+            "avoided_co2_kg": 5522.169499999999
+          },
+          {
+            "risk": 0.29,
+            "waste_kg": 4840.585,
+            "stockout_rate": 0.11552567237163815,
+            "services_with_stockout": 0.8444444444444444,
+            "plan_short_rate": 0.23166259168704156,
+            "production_kg": 27519.300000000003,
+            "avoided_kg": 3030.6099999999997,
+            "avoided_try": 461019.29999999993,
+            "avoided_co2_kg": 5758.158999999999
+          },
+          {
+            "risk": 0.3,
+            "waste_kg": 4701.355,
+            "stockout_rate": 0.1167481662591687,
+            "services_with_stockout": 0.8444444444444444,
+            "plan_short_rate": 0.23594132029339854,
+            "production_kg": 27353.61,
+            "avoided_kg": 3169.84,
+            "avoided_try": 486594.3999999999,
+            "avoided_co2_kg": 6022.696
+          }
+        ]
+      },
+      {
+        "month": 5,
+        "chef": {
+          "waste_kg": 9093.645,
+          "stockout_rate": 0.09313432835820895,
+          "services_with_stockout": 0.7204301075268817,
+          "plan_short_rate": 0.17671641791044776,
+          "production_kg": 34126.58
+        },
+        "levels": [
+          {
+            "risk": 0.05,
+            "waste_kg": 10194.11,
+            "stockout_rate": 0.016119402985074627,
+            "services_with_stockout": 0.24731182795698925,
+            "plan_short_rate": 0.04895522388059702,
+            "production_kg": 35547.67,
+            "avoided_kg": -1100.4650000000001,
+            "avoided_try": -243825.09999999986,
+            "avoided_co2_kg": -2090.8835000000004
+          },
+          {
+            "risk": 0.06,
+            "waste_kg": 9779.169999999998,
+            "stockout_rate": 0.019701492537313434,
+            "services_with_stockout": 0.3118279569892473,
+            "plan_short_rate": 0.056119402985074625,
+            "production_kg": 35123.149999999994,
+            "avoided_kg": -685.5249999999978,
+            "avoided_try": -170039.69999999995,
+            "avoided_co2_kg": -1302.4974999999959
+          },
+          {
+            "risk": 0.07,
+            "waste_kg": 9374.509999999998,
+            "stockout_rate": 0.020895522388059702,
+            "services_with_stockout": 0.3333333333333333,
+            "plan_short_rate": 0.06208955223880597,
+            "production_kg": 34711.93,
+            "avoided_kg": -280.86499999999796,
+            "avoided_try": -102805.40000000014,
+            "avoided_co2_kg": -533.6434999999962
+          },
+          {
+            "risk": 0.08,
+            "waste_kg": 9028.689999999999,
+            "stockout_rate": 0.02208955223880597,
+            "services_with_stockout": 0.3548387096774194,
+            "plan_short_rate": 0.07223880597014926,
+            "production_kg": 34358.2,
+            "avoided_kg": 64.95500000000175,
+            "avoided_try": -44666.69999999995,
+            "avoided_co2_kg": 123.41450000000331
+          },
+          {
+            "risk": 0.09,
+            "waste_kg": 8612.15,
+            "stockout_rate": 0.02447761194029851,
+            "services_with_stockout": 0.3655913978494624,
+            "plan_short_rate": 0.08477611940298507,
+            "production_kg": 33928.67,
+            "avoided_kg": 481.4950000000008,
+            "avoided_try": 25537.5,
+            "avoided_co2_kg": 914.8405000000015
+          },
+          {
+            "risk": 0.1,
+            "waste_kg": 8262.095,
+            "stockout_rate": 0.028059701492537312,
+            "services_with_stockout": 0.40860215053763443,
+            "plan_short_rate": 0.09313432835820895,
+            "production_kg": 33567.05,
+            "avoided_kg": 831.5500000000011,
+            "avoided_try": 86537.19999999995,
+            "avoided_co2_kg": 1579.945000000002
+          },
+          {
+            "risk": 0.11,
+            "waste_kg": 8037.304999999999,
+            "stockout_rate": 0.029850746268656716,
+            "services_with_stockout": 0.41935483870967744,
+            "plan_short_rate": 0.0991044776119403,
+            "production_kg": 33324.53,
+            "avoided_kg": 1056.340000000001,
+            "avoided_try": 125890.00000000023,
+            "avoided_co2_kg": 2007.0460000000019
+          },
+          {
+            "risk": 0.12,
+            "waste_kg": 7820.625,
+            "stockout_rate": 0.032238805970149255,
+            "services_with_stockout": 0.45161290322580644,
+            "plan_short_rate": 0.10268656716417911,
+            "production_kg": 33104.130000000005,
+            "avoided_kg": 1273.0200000000004,
+            "avoided_try": 163327.09999999986,
+            "avoided_co2_kg": 2418.7380000000007
+          },
+          {
+            "risk": 0.13,
+            "waste_kg": 7628.924999999999,
+            "stockout_rate": 0.03283582089552239,
+            "services_with_stockout": 0.46236559139784944,
+            "plan_short_rate": 0.10746268656716418,
+            "production_kg": 32907.88,
+            "avoided_kg": 1464.7200000000012,
+            "avoided_try": 195001.90000000014,
+            "avoided_co2_kg": 2782.968000000002
+          },
+          {
+            "risk": 0.14,
+            "waste_kg": 7400.07,
+            "stockout_rate": 0.03522388059701492,
+            "services_with_stockout": 0.4946236559139785,
+            "plan_short_rate": 0.11641791044776119,
+            "production_kg": 32672.120000000003,
+            "avoided_kg": 1693.5750000000007,
+            "avoided_try": 230760.1000000001,
+            "avoided_co2_kg": 3217.7925000000014
+          },
+          {
+            "risk": 0.15,
+            "waste_kg": 7209.21,
+            "stockout_rate": 0.03940298507462687,
+            "services_with_stockout": 0.5268817204301075,
+            "plan_short_rate": 0.12895522388059702,
+            "production_kg": 32468.36,
+            "avoided_kg": 1884.4350000000004,
+            "avoided_try": 262657.8999999999,
+            "avoided_co2_kg": 3580.4265000000005
+          },
+          {
+            "risk": 0.16,
+            "waste_kg": 7001.924999999999,
+            "stockout_rate": 0.04059701492537313,
+            "services_with_stockout": 0.5268817204301075,
+            "plan_short_rate": 0.1355223880597015,
+            "production_kg": 32252.579999999998,
+            "avoided_kg": 2091.720000000001,
+            "avoided_try": 297668.80000000005,
+            "avoided_co2_kg": 3974.268000000002
+          },
+          {
+            "risk": 0.17,
+            "waste_kg": 6800.815,
+            "stockout_rate": 0.04358208955223881,
+            "services_with_stockout": 0.5483870967741935,
+            "plan_short_rate": 0.13970149253731343,
+            "production_kg": 32032.03,
+            "avoided_kg": 2292.830000000001,
+            "avoided_try": 329437.40000000014,
+            "avoided_co2_kg": 4356.377000000001
+          },
+          {
+            "risk": 0.18,
+            "waste_kg": 6576.965,
+            "stockout_rate": 0.04955223880597015,
+            "services_with_stockout": 0.5806451612903226,
+            "plan_short_rate": 0.14865671641791045,
+            "production_kg": 31792.41,
+            "avoided_kg": 2516.6800000000003,
+            "avoided_try": 363280.09999999986,
+            "avoided_co2_kg": 4781.692
+          },
+          {
+            "risk": 0.19,
+            "waste_kg": 6386.66,
+            "stockout_rate": 0.05432835820895522,
+            "services_with_stockout": 0.6344086021505376,
+            "plan_short_rate": 0.15641791044776118,
+            "production_kg": 31582.730000000003,
+            "avoided_kg": 2706.9850000000006,
+            "avoided_try": 397141.80000000005,
+            "avoided_co2_kg": 5143.271500000001
+          },
+          {
+            "risk": 0.2,
+            "waste_kg": 6212.085,
+            "stockout_rate": 0.06328358208955225,
+            "services_with_stockout": 0.7204301075268817,
+            "plan_short_rate": 0.1617910447761194,
+            "production_kg": 31387.82,
+            "avoided_kg": 2881.5600000000004,
+            "avoided_try": 422935.30000000005,
+            "avoided_co2_kg": 5474.964000000001
+          },
+          {
+            "risk": 0.21,
+            "waste_kg": 6072.77,
+            "stockout_rate": 0.06985074626865671,
+            "services_with_stockout": 0.7526881720430108,
+            "plan_short_rate": 0.1647761194029851,
+            "production_kg": 31232.25,
+            "avoided_kg": 3020.875,
+            "avoided_try": 443390.1000000001,
+            "avoided_co2_kg": 5739.662499999999
+          },
+          {
+            "risk": 0.22,
+            "waste_kg": 5940.91,
+            "stockout_rate": 0.07283582089552239,
+            "services_with_stockout": 0.7634408602150538,
+            "plan_short_rate": 0.16895522388059703,
+            "production_kg": 31090.59,
+            "avoided_kg": 3152.7350000000006,
+            "avoided_try": 463620.4,
+            "avoided_co2_kg": 5990.196500000001
+          },
+          {
+            "risk": 0.23,
+            "waste_kg": 5850.5599999999995,
+            "stockout_rate": 0.07462686567164178,
+            "services_with_stockout": 0.7634408602150538,
+            "plan_short_rate": 0.17791044776119402,
+            "production_kg": 30994.36,
+            "avoided_kg": 3243.085000000001,
+            "avoided_try": 476456.19999999995,
+            "avoided_co2_kg": 6161.861500000002
+          },
+          {
+            "risk": 0.24,
+            "waste_kg": 5710.82,
+            "stockout_rate": 0.08298507462686568,
+            "services_with_stockout": 0.7849462365591398,
+            "plan_short_rate": 0.18208955223880596,
+            "production_kg": 30833.85,
+            "avoided_kg": 3382.8250000000007,
+            "avoided_try": 503040.80000000005,
+            "avoided_co2_kg": 6427.367500000001
+          },
+          {
+            "risk": 0.25,
+            "waste_kg": 5583.889999999999,
+            "stockout_rate": 0.08597014925373134,
+            "services_with_stockout": 0.8064516129032258,
+            "plan_short_rate": 0.18925373134328358,
+            "production_kg": 30695.57,
+            "avoided_kg": 3509.755000000001,
+            "avoided_try": 524454.7000000001,
+            "avoided_co2_kg": 6668.534500000002
+          },
+          {
+            "risk": 0.26,
+            "waste_kg": 5476.49,
+            "stockout_rate": 0.09074626865671642,
+            "services_with_stockout": 0.8387096774193549,
+            "plan_short_rate": 0.19940298507462687,
+            "production_kg": 30573.75,
+            "avoided_kg": 3617.1550000000007,
+            "avoided_try": 539657.0,
+            "avoided_co2_kg": 6872.594500000001
+          },
+          {
+            "risk": 0.27,
+            "waste_kg": 5373.299999999999,
+            "stockout_rate": 0.09492537313432836,
+            "services_with_stockout": 0.8494623655913979,
+            "plan_short_rate": 0.20597014925373133,
+            "production_kg": 30458.43,
+            "avoided_kg": 3720.345000000001,
+            "avoided_try": 556582.6000000001,
+            "avoided_co2_kg": 7068.655500000002
+          },
+          {
+            "risk": 0.28,
+            "waste_kg": 5274.95,
+            "stockout_rate": 0.09850746268656717,
+            "services_with_stockout": 0.8602150537634409,
+            "plan_short_rate": 0.2155223880597015,
+            "production_kg": 30336.22,
+            "avoided_kg": 3818.6950000000006,
+            "avoided_try": 570598.5,
+            "avoided_co2_kg": 7255.5205000000005
+          },
+          {
+            "risk": 0.29,
+            "waste_kg": 5158.92,
+            "stockout_rate": 0.1008955223880597,
+            "services_with_stockout": 0.8709677419354839,
+            "plan_short_rate": 0.22268656716417912,
+            "production_kg": 30206.25,
+            "avoided_kg": 3934.7250000000004,
+            "avoided_try": 585013.6,
+            "avoided_co2_kg": 7475.9775
+          },
+          {
+            "risk": 0.3,
+            "waste_kg": 5057.879999999999,
+            "stockout_rate": 0.10686567164179105,
+            "services_with_stockout": 0.8709677419354839,
+            "plan_short_rate": 0.22865671641791044,
+            "production_kg": 30074.24,
+            "avoided_kg": 4035.7650000000012,
+            "avoided_try": 598115.0,
+            "avoided_co2_kg": 7667.953500000002
+          }
+        ]
+      },
+      {
+        "month": 6,
+        "chef": {
+          "waste_kg": 8747.48,
+          "stockout_rate": 0.09466019417475728,
+          "services_with_stockout": 0.7222222222222222,
+          "plan_short_rate": 0.17657766990291263,
+          "production_kg": 34374.05
+        },
+        "levels": [
+          {
+            "risk": 0.05,
+            "waste_kg": 11581.55,
+            "stockout_rate": 0.015776699029126214,
+            "services_with_stockout": 0.26666666666666666,
+            "plan_short_rate": 0.054004854368932036,
+            "production_kg": 37546.65,
+            "avoided_kg": -2834.0699999999997,
+            "avoided_try": -532802.1000000001,
+            "avoided_co2_kg": -5384.732999999999
+          },
+          {
+            "risk": 0.06,
+            "waste_kg": 11106.319999999998,
+            "stockout_rate": 0.018810679611650484,
+            "services_with_stockout": 0.28888888888888886,
+            "plan_short_rate": 0.0625,
+            "production_kg": 37065.17999999999,
+            "avoided_kg": -2358.8399999999983,
+            "avoided_try": -455637.6000000001,
+            "avoided_co2_kg": -4481.795999999997
+          },
+          {
+            "risk": 0.07,
+            "waste_kg": 10682.72,
+            "stockout_rate": 0.022451456310679612,
+            "services_with_stockout": 0.35555555555555557,
+            "plan_short_rate": 0.06856796116504854,
+            "production_kg": 36629.18000000001,
+            "avoided_kg": -1935.2399999999998,
+            "avoided_try": -379341.7000000002,
+            "avoided_co2_kg": -3676.955999999999
+          },
+          {
+            "risk": 0.08,
+            "waste_kg": 10215.14,
+            "stockout_rate": 0.024271844660194174,
+            "services_with_stockout": 0.37777777777777777,
+            "plan_short_rate": 0.07584951456310679,
+            "production_kg": 36149.41,
+            "avoided_kg": -1467.6599999999999,
+            "avoided_try": -300181.5,
+            "avoided_co2_kg": -2788.5539999999996
+          },
+          {
+            "risk": 0.09,
+            "waste_kg": 9766.81,
+            "stockout_rate": 0.030946601941747573,
+            "services_with_stockout": 0.45555555555555555,
+            "plan_short_rate": 0.0904126213592233,
+            "production_kg": 35678.3,
+            "avoided_kg": -1019.3299999999999,
+            "avoided_try": -228043.7999999998,
+            "avoided_co2_kg": -1936.7269999999999
+          },
+          {
+            "risk": 0.1,
+            "waste_kg": 9332.07,
+            "stockout_rate": 0.03762135922330097,
+            "services_with_stockout": 0.5111111111111111,
+            "plan_short_rate": 0.10072815533980582,
+            "production_kg": 35226.19,
+            "avoided_kg": -584.5900000000001,
+            "avoided_try": -153200.80000000005,
+            "avoided_co2_kg": -1110.7210000000002
+          },
+          {
+            "risk": 0.11,
+            "waste_kg": 9077.21,
+            "stockout_rate": 0.03944174757281554,
+            "services_with_stockout": 0.5222222222222223,
+            "plan_short_rate": 0.10315533980582524,
+            "production_kg": 34964.090000000004,
+            "avoided_kg": -329.72999999999956,
+            "avoided_try": -105051.20000000019,
+            "avoided_co2_kg": -626.4869999999992
+          },
+          {
+            "risk": 0.12,
+            "waste_kg": 8804.599999999999,
+            "stockout_rate": 0.04247572815533981,
+            "services_with_stockout": 0.5555555555555556,
+            "plan_short_rate": 0.10922330097087378,
+            "production_kg": 34681.53,
+            "avoided_kg": -57.11999999999898,
+            "avoided_try": -63620.60000000009,
+            "avoided_co2_kg": -108.52799999999806
+          },
+          {
+            "risk": 0.13,
+            "waste_kg": 8564.62,
+            "stockout_rate": 0.047936893203883495,
+            "services_with_stockout": 0.5888888888888889,
+            "plan_short_rate": 0.11225728155339806,
+            "production_kg": 34425.880000000005,
+            "avoided_kg": 182.85999999999876,
+            "avoided_try": -19408.700000000186,
+            "avoided_co2_kg": 347.43399999999764
+          },
+          {
+            "risk": 0.14,
+            "waste_kg": 8337.535,
+            "stockout_rate": 0.050970873786407765,
+            "services_with_stockout": 0.6333333333333333,
+            "plan_short_rate": 0.1183252427184466,
+            "production_kg": 34190.14,
+            "avoided_kg": 409.9449999999997,
+            "avoided_try": 21793.199999999953,
+            "avoided_co2_kg": 778.8954999999994
+          },
+          {
+            "risk": 0.15,
+            "waste_kg": 8067.724999999999,
+            "stockout_rate": 0.05461165048543689,
+            "services_with_stockout": 0.6555555555555556,
+            "plan_short_rate": 0.1262135922330097,
+            "production_kg": 33905.880000000005,
+            "avoided_kg": 679.7550000000001,
+            "avoided_try": 66460.8999999999,
+            "avoided_co2_kg": 1291.5345000000002
+          },
+          {
+            "risk": 0.16,
+            "waste_kg": 7827.424999999999,
+            "stockout_rate": 0.05703883495145631,
+            "services_with_stockout": 0.6666666666666666,
+            "plan_short_rate": 0.1316747572815534,
+            "production_kg": 33641.380000000005,
+            "avoided_kg": 920.0550000000003,
+            "avoided_try": 108067.3999999999,
+            "avoided_co2_kg": 1748.1045000000004
+          },
+          {
+            "risk": 0.17,
+            "waste_kg": 7622.905,
+            "stockout_rate": 0.06371359223300971,
+            "services_with_stockout": 0.6666666666666666,
+            "plan_short_rate": 0.13895631067961164,
+            "production_kg": 33412.96,
+            "avoided_kg": 1124.5749999999998,
+            "avoided_try": 139057.09999999986,
+            "avoided_co2_kg": 2136.6924999999997
+          },
+          {
+            "risk": 0.18,
+            "waste_kg": 7418.504999999999,
+            "stockout_rate": 0.06735436893203883,
+            "services_with_stockout": 0.6777777777777778,
+            "plan_short_rate": 0.15351941747572814,
+            "production_kg": 33189.880000000005,
+            "avoided_kg": 1328.9750000000004,
+            "avoided_try": 175928.09999999986,
+            "avoided_co2_kg": 2525.0525000000007
+          },
+          {
+            "risk": 0.19,
+            "waste_kg": 7183.695,
+            "stockout_rate": 0.07281553398058252,
+            "services_with_stockout": 0.7111111111111111,
+            "plan_short_rate": 0.16201456310679613,
+            "production_kg": 32930.94,
+            "avoided_kg": 1563.7849999999999,
+            "avoided_try": 217042.7999999998,
+            "avoided_co2_kg": 2971.1914999999995
+          },
+          {
+            "risk": 0.2,
+            "waste_kg": 6915.2300000000005,
+            "stockout_rate": 0.07888349514563107,
+            "services_with_stockout": 0.7333333333333333,
+            "plan_short_rate": 0.17111650485436894,
+            "production_kg": 32639.510000000002,
+            "avoided_kg": 1832.249999999999,
+            "avoided_try": 264860.5,
+            "avoided_co2_kg": 3481.2749999999983
+          },
+          {
+            "risk": 0.21,
+            "waste_kg": 6776.860000000001,
+            "stockout_rate": 0.08070388349514564,
+            "services_with_stockout": 0.7444444444444445,
+            "plan_short_rate": 0.17718446601941748,
+            "production_kg": 32492.55,
+            "avoided_kg": 1970.619999999999,
+            "avoided_try": 286477.8999999999,
+            "avoided_co2_kg": 3744.177999999998
+          },
+          {
+            "risk": 0.22,
+            "waste_kg": 6632.9,
+            "stockout_rate": 0.08434466019417476,
+            "services_with_stockout": 0.7555555555555555,
+            "plan_short_rate": 0.18264563106796117,
+            "production_kg": 32334.21,
+            "avoided_kg": 2114.58,
+            "avoided_try": 307769.8999999999,
+            "avoided_co2_kg": 4017.7019999999998
+          },
+          {
+            "risk": 0.23,
+            "waste_kg": 6484.74,
+            "stockout_rate": 0.0891990291262136,
+            "services_with_stockout": 0.7777777777777778,
+            "plan_short_rate": 0.18992718446601942,
+            "production_kg": 32162.64,
+            "avoided_kg": 2262.74,
+            "avoided_try": 333115.29999999993,
+            "avoided_co2_kg": 4299.205999999999
+          },
+          {
+            "risk": 0.24,
+            "waste_kg": 6340.43,
+            "stockout_rate": 0.09283980582524272,
+            "services_with_stockout": 0.7777777777777778,
+            "plan_short_rate": 0.1941747572815534,
+            "production_kg": 31992.020000000004,
+            "avoided_kg": 2407.0499999999993,
+            "avoided_try": 352360.4999999999,
+            "avoided_co2_kg": 4573.394999999999
+          },
+          {
+            "risk": 0.25,
+            "waste_kg": 6187.67,
+            "stockout_rate": 0.10012135922330097,
+            "services_with_stockout": 0.8222222222222222,
+            "plan_short_rate": 0.2008495145631068,
+            "production_kg": 31818.769999999997,
+            "avoided_kg": 2559.8099999999995,
+            "avoided_try": 378236.59999999986,
+            "avoided_co2_kg": 4863.638999999999
+          },
+          {
+            "risk": 0.26,
+            "waste_kg": 6056.955,
+            "stockout_rate": 0.10436893203883495,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.20813106796116504,
+            "production_kg": 31660.130000000005,
+            "avoided_kg": 2690.5249999999996,
+            "avoided_try": 394569.7999999998,
+            "avoided_co2_kg": 5111.9974999999995
+          },
+          {
+            "risk": 0.27,
+            "waste_kg": 5914.195,
+            "stockout_rate": 0.10800970873786407,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.2111650485436893,
+            "production_kg": 31503.07,
+            "avoided_kg": 2833.285,
+            "avoided_try": 415862.2999999998,
+            "avoided_co2_kg": 5383.241499999999
+          },
+          {
+            "risk": 0.28,
+            "waste_kg": 5789.074999999999,
+            "stockout_rate": 0.11165048543689321,
+            "services_with_stockout": 0.8555555555555555,
+            "plan_short_rate": 0.21844660194174756,
+            "production_kg": 31363.81,
+            "avoided_kg": 2958.4050000000007,
+            "avoided_try": 435645.09999999986,
+            "avoided_co2_kg": 5620.969500000001
+          },
+          {
+            "risk": 0.29,
+            "waste_kg": 5671.785,
+            "stockout_rate": 0.11407766990291263,
+            "services_with_stockout": 0.8666666666666667,
+            "plan_short_rate": 0.22694174757281554,
+            "production_kg": 31226.36,
+            "avoided_kg": 3075.6949999999997,
+            "avoided_try": 453618.4999999999,
+            "avoided_co2_kg": 5843.820499999999
+          },
+          {
+            "risk": 0.3,
+            "waste_kg": 5551.8949999999995,
+            "stockout_rate": 0.11893203883495146,
+            "services_with_stockout": 0.8777777777777778,
+            "plan_short_rate": 0.23361650485436894,
+            "production_kg": 31086.23,
+            "avoided_kg": 3195.585,
+            "avoided_try": 472808.19999999984,
+            "avoided_co2_kg": 6071.6115
+          }
+        ]
+      },
+      {
+        "month": 7,
+        "chef": {
+          "waste_kg": 10889.285,
+          "stockout_rate": 0.08319374651032943,
+          "services_with_stockout": 0.6774193548387096,
+          "plan_short_rate": 0.16471245114461194,
+          "production_kg": 42549.7
+        },
+        "levels": [
+          {
+            "risk": 0.05,
+            "waste_kg": 13804.255000000001,
+            "stockout_rate": 0.015633724176437745,
+            "services_with_stockout": 0.27956989247311825,
+            "plan_short_rate": 0.056393076493579004,
+            "production_kg": 45857.64,
+            "avoided_kg": -2914.970000000001,
+            "avoided_try": -505869.99999999953,
+            "avoided_co2_kg": -5538.443000000002
+          },
+          {
+            "risk": 0.06,
+            "waste_kg": 13187.855,
+            "stockout_rate": 0.01954215522054718,
+            "services_with_stockout": 0.3225806451612903,
+            "plan_short_rate": 0.059743160245672805,
+            "production_kg": 45225.86,
+            "avoided_kg": -2298.5699999999997,
+            "avoided_try": -402565.09999999986,
+            "avoided_co2_kg": -4367.282999999999
+          },
+          {
+            "risk": 0.07,
+            "waste_kg": 12620.125,
+            "stockout_rate": 0.023450586264656615,
+            "services_with_stockout": 0.3763440860215054,
+            "plan_short_rate": 0.06476828587381352,
+            "production_kg": 44638.490000000005,
+            "avoided_kg": -1730.8400000000001,
+            "avoided_try": -317245.7999999998,
+            "avoided_co2_kg": -3288.596
+          },
+          {
+            "risk": 0.08,
+            "waste_kg": 12015.525,
+            "stockout_rate": 0.027917364600781685,
+            "services_with_stockout": 0.41935483870967744,
+            "plan_short_rate": 0.07314349525404802,
+            "production_kg": 44009.93,
+            "avoided_kg": -1126.2399999999998,
+            "avoided_try": -216783.49999999977,
+            "avoided_co2_kg": -2139.8559999999993
+          },
+          {
+            "risk": 0.09,
+            "waste_kg": 11462.505000000001,
+            "stockout_rate": 0.031825795644891124,
+            "services_with_stockout": 0.45161290322580644,
+            "plan_short_rate": 0.0876605248464545,
+            "production_kg": 43431.08,
+            "avoided_kg": -573.2200000000012,
+            "avoided_try": -124571.3999999999,
+            "avoided_co2_kg": -1089.1180000000022
+          },
+          {
+            "risk": 0.1,
+            "waste_kg": 10895.355000000001,
+            "stockout_rate": 0.036292573981016193,
+            "services_with_stockout": 0.4838709677419355,
+            "plan_short_rate": 0.09882747068676717,
+            "production_kg": 42833.630000000005,
+            "avoided_kg": -6.070000000001528,
+            "avoided_try": -31776.999999999767,
+            "avoided_co2_kg": -11.533000000002902
+          },
+          {
+            "risk": 0.11,
+            "waste_kg": 10602.895,
+            "stockout_rate": 0.03908431044109436,
+            "services_with_stockout": 0.4946236559139785,
+            "plan_short_rate": 0.1044109436069235,
+            "production_kg": 42516.79,
+            "avoided_kg": 286.3899999999994,
+            "avoided_try": 17672.200000000186,
+            "avoided_co2_kg": 544.1409999999988
+          },
+          {
+            "risk": 0.12,
+            "waste_kg": 10332.305,
+            "stockout_rate": 0.04187604690117253,
+            "services_with_stockout": 0.5053763440860215,
+            "plan_short_rate": 0.11334450027917364,
+            "production_kg": 42230.93,
+            "avoided_kg": 556.9799999999996,
+            "avoided_try": 60386.80000000005,
+            "avoided_co2_kg": 1058.261999999999
+          },
+          {
+            "risk": 0.13,
+            "waste_kg": 10039.615,
+            "stockout_rate": 0.042992741485203795,
+            "services_with_stockout": 0.5053763440860215,
+            "plan_short_rate": 0.12004466778336124,
+            "production_kg": 41922.64,
+            "avoided_kg": 849.6700000000001,
+            "avoided_try": 111512.30000000028,
+            "avoided_co2_kg": 1614.373
+          },
+          {
+            "risk": 0.14,
+            "waste_kg": 9761.744999999999,
+            "stockout_rate": 0.04522613065326633,
+            "services_with_stockout": 0.5053763440860215,
+            "plan_short_rate": 0.12618648799553323,
+            "production_kg": 41631.28,
+            "avoided_kg": 1127.5400000000009,
+            "avoided_try": 153933.40000000014,
+            "avoided_co2_kg": 2142.3260000000014
+          },
+          {
+            "risk": 0.15,
+            "waste_kg": 9504.695,
+            "stockout_rate": 0.0480178671133445,
+            "services_with_stockout": 0.5268817204301075,
+            "plan_short_rate": 0.13512004466778335,
+            "production_kg": 41344.64,
+            "avoided_kg": 1384.5900000000001,
+            "avoided_try": 199919.1000000001,
+            "avoided_co2_kg": 2630.721
+          },
+          {
+            "risk": 0.16,
+            "waste_kg": 9213.585,
+            "stockout_rate": 0.05248464544946957,
+            "services_with_stockout": 0.5806451612903226,
+            "plan_short_rate": 0.14517029592406477,
+            "production_kg": 41026.71,
+            "avoided_kg": 1675.7000000000007,
+            "avoided_try": 245453.5,
+            "avoided_co2_kg": 3183.8300000000013
+          },
+          {
+            "risk": 0.17,
+            "waste_kg": 8938.365,
+            "stockout_rate": 0.05806811836962591,
+            "services_with_stockout": 0.6129032258064516,
+            "plan_short_rate": 0.15019542155220547,
+            "production_kg": 40736.78,
+            "avoided_kg": 1950.92,
+            "avoided_try": 291189.0,
+            "avoided_co2_kg": 3706.748
+          },
+          {
+            "risk": 0.18,
+            "waste_kg": 8643.775000000001,
+            "stockout_rate": 0.06476828587381352,
+            "services_with_stockout": 0.6559139784946236,
+            "plan_short_rate": 0.16192071468453378,
+            "production_kg": 40410.520000000004,
+            "avoided_kg": 2245.5099999999984,
+            "avoided_try": 340461.6000000001,
+            "avoided_co2_kg": 4266.468999999996
+          },
+          {
+            "risk": 0.19,
+            "waste_kg": 8406.224999999999,
+            "stockout_rate": 0.06811836962590731,
+            "services_with_stockout": 0.6774193548387096,
+            "plan_short_rate": 0.1702959240647683,
+            "production_kg": 40136.770000000004,
+            "avoided_kg": 2483.0600000000013,
+            "avoided_try": 375194.3000000003,
+            "avoided_co2_kg": 4717.814000000002
+          },
+          {
+            "risk": 0.2,
+            "waste_kg": 8116.475,
+            "stockout_rate": 0.07258514796203239,
+            "services_with_stockout": 0.6989247311827957,
+            "plan_short_rate": 0.17755443886097153,
+            "production_kg": 39821.64,
+            "avoided_kg": 2772.8099999999995,
+            "avoided_try": 420263.1000000001,
+            "avoided_co2_kg": 5268.338999999999
+          },
+          {
+            "risk": 0.21,
+            "waste_kg": 7934.345,
+            "stockout_rate": 0.07537688442211055,
+            "services_with_stockout": 0.6989247311827957,
+            "plan_short_rate": 0.1820212171970966,
+            "production_kg": 39624.5,
+            "avoided_kg": 2954.9399999999996,
+            "avoided_try": 452133.5,
+            "avoided_co2_kg": 5614.385999999999
+          },
+          {
+            "risk": 0.22,
+            "waste_kg": 7781.295,
+            "stockout_rate": 0.07984366275823562,
+            "services_with_stockout": 0.7311827956989247,
+            "plan_short_rate": 0.1887213847012842,
+            "production_kg": 39453.71,
+            "avoided_kg": 3107.99,
+            "avoided_try": 471600.90000000014,
+            "avoided_co2_kg": 5905.181
+          },
+          {
+            "risk": 0.23,
+            "waste_kg": 7601.145,
+            "stockout_rate": 0.08598548297040759,
+            "services_with_stockout": 0.7419354838709677,
+            "plan_short_rate": 0.19095477386934673,
+            "production_kg": 39250.83,
+            "avoided_kg": 3288.1399999999994,
+            "avoided_try": 500490.1000000001,
+            "avoided_co2_kg": 6247.4659999999985
+          },
+          {
+            "risk": 0.24,
+            "waste_kg": 7446.695,
+            "stockout_rate": 0.08821887213847013,
+            "services_with_stockout": 0.7526881720430108,
+            "plan_short_rate": 0.19653824678950307,
+            "production_kg": 39069.55,
+            "avoided_kg": 3442.59,
+            "avoided_try": 527178.8,
+            "avoided_co2_kg": 6540.921
+          },
+          {
+            "risk": 0.25,
+            "waste_kg": 7302.795,
+            "stockout_rate": 0.09212730318257957,
+            "services_with_stockout": 0.7634408602150538,
+            "plan_short_rate": 0.2054718034617532,
+            "production_kg": 38892.09,
+            "avoided_kg": 3586.49,
+            "avoided_try": 549081.4000000001,
+            "avoided_co2_kg": 6814.330999999999
+          },
+          {
+            "risk": 0.26,
+            "waste_kg": 7154.2,
+            "stockout_rate": 0.09882747068676717,
+            "services_with_stockout": 0.8064516129032258,
+            "plan_short_rate": 0.21328866554997208,
+            "production_kg": 38706.42,
+            "avoided_kg": 3735.085,
+            "avoided_try": 568961.8999999999,
+            "avoided_co2_kg": 7096.6615
+          },
+          {
+            "risk": 0.27,
+            "waste_kg": 6969.469999999999,
+            "stockout_rate": 0.10161920714684534,
+            "services_with_stockout": 0.8172043010752689,
+            "plan_short_rate": 0.21943048576214405,
+            "production_kg": 38490.14,
+            "avoided_kg": 3919.8150000000005,
+            "avoided_try": 596982.0,
+            "avoided_co2_kg": 7447.6485
+          },
+          {
+            "risk": 0.28,
+            "waste_kg": 6801.73,
+            "stockout_rate": 0.10887772194304858,
+            "services_with_stockout": 0.8279569892473119,
+            "plan_short_rate": 0.22445561139028475,
+            "production_kg": 38298.3,
+            "avoided_kg": 4087.5550000000003,
+            "avoided_try": 619566.7000000002,
+            "avoided_co2_kg": 7766.3545
+          },
+          {
+            "risk": 0.29,
+            "waste_kg": 6642.575,
+            "stockout_rate": 0.11501954215522055,
+            "services_with_stockout": 0.8279569892473119,
+            "plan_short_rate": 0.23171412618648798,
+            "production_kg": 38114.47,
+            "avoided_kg": 4246.71,
+            "avoided_try": 642496.2000000002,
+            "avoided_co2_kg": 8068.749
+          },
+          {
+            "risk": 0.3,
+            "waste_kg": 6490.165,
+            "stockout_rate": 0.12004466778336124,
+            "services_with_stockout": 0.8387096774193549,
+            "plan_short_rate": 0.23953098827470687,
+            "production_kg": 37932.94,
+            "avoided_kg": 4399.12,
+            "avoided_try": 667001.1000000001,
+            "avoided_co2_kg": 8358.328
+          }
+        ]
+      },
+      {
+        "month": 8,
+        "chef": {
+          "waste_kg": 3781.54,
+          "stockout_rate": 0.06913996627318718,
+          "services_with_stockout": 0.6333333333333333,
+          "plan_short_rate": 0.15177065767284992,
+          "production_kg": 15090.170000000002
+        },
+        "levels": [
+          {
+            "risk": 0.05,
+            "waste_kg": 4283.279999999999,
+            "stockout_rate": 0.011804384485666104,
+            "services_with_stockout": 0.2,
+            "plan_short_rate": 0.05227655986509275,
+            "production_kg": 15695.46,
+            "avoided_kg": -501.7399999999989,
+            "avoided_try": -142360.90000000002,
+            "avoided_co2_kg": -953.3059999999978
+          },
+          {
+            "risk": 0.06,
+            "waste_kg": 4090.2700000000004,
+            "stockout_rate": 0.01517706576728499,
+            "services_with_stockout": 0.26666666666666666,
+            "plan_short_rate": 0.06745362563237774,
+            "production_kg": 15499.94,
+            "avoided_kg": -308.7300000000005,
+            "avoided_try": -113327.69999999995,
+            "avoided_co2_kg": -586.5870000000009
+          },
+          {
+            "risk": 0.07,
+            "waste_kg": 3916.58,
+            "stockout_rate": 0.02023608768971332,
+            "services_with_stockout": 0.3333333333333333,
+            "plan_short_rate": 0.07588532883642496,
+            "production_kg": 15321.51,
+            "avoided_kg": -135.03999999999996,
+            "avoided_try": -83465.09999999998,
+            "avoided_co2_kg": -256.5759999999999
+          },
+          {
+            "risk": 0.08,
+            "waste_kg": 3737.8399999999997,
+            "stockout_rate": 0.023608768971332208,
+            "services_with_stockout": 0.36666666666666664,
+            "plan_short_rate": 0.08600337268128162,
+            "production_kg": 15136.800000000001,
+            "avoided_kg": 43.70000000000027,
+            "avoided_try": -55492.69999999995,
+            "avoided_co2_kg": 83.03000000000051
+          },
+          {
+            "risk": 0.09,
+            "waste_kg": 3542.6799999999994,
+            "stockout_rate": 0.023608768971332208,
+            "services_with_stockout": 0.36666666666666664,
+            "plan_short_rate": 0.09274873524451939,
+            "production_kg": 14935.48,
+            "avoided_kg": 238.86000000000058,
+            "avoided_try": -20968.800000000047,
+            "avoided_co2_kg": 453.8340000000011
+          },
+          {
+            "risk": 0.1,
+            "waste_kg": 3383.1099999999997,
+            "stockout_rate": 0.023608768971332208,
+            "services_with_stockout": 0.36666666666666664,
+            "plan_short_rate": 0.1045531197301855,
+            "production_kg": 14772.55,
+            "avoided_kg": 398.4300000000003,
+            "avoided_try": 7175.199999999953,
+            "avoided_co2_kg": 757.0170000000005
+          },
+          {
+            "risk": 0.11,
+            "waste_kg": 3282.37,
+            "stockout_rate": 0.026981450252951095,
+            "services_with_stockout": 0.4,
+            "plan_short_rate": 0.1045531197301855,
+            "production_kg": 14662.69,
+            "avoided_kg": 499.1700000000001,
+            "avoided_try": 26446.0,
+            "avoided_co2_kg": 948.4230000000001
+          },
+          {
+            "risk": 0.12,
+            "waste_kg": 3186.8599999999997,
+            "stockout_rate": 0.03035413153456998,
+            "services_with_stockout": 0.4666666666666667,
+            "plan_short_rate": 0.11467116357504216,
+            "production_kg": 14566.8,
+            "avoided_kg": 594.6800000000003,
+            "avoided_try": 42280.59999999998,
+            "avoided_co2_kg": 1129.8920000000005
+          },
+          {
+            "risk": 0.13,
+            "waste_kg": 3076.34,
+            "stockout_rate": 0.03035413153456998,
+            "services_with_stockout": 0.4666666666666667,
+            "plan_short_rate": 0.11804384485666104,
+            "production_kg": 14455.720000000001,
+            "avoided_kg": 705.1999999999998,
+            "avoided_try": 60158.40000000002,
+            "avoided_co2_kg": 1339.8799999999997
+          },
+          {
+            "risk": 0.14,
+            "waste_kg": 2997.58,
+            "stockout_rate": 0.0387858347386172,
+            "services_with_stockout": 0.6,
+            "plan_short_rate": 0.1281618887015177,
+            "production_kg": 14372.76,
+            "avoided_kg": 783.96,
+            "avoided_try": 71513.30000000005,
+            "avoided_co2_kg": 1489.524
+          },
+          {
+            "risk": 0.15,
+            "waste_kg": 2921.66,
+            "stockout_rate": 0.047217537942664416,
+            "services_with_stockout": 0.7333333333333333,
+            "plan_short_rate": 0.13659359190556492,
+            "production_kg": 14285.599999999999,
+            "avoided_kg": 859.8800000000001,
+            "avoided_try": 83014.19999999995,
+            "avoided_co2_kg": 1633.7720000000002
+          },
+          {
+            "risk": 0.16,
+            "waste_kg": 2848.1099999999997,
+            "stockout_rate": 0.050590219224283306,
+            "services_with_stockout": 0.7333333333333333,
+            "plan_short_rate": 0.13827993254637436,
+            "production_kg": 14208.94,
+            "avoided_kg": 933.4300000000003,
+            "avoided_try": 93688.09999999998,
+            "avoided_co2_kg": 1773.5170000000005
+          },
+          {
+            "risk": 0.17,
+            "waste_kg": 2786.64,
+            "stockout_rate": 0.05396290050590219,
+            "services_with_stockout": 0.7333333333333333,
+            "plan_short_rate": 0.15177065767284992,
+            "production_kg": 14141.57,
+            "avoided_kg": 994.9000000000001,
+            "avoided_try": 105305.70000000001,
+            "avoided_co2_kg": 1890.3100000000002
+          },
+          {
+            "risk": 0.18,
+            "waste_kg": 2711.4700000000003,
+            "stockout_rate": 0.05733558178752108,
+            "services_with_stockout": 0.7333333333333333,
+            "plan_short_rate": 0.16020236087689713,
+            "production_kg": 14060.29,
+            "avoided_kg": 1070.0699999999997,
+            "avoided_try": 115793.30000000005,
+            "avoided_co2_kg": 2033.1329999999994
+          },
+          {
+            "risk": 0.19,
+            "waste_kg": 2641.94,
+            "stockout_rate": 0.0657672849915683,
+            "services_with_stockout": 0.7666666666666667,
+            "plan_short_rate": 0.16863406408094436,
+            "production_kg": 13975.939999999999,
+            "avoided_kg": 1139.6,
+            "avoided_try": 127136.19999999995,
+            "avoided_co2_kg": 2165.24
+          },
+          {
+            "risk": 0.2,
+            "waste_kg": 2535.2700000000004,
+            "stockout_rate": 0.06913996627318718,
+            "services_with_stockout": 0.7666666666666667,
+            "plan_short_rate": 0.178752107925801,
+            "production_kg": 13864.43,
+            "avoided_kg": 1246.2699999999995,
+            "avoided_try": 146851.69999999995,
+            "avoided_co2_kg": 2367.912999999999
+          },
+          {
+            "risk": 0.21,
+            "waste_kg": 2480.63,
+            "stockout_rate": 0.07419898819561552,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.18381112984822934,
+            "production_kg": 13798.57,
+            "avoided_kg": 1300.9099999999999,
+            "avoided_try": 156828.59999999998,
+            "avoided_co2_kg": 2471.729
+          },
+          {
+            "risk": 0.22,
+            "waste_kg": 2402.56,
+            "stockout_rate": 0.0775716694772344,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.18887015177065766,
+            "production_kg": 13717.390000000001,
+            "avoided_kg": 1378.98,
+            "avoided_try": 171465.59999999998,
+            "avoided_co2_kg": 2620.062
+          },
+          {
+            "risk": 0.23,
+            "waste_kg": 2333.6499999999996,
+            "stockout_rate": 0.08768971332209106,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.19392917369308602,
+            "production_kg": 13640.06,
+            "avoided_kg": 1447.8900000000003,
+            "avoided_try": 180235.40000000002,
+            "avoided_co2_kg": 2750.9910000000004
+          },
+          {
+            "risk": 0.24,
+            "waste_kg": 2276.5699999999997,
+            "stockout_rate": 0.09106239460370995,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.20067453625632378,
+            "production_kg": 13573.16,
+            "avoided_kg": 1504.9700000000003,
+            "avoided_try": 191673.90000000002,
+            "avoided_co2_kg": 2859.443
+          },
+          {
+            "risk": 0.25,
+            "waste_kg": 2232.51,
+            "stockout_rate": 0.09274873524451939,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.2057335581787521,
+            "production_kg": 13522.79,
+            "avoided_kg": 1549.0299999999997,
+            "avoided_try": 197609.69999999995,
+            "avoided_co2_kg": 2943.1569999999992
+          },
+          {
+            "risk": 0.26,
+            "waste_kg": 2171.97,
+            "stockout_rate": 0.09443507588532883,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.21079258010118043,
+            "production_kg": 13454.650000000001,
+            "avoided_kg": 1609.5700000000002,
+            "avoided_try": 207154.40000000002,
+            "avoided_co2_kg": 3058.183
+          },
+          {
+            "risk": 0.27,
+            "waste_kg": 2103.3,
+            "stockout_rate": 0.09612141652613827,
+            "services_with_stockout": 0.8,
+            "plan_short_rate": 0.21585160202360876,
+            "production_kg": 13376.4,
+            "avoided_kg": 1678.2399999999998,
+            "avoided_try": 217172.8,
+            "avoided_co2_kg": 3188.6559999999995
+          },
+          {
+            "risk": 0.28,
+            "waste_kg": 2032.52,
+            "stockout_rate": 0.10286677908937605,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.2209106239460371,
+            "production_kg": 13299.87,
+            "avoided_kg": 1749.02,
+            "avoided_try": 229476.8,
+            "avoided_co2_kg": 3323.138
+          },
+          {
+            "risk": 0.29,
+            "waste_kg": 1982.6399999999999,
+            "stockout_rate": 0.10623946037099494,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.2327150084317032,
+            "production_kg": 13242.16,
+            "avoided_kg": 1798.9,
+            "avoided_try": 240161.8,
+            "avoided_co2_kg": 3417.91
+          },
+          {
+            "risk": 0.3,
+            "waste_kg": 1929.94,
+            "stockout_rate": 0.10623946037099494,
+            "services_with_stockout": 0.8333333333333334,
+            "plan_short_rate": 0.24283305227655985,
+            "production_kg": 13177.14,
+            "avoided_kg": 1851.6,
+            "avoided_try": 249083.59999999998,
+            "avoided_co2_kg": 3518.0399999999995
+          }
+        ]
+      }
+    ]
+  },
+  "method_facts": {
+    "censoring_factor_median": 1.0599891855482375,
+    "true_over_observed_median": 1.1170535714285714,
+    "guest_effect_match": -0.017605702438316297,
+    "guest_effect_themed": 0.035843138300535586,
+    "guest_effect_conference": 0.04837232012130918,
+    "conference_lunches_in_training": 13,
+    "plan_short_unrounded": {
+      "0.05": 0.07844205365654365,
+      "0.06": 0.08579599618684461,
+      "0.07": 0.09696309410322757,
+      "0.08": 0.10840256026147352,
+      "0.09": 0.12242952471741794,
+      "0.1": 0.13495846384311588,
+      "0.11": 0.14231240637341686,
+      "0.12": 0.14871306005719734,
+      "0.13": 0.1572926596758818,
+      "0.14": 0.16696173226201824,
+      "0.15": 0.1770393572109492,
+      "0.16": 0.18507422034590768,
+      "0.17": 0.19338145172272914,
+      "0.18": 0.20400381315538607,
+      "0.19": 0.21408143810431704,
+      "0.2": 0.22388669481138498,
+      "0.21": 0.23124063734168596,
+      "0.22": 0.23982023696037041,
+      "0.23": 0.2470379953697399,
+      "0.24": 0.25561759498842435,
+      "0.25": 0.2631077216396568,
+      "0.26": 0.2718235053792728,
+      "0.27": 0.27999455263516276,
+      "0.28": 0.2906169140678197,
+      "0.29": 0.29851559308184666,
+      "0.3": 0.3077761133051886
+    }
+  }
+}

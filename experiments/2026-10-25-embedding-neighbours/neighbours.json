@@ -1,0 +1,142 @@
+{
+  "tfidf": {
+    "neighbours_same_group_top3": 0.5174129353233831,
+    "new_dishes": {
+      "Gözleme": [
+        "Börek",
+        "Beyaz peynir",
+        "Patates kızartması"
+      ],
+      "Soğuk cacık": [
+        "Çoban salata",
+        "Yayla çorbası",
+        "Yeşil salata"
+      ],
+      "Ali Nazik": [
+        "Kuzu tandır",
+        "Hünkâr beğendi",
+        "İmam bayıldı"
+      ],
+      "Tavuk kanat": [
+        "Fırın tavuk but",
+        "Tavuk sote",
+        "Tavuk şiş"
+      ],
+      "Pelmeni": [
+        "Mantı",
+        "Izgara köfte",
+        "Dondurma"
+      ],
+      "Revani": [
+        "Granola ve yoğurt",
+        "Baklava",
+        "Soğuk cacık"
+      ]
+    }
+  },
+  "berturk": {
+    "neighbours_same_group_top3": 0.5373134328358209,
+    "new_dishes": {
+      "Gözleme": [
+        "Börek",
+        "Mantı",
+        "Patates kızartması"
+      ],
+      "Soğuk cacık": [
+        "Yayla çorbası",
+        "Mercimek çorbası",
+        "Çoban salata"
+      ],
+      "Ali Nazik": [
+        "Hünkâr beğendi",
+        "Kuzu tandır",
+        "Izgara sebze"
+      ],
+      "Tavuk kanat": [
+        "Fırın tavuk but",
+        "Tavuk sote",
+        "Tavuk şiş"
+      ],
+      "Pelmeni": [
+        "Mantı",
+        "Izgara köfte",
+        "Sırniki"
+      ],
+      "Revani": [
+        "Mantı",
+        "Soğuk cacık",
+        "Sütlaç"
+      ]
+    }
+  },
+  "minilm": {
+    "neighbours_same_group_top3": 0.3880597014925373,
+    "new_dishes": {
+      "Gözleme": [
+        "Börek",
+        "Patates kızartması",
+        "Künefe"
+      ],
+      "Soğuk cacık": [
+        "Mantı",
+        "Granola ve yoğurt",
+        "Revani"
+      ],
+      "Ali Nazik": [
+        "Mantı",
+        "Revani",
+        "Yayla çorbası"
+      ],
+      "Tavuk kanat": [
+        "Tavuk sote",
+        "Fırın tavuk but",
+        "Kremalı mantarlı tavuk"
+      ],
+      "Pelmeni": [
+        "Dondurma",
+        "Künefe",
+        "Çikolatalı pasta"
+      ],
+      "Revani": [
+        "Mantı",
+        "Ali Nazik",
+        "Granola ve yoğurt"
+      ]
+    }
+  },
+  "category": {
+    "neighbours_same_group_top3": 1.0,
+    "new_dishes": {
+      "Gözleme": [
+        "Menemen",
+        "Haşlanmış yumurta",
+        "Omlet istasyonu"
+      ],
+      "Soğuk cacık": [
+        "Mercimek çorbası",
+        "Ezogelin çorbası",
+        "Domates çorbası"
+      ],
+      "Ali Nazik": [
+        "Kuzu tandır",
+        "İzmir köfte",
+        "Dana güveç"
+      ],
+      "Tavuk kanat": [
+        "Fırın tavuk but",
+        "Tavuk şiş",
+        "Tavuk sote"
+      ],
+      "Pelmeni": [
+        "Tereyağlı pilav",
+        "Bulgur pilavı",
+        "Spagetti bolonez"
+      ],
+      "Revani": [
+        "Baklava",
+        "Sütlaç",
+        "Çikolatalı pasta"
+      ]
+    }
+  }
+}

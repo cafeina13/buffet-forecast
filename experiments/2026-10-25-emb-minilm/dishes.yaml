@@ -1,0 +1,104 @@
+# Fictional dish catalogue for the synthetic resort.
+# take: share of attending guests who take the dish (team assumption)
+# portion_g: grams per guest who takes it (team assumption)
+# kg_per_unit: weight of one serving unit (tray, litre, bowl, kg)
+# freq: daily | weekly (days: 0=Mon..6=Sun) | sparse (prob per service) | new (from date, then prob)
+# affinity: multipliers per nationality (default 1.0), team assumption
+source: "team assumption (fictional catalogue)"
+
+groups:
+  soup: {temp_sensitivity: -1.6}
+  red_meat: {temp_sensitivity: -0.8}
+  chicken: {temp_sensitivity: -0.3}
+  fish: {temp_sensitivity: 0.0}
+  vegetables: {temp_sensitivity: 0.2}
+  rice_pasta: {temp_sensitivity: -0.2}
+  salad: {temp_sensitivity: 1.2}
+  dessert: {temp_sensitivity: 0.3}
+  breakfast: {temp_sensitivity: 0.0}
+
+dishes:
+  # Breakfast
+  - {id: b01, name: "Menemen", group: breakfast, ingredients: [yumurta, domates, biber], unit: tepsi, kg_per_unit: 3.0, take: 0.34, portion_g: 120, meals: [breakfast], freq: daily, affinity: {TR: 1.6, DE: 0.9}}
+  - {id: b02, name: "Haşlanmış yumurta", group: breakfast, ingredients: [yumurta], unit: tepsi, kg_per_unit: 3.0, take: 0.42, portion_g: 60, meals: [breakfast], freq: daily}
+  - {id: b03, name: "Omlet istasyonu", group: breakfast, ingredients: [yumurta, peynir, mantar], unit: kg, kg_per_unit: 1.0, take: 0.30, portion_g: 130, meals: [breakfast], freq: daily, affinity: {UK: 1.3, DE: 1.2}}
+  - {id: b04, name: "Beyaz peynir", group: breakfast, ingredients: [peynir], unit: tepsi, kg_per_unit: 2.5, take: 0.48, portion_g: 45, meals: [breakfast], freq: daily, affinity: {TR: 1.4, RU: 1.1}}
+  - {id: b05, name: "Zeytin çeşitleri", group: breakfast, ingredients: [zeytin], unit: kase, kg_per_unit: 1.5, take: 0.40, portion_g: 35, meals: [breakfast], freq: daily, affinity: {TR: 1.5, UK: 0.7}}
+  - {id: b06, name: "Sucuklu yumurta", group: breakfast, ingredients: [sucuk, yumurta], unit: tepsi, kg_per_unit: 3.0, take: 0.22, portion_g: 110, meals: [breakfast], freq: {weekly: [5, 6]}, affinity: {TR: 1.7, RU: 1.2}}
+  - {id: b07, name: "Pankek", group: breakfast, ingredients: [un, süt, yumurta], unit: tepsi, kg_per_unit: 2.5, take: 0.26, portion_g: 90, meals: [breakfast], freq: daily, affinity: {UK: 1.4, OTHER: 1.2}}
+  - {id: b08, name: "Kızarmış sosis", group: breakfast, ingredients: [sosis], unit: tepsi, kg_per_unit: 3.0, take: 0.28, portion_g: 80, meals: [breakfast], freq: daily, affinity: {UK: 1.6, DE: 1.3, TR: 0.6}}
+  - {id: b09, name: "Fasulye (İngiliz usulü)", group: breakfast, ingredients: [kuru fasulye, domates sosu], unit: tepsi, kg_per_unit: 3.5, take: 0.15, portion_g: 100, meals: [breakfast], freq: daily, affinity: {UK: 2.4, TR: 0.4}}
+  - {id: b10, name: "Simit", group: breakfast, ingredients: [un, susam], unit: tepsi, kg_per_unit: 2.0, take: 0.30, portion_g: 70, meals: [breakfast], freq: daily, affinity: {TR: 1.5}}
+  - {id: b11, name: "Sırniki", group: breakfast, ingredients: [lor peyniri, un, yumurta], unit: tepsi, kg_per_unit: 2.5, take: 0.14, portion_g: 90, meals: [breakfast], freq: {sparse: 0.45}, affinity: {RU: 2.6, TR: 0.5}}
+  - {id: b12, name: "Börek", group: breakfast, ingredients: [yufka, peynir, ıspanak], unit: tepsi, kg_per_unit: 3.0, take: 0.26, portion_g: 100, meals: [breakfast], freq: daily, affinity: {TR: 1.4}}
+  - {id: b13, name: "Granola ve yoğurt", group: breakfast, ingredients: [yulaf, yoğurt, bal], unit: kase, kg_per_unit: 2.0, take: 0.24, portion_g: 120, meals: [breakfast], freq: daily, affinity: {DE: 1.5, OTHER: 1.2}}
+  - {id: b14, name: "Gözleme", group: breakfast, ingredients: [yufka, peynir, patates], unit: tepsi, kg_per_unit: 2.5, take: 0.18, portion_g: 110, meals: [breakfast], freq: new, new_from: "2026-07-01", new_prob: 0.8, affinity: {TR: 1.5, RU: 1.1}}
+
+  # Soups
+  - {id: s01, name: "Mercimek çorbası", group: soup, ingredients: [kırmızı mercimek, soğan, havuç], unit: litre, kg_per_unit: 1.0, take: 0.30, portion_g: 250, meals: [lunch, dinner], freq: daily, affinity: {TR: 1.7, DE: 0.9}}
+  - {id: s02, name: "Ezogelin çorbası", group: soup, ingredients: [mercimek, bulgur, pirinç, nane], unit: litre, kg_per_unit: 1.0, take: 0.14, portion_g: 250, meals: [lunch, dinner], freq: {weekly: [1, 4]}, affinity: {TR: 1.8}}
+  - {id: s03, name: "Domates çorbası", group: soup, ingredients: [domates, krema], unit: litre, kg_per_unit: 1.0, take: 0.18, portion_g: 250, meals: [lunch, dinner], freq: {weekly: [0, 3, 6]}, affinity: {DE: 1.3, UK: 1.2}}
+  - {id: s04, name: "Borş", group: soup, ingredients: [pancar, lahana, et suyu], unit: litre, kg_per_unit: 1.0, take: 0.12, portion_g: 250, meals: [dinner], freq: {sparse: 0.3}, affinity: {RU: 3.0, TR: 0.4}}
+  - {id: s05, name: "Yayla çorbası", group: soup, ingredients: [yoğurt, pirinç, nane], unit: litre, kg_per_unit: 1.0, take: 0.12, portion_g: 250, meals: [lunch, dinner], freq: {weekly: [2, 5]}, affinity: {TR: 1.8}}
+  - {id: s06, name: "Soğuk cacık", group: soup, ingredients: [yoğurt, salatalık, nane], unit: litre, kg_per_unit: 1.0, take: 0.16, portion_g: 180, meals: [lunch, dinner], freq: new, new_from: "2026-06-15", new_prob: 0.7, temp_sensitivity: 1.4, affinity: {TR: 1.5, RU: 1.2}}
+
+  # Red meat
+  - {id: m01, name: "Kuzu tandır", group: red_meat, ingredients: [kuzu eti, soğan, baharat], unit: tepsi, kg_per_unit: 5.0, take: 0.20, portion_g: 160, meals: [dinner], freq: {weekly: [5]}, affinity: {TR: 1.5, RU: 1.3}}
+  - {id: m02, name: "İzmir köfte", group: red_meat, ingredients: [kıyma, patates, domates sosu], unit: tepsi, kg_per_unit: 5.0, take: 0.24, portion_g: 170, meals: [lunch, dinner], freq: {weekly: [0, 3]}, affinity: {TR: 1.4}}
+  - {id: m03, name: "Dana güveç", group: red_meat, ingredients: [dana eti, sebze], unit: tepsi, kg_per_unit: 5.0, take: 0.20, portion_g: 170, meals: [dinner], freq: {weekly: [1, 4]}}
+  - {id: m04, name: "Izgara köfte", group: red_meat, ingredients: [kıyma, soğan, baharat], unit: tepsi, kg_per_unit: 4.0, take: 0.30, portion_g: 140, meals: [lunch, dinner], freq: daily, affinity: {TR: 1.3, DE: 1.2}}
+  - {id: m05, name: "Beef stroganoff", group: red_meat, ingredients: [dana eti, krema, mantar], unit: tepsi, kg_per_unit: 5.0, take: 0.16, portion_g: 160, meals: [dinner], freq: {sparse: 0.25}, affinity: {RU: 2.2}}
+  - {id: m06, name: "Hünkâr beğendi", group: red_meat, ingredients: [dana eti, patlıcan, beşamel], unit: tepsi, kg_per_unit: 5.0, take: 0.15, portion_g: 170, meals: [dinner], freq: {sparse: 0.2}, affinity: {TR: 1.8}}
+  - {id: m07, name: "Döner istasyonu", group: red_meat, ingredients: [dana eti, lavaş], unit: kg, kg_per_unit: 1.0, take: 0.26, portion_g: 130, meals: [lunch], freq: {weekly: [2, 6]}, affinity: {DE: 1.5, TR: 1.2}}
+  - {id: m08, name: "Ali Nazik", group: red_meat, ingredients: [kuzu eti, patlıcan, yoğurt], unit: tepsi, kg_per_unit: 5.0, take: 0.14, portion_g: 170, meals: [dinner], freq: new, new_from: "2026-08-01", new_prob: 0.35, affinity: {TR: 1.7}}
+
+  # Chicken
+  - {id: c01, name: "Fırın tavuk but", group: chicken, ingredients: [tavuk but, baharat, patates], unit: tepsi, kg_per_unit: 5.0, take: 0.34, portion_g: 170, meals: [lunch, dinner], freq: daily}
+  - {id: c02, name: "Tavuk şiş", group: chicken, ingredients: [tavuk göğsü, biber, soğan], unit: tepsi, kg_per_unit: 4.0, take: 0.26, portion_g: 140, meals: [lunch, dinner], freq: {weekly: [1, 3, 5]}}
+  - {id: c03, name: "Tavuk sote", group: chicken, ingredients: [tavuk göğsü, biber, domates], unit: tepsi, kg_per_unit: 5.0, take: 0.22, portion_g: 150, meals: [lunch], freq: {weekly: [0, 2, 4, 6]}}
+  - {id: c04, name: "Kremalı mantarlı tavuk", group: chicken, ingredients: [tavuk göğsü, krema, mantar], unit: tepsi, kg_per_unit: 5.0, take: 0.18, portion_g: 150, meals: [dinner], freq: {weekly: [0, 6]}, affinity: {DE: 1.3, RU: 1.2}}
+  - {id: c05, name: "Chicken curry", group: chicken, ingredients: [tavuk, köri, hindistan cevizi sütü], unit: tepsi, kg_per_unit: 5.0, take: 0.14, portion_g: 150, meals: [dinner], freq: {sparse: 0.25}, affinity: {UK: 2.0}}
+  - {id: c06, name: "Tavuk şnitzel", group: chicken, ingredients: [tavuk göğsü, galeta unu, yumurta], unit: tepsi, kg_per_unit: 4.0, take: 0.24, portion_g: 140, meals: [lunch], freq: {weekly: [1, 5]}, affinity: {DE: 1.7, UK: 1.2}}
+  - {id: c07, name: "Tavuk kanat", group: chicken, ingredients: [tavuk kanat, baharat], unit: tepsi, kg_per_unit: 4.0, take: 0.22, portion_g: 130, meals: [lunch, dinner], freq: new, new_from: "2026-07-15", new_prob: 0.4, affinity: {UK: 1.4, DE: 1.2}}
+
+  # Fish
+  - {id: f01, name: "Izgara levrek", group: fish, ingredients: [levrek, limon], unit: tepsi, kg_per_unit: 4.0, take: 0.18, portion_g: 160, meals: [dinner], freq: {weekly: [2, 5]}, affinity: {RU: 1.2, TR: 1.1}}
+  - {id: f02, name: "Somon fileto", group: fish, ingredients: [somon, dereotu], unit: tepsi, kg_per_unit: 4.0, take: 0.16, portion_g: 150, meals: [dinner], freq: {weekly: [0, 4]}, affinity: {DE: 1.3, RU: 1.3}}
+  - {id: f03, name: "Kalamar tava", group: fish, ingredients: [kalamar, un], unit: tepsi, kg_per_unit: 3.5, take: 0.16, portion_g: 110, meals: [lunch, dinner], freq: {sparse: 0.3}}
+  - {id: f04, name: "Fish and chips", group: fish, ingredients: [morina, patates, un], unit: tepsi, kg_per_unit: 4.0, take: 0.18, portion_g: 160, meals: [lunch], freq: {weekly: [4]}, affinity: {UK: 2.4}}
+  - {id: f05, name: "Hamsi tava", group: fish, ingredients: [hamsi, mısır unu], unit: tepsi, kg_per_unit: 3.5, take: 0.10, portion_g: 120, meals: [lunch, dinner], freq: {sparse: 0.15}, affinity: {TR: 2.2, UK: 0.5}}
+
+  # Vegetables
+  - {id: v01, name: "Zeytinyağlı taze fasulye", group: vegetables, ingredients: [taze fasulye, domates, zeytinyağı], unit: tepsi, kg_per_unit: 4.0, take: 0.18, portion_g: 130, meals: [lunch, dinner], freq: daily, affinity: {TR: 1.6}}
+  - {id: v02, name: "Izgara sebze", group: vegetables, ingredients: [kabak, patlıcan, biber], unit: tepsi, kg_per_unit: 3.0, take: 0.26, portion_g: 110, meals: [lunch, dinner], freq: daily}
+  - {id: v03, name: "İmam bayıldı", group: vegetables, ingredients: [patlıcan, soğan, domates], unit: tepsi, kg_per_unit: 4.0, take: 0.12, portion_g: 140, meals: [dinner], freq: {weekly: [3]}, affinity: {TR: 1.8}}
+  - {id: v04, name: "Patates kızartması", group: vegetables, ingredients: [patates], unit: tepsi, kg_per_unit: 3.0, take: 0.38, portion_g: 120, meals: [lunch, dinner], freq: daily, affinity: {UK: 1.3, DE: 1.2}}
+  - {id: v05, name: "Ratatouille", group: vegetables, ingredients: [kabak, patlıcan, domates, biber], unit: tepsi, kg_per_unit: 4.0, take: 0.12, portion_g: 130, meals: [dinner], freq: {sparse: 0.3}, affinity: {OTHER: 1.4}}
+  - {id: v06, name: "Kabak mücver", group: vegetables, ingredients: [kabak, yumurta, un, dereotu], unit: tepsi, kg_per_unit: 3.0, take: 0.16, portion_g: 100, meals: [lunch], freq: {weekly: [1, 4]}, affinity: {TR: 1.4}}
+
+  # Rice / pasta
+  - {id: r01, name: "Tereyağlı pilav", group: rice_pasta, ingredients: [pirinç, tereyağı], unit: tepsi, kg_per_unit: 5.0, take: 0.42, portion_g: 150, meals: [lunch, dinner], freq: daily}
+  - {id: r02, name: "Bulgur pilavı", group: rice_pasta, ingredients: [bulgur, domates, biber], unit: tepsi, kg_per_unit: 5.0, take: 0.18, portion_g: 150, meals: [lunch, dinner], freq: {weekly: [0, 2, 4]}, affinity: {TR: 1.7}}
+  - {id: r03, name: "Spagetti bolonez", group: rice_pasta, ingredients: [makarna, kıyma, domates sosu], unit: tepsi, kg_per_unit: 5.0, take: 0.28, portion_g: 170, meals: [lunch, dinner], freq: daily, affinity: {DE: 1.2, UK: 1.2}}
+  - {id: r04, name: "Penne arabiata", group: rice_pasta, ingredients: [makarna, domates sosu, acı biber], unit: tepsi, kg_per_unit: 5.0, take: 0.18, portion_g: 160, meals: [lunch], freq: {weekly: [1, 3, 5]}}
+  - {id: r05, name: "Mantı", group: rice_pasta, ingredients: [hamur, kıyma, yoğurt], unit: tepsi, kg_per_unit: 4.0, take: 0.16, portion_g: 150, meals: [lunch, dinner], freq: {sparse: 0.25}, affinity: {TR: 1.7, RU: 1.4}}
+  - {id: r06, name: "Pelmeni", group: rice_pasta, ingredients: [hamur, kıyma, ekşi krema], unit: tepsi, kg_per_unit: 4.0, take: 0.12, portion_g: 150, meals: [dinner], freq: new, new_from: "2026-06-20", new_prob: 0.3, affinity: {RU: 2.8, TR: 0.7}}
+
+  # Salads
+  - {id: l01, name: "Çoban salata", group: salad, ingredients: [domates, salatalık, biber, soğan], unit: kase, kg_per_unit: 3.0, take: 0.42, portion_g: 110, meals: [lunch, dinner], freq: daily, affinity: {TR: 1.4}}
+  - {id: l02, name: "Yeşil salata", group: salad, ingredients: [marul, roka, salatalık], unit: kase, kg_per_unit: 2.0, take: 0.36, portion_g: 80, meals: [lunch, dinner], freq: daily}
+  - {id: l03, name: "Sezar salata", group: salad, ingredients: [marul, tavuk, parmesan, kruton], unit: kase, kg_per_unit: 2.5, take: 0.22, portion_g: 120, meals: [lunch, dinner], freq: daily, affinity: {DE: 1.2, UK: 1.3}}
+  - {id: l04, name: "Patates salatası", group: salad, ingredients: [patates, soğan, maydanoz], unit: kase, kg_per_unit: 3.0, take: 0.18, portion_g: 110, meals: [lunch, dinner], freq: {weekly: [0, 3, 5]}, affinity: {DE: 1.6}}
+  - {id: l05, name: "Kısır", group: salad, ingredients: [bulgur, salça, maydanoz], unit: kase, kg_per_unit: 3.0, take: 0.14, portion_g: 100, meals: [lunch], freq: {weekly: [2, 6]}, affinity: {TR: 1.9}}
+  - {id: l06, name: "Olivye salatası", group: salad, ingredients: [patates, bezelye, mayonez, turşu], unit: kase, kg_per_unit: 3.0, take: 0.14, portion_g: 110, meals: [dinner], freq: {sparse: 0.35}, affinity: {RU: 2.6}}
+  - {id: l07, name: "Piyaz", group: salad, ingredients: [kuru fasulye, soğan, maydanoz], unit: kase, kg_per_unit: 3.0, take: 0.12, portion_g: 100, meals: [lunch], freq: {weekly: [1, 4]}, affinity: {TR: 1.8}}
+
+  # Desserts
+  - {id: d01, name: "Baklava", group: dessert, ingredients: [yufka, ceviz, şerbet], unit: tepsi, kg_per_unit: 3.0, take: 0.30, portion_g: 70, meals: [lunch, dinner], freq: daily, affinity: {RU: 1.3, TR: 1.2}}
+  - {id: d02, name: "Sütlaç", group: dessert, ingredients: [süt, pirinç, şeker], unit: kase, kg_per_unit: 3.0, take: 0.18, portion_g: 130, meals: [lunch, dinner], freq: {weekly: [0, 2, 4, 6]}, affinity: {TR: 1.5}}
+  - {id: d03, name: "Çikolatalı pasta", group: dessert, ingredients: [un, çikolata, krema], unit: tepsi, kg_per_unit: 2.5, take: 0.26, portion_g: 90, meals: [dinner], freq: daily}
+  - {id: d04, name: "Meyve tabağı", group: dessert, ingredients: [karpuz, kavun, üzüm], unit: tepsi, kg_per_unit: 4.0, take: 0.40, portion_g: 160, meals: [lunch, dinner], freq: daily, temp_sensitivity: 1.0}
+  - {id: d05, name: "Dondurma", group: dessert, ingredients: [süt, şeker, krema], unit: kg, kg_per_unit: 1.0, take: 0.28, portion_g: 90, meals: [lunch, dinner], freq: daily, temp_sensitivity: 1.6}
+  - {id: d06, name: "Künefe", group: dessert, ingredients: [tel kadayıf, peynir, şerbet], unit: tepsi, kg_per_unit: 3.0, take: 0.14, portion_g: 110, meals: [dinner], freq: {weekly: [5]}, temp_sensitivity: -0.5, affinity: {TR: 1.6, RU: 1.2}}
+  - {id: d07, name: "Tiramisu", group: dessert, ingredients: [mascarpone, kahve, bisküvi], unit: tepsi, kg_per_unit: 2.5, take: 0.16, portion_g: 90, meals: [dinner], freq: {sparse: 0.35}, affinity: {DE: 1.3, OTHER: 1.3}}
+  - {id: d08, name: "Revani", group: dessert, ingredients: [irmik, yoğurt, şerbet], unit: tepsi, kg_per_unit: 3.0, take: 0.14, portion_g: 80, meals: [lunch, dinner], freq: new, new_from: "2026-07-10", new_prob: 0.4, affinity: {TR: 1.5}}

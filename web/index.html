@@ -93,7 +93,7 @@
         <div class="card">
           <p class="step">YEMEK BENZERLİĞİ</p>
           <h3>Yemek vektörü</h3>
-          <p class="muted">Yemeğin adından ve malzemelerinden harf dizisi benzerliğiyle (TF-IDF) bir vektör. Bu prototipte model benzer yemeklerin tüketimini neredeyse kullanmıyor; hazır bir dil modeliyle deneme mentorlukta yapılacak.</p>
+          <p class="muted">Yemeğin adı ve malzemeleri, Türkçe cümle benzerliği için eğitilmiş hazır bir dil modeliyle (BERTurk) vektöre çevriliyor. Bu prototipte model benzer yemeklerin tüketim ortalamasını neredeyse kullanmıyor; vektörün kendisi küçük bir girdi.</p>
         </div>
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
@@ -105,13 +105,13 @@
       <div class="card">
         <p class="step">EĞİTİLEN MODEL 2</p>
         <h3>Tüketim modeli</h3>
-        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); yarı sentetik testte sık tükenen yemeklerde küçük bir iyileşme görüldü (%85,1 → %86,8, 363 yemek servisi; ipucu, kanıt değil).</p>
+        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); yarı sentetik testte sık tükenen yemeklerde küçük bir iyileşme görüldü (%84,6 → %86,2, 363 yemek servisi; ipucu, kanıt değil).</p>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin 29 Haziran 2024’teki Almanya–Danimarka maçı akşamı mercimek çorbası için: “568 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,6 kg (tükenen servisler düzeltilerek); sıcak hava (36 °C) talebi azaltıyor (ılık bir güne göre −%18).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; simüle edilen yemek talebi de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin 29 Haziran 2024’teki Almanya–Danimarka maçı akşamı mercimek çorbası için: “568 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,6 kg (tükenen servisler düzeltilerek); sıcak hava (36 °C) talebi azaltıyor (ılık bir güne göre −%21).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; simüle edilen yemek talebi de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
       </div>
     </div>
     <div class="callout">

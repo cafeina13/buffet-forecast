@@ -75,10 +75,10 @@
       <div class="section-head">
         <p class="eyebrow">YEMEK BENZERLİĞİ</p>
         <h2>Yeni yemeklerin en yakın komşuları</h2>
-        <p class="lead">Her yemeğin adı ve malzemeleri, harf dizisi benzerliğine (karakter n-gram TF-IDF) göre bir vektöre çevrildi. Aşağıda, menüye sezon ortasında giren her yemek ve bu vektörlere göre en yakın üç yemeği listeleniyor (tüketim modeli en yakın beş yemeğin geçmiş talebinin ortalamasını girdi olarak alır).</p>
+        <p class="lead">Her yemeğin adı ve malzemeleri, Türkçe cümle benzerliği için eğitilmiş hazır bir dil modeliyle (BERTurk) bir vektöre çevrildi; tüketim modeline bu vektörün 8 boyuta indirgenmiş hâli girer. Aşağıda, menüye sezon ortasında giren her yemek ve bu vektörlere göre en yakın üç yemeği listeleniyor (tüketim modeli en yakın beş yemeğin geçmiş talebinin ortalamasını girdi olarak alır).</p>
       </div>
       <div class="chart-card" id="map-chart"></div>
-      <p class="note" style="margin-top:14px">Dürüst sonuç: harf dizisi benzerliği yemeğin anlamını değil yazımını yakalıyor (ör. Pelmeni’nin komşuları arasında Dondurma var) ve bu prototipte tüketim modeli komşuların tüketimini neredeyse kullanmıyor. Çok dilli hazır bir dil modeliyle ve elle girilmiş kategoriyle karşılaştırma mentorluk döneminde yapılacak.</p>
+      <p class="note" style="margin-top:14px">Dürüst sonuç: dört yöntemi karşılaştırdık (harf dizisi benzerliği TF-IDF, BERTurk, çok dilli küçük bir dil modeli, elle girilmiş yemek grubu). BERTurk komşuları daha anlamlı (ör. Pelmeni → Mantı; harf dizisi benzerliğinde Pelmeni’nin komşuları arasında Dondurma vardı), ama zayıf eşleşmeler de var (ör. Revani → Mantı). Geçmişi olmayan 95 yemek-öğünde tahmin hatası dört yöntemde de birbirine yakın çıktı (ortanca hata %26–28); bu prototipte tüketim modeli komşuların tüketimini neredeyse kullanmıyor.</p>
     </div>
   </section>
 
@@ -87,7 +87,7 @@
       <div class="section-head">
         <p class="eyebrow">ÖZGÜNLÜK 2 · TÜKENME KAYDI</p>
         <h2>Geri besleme döngüsü deneyi: hazırlanıyor</h2>
-        <p class="lead">Tükenme kaydını hesaba katan ve katmayan modellerin sezon boyunca nasıl ayrıştığını gösteren deney mentorluk döneminde tamamlanacak ve buraya eklenecek. Bu prototipte tükenen servislerde gözlenen tüketim, tükenme saatine kadar gelen misafir payına göre yukarı ölçekleniyor (en fazla 2 kat). Yarı sentetik testte, sık tükenen yemeklerde %90’lık değerin talebi karşılama oranı düzeltmeyle %86,8, düzeltmesiz %85,1 oldu (363 yemek servisi); fark küçük, kanıt değil ipucu.</p>
+        <p class="lead">Tükenme kaydını hesaba katan ve katmayan modellerin sezon boyunca nasıl ayrıştığını gösteren deney mentorluk döneminde tamamlanacak ve buraya eklenecek. Bu prototipte tükenen servislerde gözlenen tüketim, tükenme saatine kadar gelen misafir payına göre yukarı ölçekleniyor (en fazla 2 kat). Yarı sentetik testte, sık tükenen yemeklerde %90’lık değerin talebi karşılama oranı düzeltmeyle %86,2, düzeltmesiz %84,6 oldu (363 yemek servisi); fark küçük, kanıt değil ipucu.</p>
       </div>
     </div>
   </section>
