@@ -7,7 +7,7 @@ Traycast (formerly the working name Ölçülü) forecasts how much of each dish 
 suggests refill times during service with a simple rule. This repository holds the synthetic data
 generator, the two models, and the static prototype website.
 
-Live site: https://traycast.vercel.app (the old address https://olculu.vercel.app serves the same site)
+Live site: https://traycast.vercel.app
 
 ## Setup and running
 
