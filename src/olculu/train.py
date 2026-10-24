@@ -32,9 +32,15 @@ def load_run(name):
     return {t: pd.read_csv(d / f"{t}.csv") for t in ["services", "servings", "hourly"]}
 
 
-def blind_cutoff(cfg):
-    end = date.fromisoformat(cfg["season"]["end"])
+def blind_cutoff(cfg, end=None):
+    """First day of the blind weeks. `end` is the test season's last day (from data/test/meta.json)."""
+    end = date.fromisoformat(str(end or cfg["season"]["end"]))
     return pd.Timestamp(end - timedelta(weeks=cfg["season"]["blind_test_weeks"]) + timedelta(days=1))
+
+
+def run_meta(name):
+    path = DATA_DIR / name / "meta.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"mode": "synthetic"}
 
 
 def attach_guest_pred(frame, services, pred_col):
@@ -51,7 +57,8 @@ def main():
     dishes = {d["id"]: d for d in catalogue["dishes"]}
     unit_kg = {k: d["kg_per_unit"] for k, d in dishes.items()}
     refill = cfg["service"]["max_refill_share"]
-    cutoff = blind_cutoff(cfg)
+    test_meta = run_meta("test")
+    cutoff = blind_cutoff(cfg, test_meta.get("end"))
 
     train, test = load_run("train"), load_run("test")
     s_tr, s_te = prepare_services(train["services"]), prepare_services(test["services"])
@@ -148,7 +155,8 @@ def main():
     groups = ev["group"].to_numpy()
     price = np.array([costs[g] for g in groups])
     chef_waste_try = float((chef["waste"][july] * price[july]).sum())
-    report = {"month": "Temmuz 2026 (sentetik test sezonu)", "chef": {
+    season_kind = "yarı sentetik" if test_meta["mode"] == "grounded" else "sentetik"
+    report = {"month": f"Temmuz {int(ev['date'].dt.year.iloc[0])} ({season_kind} test sezonu)", "chef": {
         "waste_kg": float(chef["waste"][july].sum()), "stockout_rate": float(chef["stockout"][july].mean()),
         "services_with_stockout": services_with_stockout(chef["stockout"][july], july),
         "plan_short_rate": float(np.mean(y[july] > ev["plan_kg"].to_numpy()[july])),
