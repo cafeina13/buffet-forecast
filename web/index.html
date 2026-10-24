@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ölçülü</title>
-<meta name="description" content="Her şey dahil büfelerde her yemekten ne kadar ve ne zaman pişirileceğini tahmin eden yapay zekâ. Prototip; sentetik veri.">
+<meta name="description" content="Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ. Prototip; sentetik veri.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
@@ -34,7 +34,7 @@
   <div class="wrap">
     <p class="eyebrow">Bİ’DÜŞÜNSEN BULURSUN 2026 · YAPAY ZEKÂ İLE SÜRDÜRÜLEBİLİR GELECEĞİ TASARLA</p>
     <h1 data-product-name>Ölçülü</h1>
-    <p class="lead">Her şey dahil büfelerde her yemekten ne kadar ve ne zaman pişirileceğini tahmin eden yapay zekâ.</p>
+    <p class="lead">Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ.</p>
     <hr>
     <p class="tagline">Daha az pişir, büfe yine de boş kalmasın.</p>
     <p class="hero-problem">Her şey dahil büfelerde üretim çoğu zaman “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlanıyor ve fazlası çöpe gidebiliyor. <span data-product-name>Ölçülü</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin ilk pişirilen miktarı aşma riskini tüm yemekler için tek bir ayarla seçer.</p>
@@ -71,12 +71,12 @@
       <div class="card">
         <p class="step">4 · AY SONUNDA</p>
         <h3>Otomatik rapor</h3>
-        <p class="muted">Önlenen atık (kg), tasarruf (TL) ve CO₂ eşdeğeri raporlanır.</p>
+        <p class="muted">Önlenen atık (kg), maliyeti (TL), CO₂ eşdeğeri [1] ve tükenme oranları raporlanır.</p>
       </div>
     </div>
     <div class="callout two">
-      <p><b>Ek donanım gerekmez:</b> otelin mevcut tableti veya telefonu yeter.</p>
-      <p><b>Ama ölçüm gerekir:</b> model de tasarruf hesabı da servis sonrası ölçülen artanlardan beslenir.</p>
+      <p><b>Ekran için ek donanım gerekmez:</b> otelin mevcut tableti veya telefonu yeter.</p>
+      <p><b>Ama ölçüm gerekir:</b> artanlar mutfak terazisiyle ya da fotoğrafla ölçülecek; model de tasarruf hesabı da bu ölçümden beslenir.</p>
     </div>
   </div>
 </section>
@@ -98,25 +98,25 @@
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
           <h3>Misafir modeli</h3>
-          <p class="muted">Ön büro kayıtlarından (tur, a la carte, uçuş saatleri) öğünde otelde kaç kişi olduğu hesaplanır; model bunların ne kadarının büfeye geleceğini maç, tema gecesi ve havaya göre öğrenir.</p>
+          <p class="muted">Ön büro kayıtlarından (tur, a la carte, geç gelen ve erken ayrılan misafir sayıları) öğünde otelde kaç kişi olduğu bir kuralla hesaplanır; model bunların ne kadarının büfeye geleceğini öğrenir. Sentetik veride öğrenilen etkiler maç ve tema gecesi; kazancın çoğu kuraldan geliyor.</p>
         </div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card">
         <p class="step">EĞİTİLEN MODEL 2</p>
         <h3>Tüketim modeli</h3>
-        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenme kayıtları “en az bu kadar” olarak işlenir.</p>
+        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); bu düzeltmenin etkisi henüz ölçülemedi.</p>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, tazeleme saati ve Türkçe bir cümlelik gerekçe (SHAP): “Bugün 4 tepsi; doluluk %8 düştü, hava 34 °C.”</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemek bu öğünde şimdiye kadar 100 misafir başına ortalama 8,4 kg tüketildi; sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve mutfak beklentisiyle aynı yöndeyse yazılır.</p>
       </div>
     </div>
     <div class="callout">
       <p><b>Başarı ölçütü:</b> aynı tükenme oranında şefin kendi planından ne kadar daha az atık. Yalnızca modelin hiç görmediği haftalarda, gerçek otel verisiyle ölçülecek.</p>
-      <p class="small muted">Türkiye’de öncül çalışmalar var: Alanya’da bir her şey dahil otelde yiyecek-içecek miktarlarının yapay sinir ağlarıyla tahmini üzerine bir doktora tezi [2]; yemekhane talebinin XGBoost, LSTM ve Prophet ile tahmin edildiği ve israfın %6,2 azaltılabileceğinin hesaplandığı bir yüksek lisans tezi [3]; yemekhane talebinde karar ağaçlarıyla R² 0,83’e varan doğruluk [4].</p>
+      <p class="small muted">Türkiye’de öncül çalışmalar var: her şey dahil sistemde yiyecek-içecek miktarlarının yapay sinir ağlarıyla tahmini üzerine, Alanya’da uygulanmış bir doktora tezi [2]; yemekhane talebinin XGBoost, LSTM ve Prophet ile tahmin edildiği ve israfın %6,2 azaltılabileceğinin hesaplandığı bir yüksek lisans tezi [3]; yemekhane talebinde karar ağaçlarıyla R² 0,83’e varan doğruluk [4].</p>
     </div>
   </div>
 </section>
@@ -126,7 +126,7 @@
     <div class="section-head">
       <p class="eyebrow">CANLI DEMO</p>
       <h2>Şefin ekranını kendiniz deneyin</h2>
-      <p class="lead">Gün ve öğünü seçin, bitme riskini değiştirin, “bu akşam maç var” deyin: iki model tarayıcınızda anında yeniden hesaplar. Her yemek için miktar, aralık, tazeleme saati ve Türkçe gerekçe.</p>
+      <p class="lead">Gün ve öğünü seçin, riski değiştirin, “bu akşam maç var” deyin: iki model tarayıcınızda anında yeniden hesaplar. Her yemek için miktar, aralık, tazeleme saati ve kısa bir Türkçe gerekçe.</p>
     </div>
     <div class="hero-actions" style="margin-top:0">
       <a class="btn btn-primary" href="demo.html">Şefin ekranını açın</a>
@@ -135,7 +135,7 @@
     <div class="prototype-note" style="background:var(--green-2);border-color:var(--clay-light);margin-top:32px">
       <p class="eyebrow">PROTOTİP HAKKINDA</p>
       <h3>Bu prototip sentetik veriyle çalışıyor</h3>
-      <p>Henüz gerçek otel verimiz yok. Prototip, literatüre dayanan varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
+      <p>Henüz gerçek otel verimiz yok. Prototip, çoğu ekip varsayımı olan, birkaçının yönü literatürden alınmış varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
     </div>
   </div>
 </section>
@@ -175,7 +175,7 @@
       <h2>Kaynakça</h2>
     </div>
     <ol>
-      <li><a href="https://doi.org/10.1016/j.annale.2021.100010" rel="noopener">Juvan, E., Grün, B., Zabukovec Baruca, P., Dolnicar, S. (2021). Drivers of plate waste at buffets. Annals of Tourism Research Empirical Insights, 2(1), 100010.</a> <span>(şefin ekranındaki aylık rapordaki CO₂ katsayısı: 1 kg gıda atığı ≈ 1,9 kg CO₂ eşdeğeri, BIO Intelligence 2010 aktarımıyla)</span></li>
+      <li><a href="https://doi.org/10.1016/j.annale.2021.100010" rel="noopener">Juvan, E., Grün, B., Zabukovec Baruca, P., Dolnicar, S. (2021). Drivers of plate waste at buffets: A comprehensive conceptual model based on observational data and staff insights. Annals of Tourism Research Empirical Insights, 2(1), 100010.</a> <span>(şefin ekranındaki aylık rapordaki CO₂ katsayısı: 1 kg gıda atığı ≈ 1,9 kg CO₂ eşdeğeri, BIO Intelligence 2010 aktarımıyla)</span></li>
       <li><a href="https://tezara.org/theses/440587" rel="noopener">Erinci, F. (2016). Her şey dahil sisteminde yiyecek içecek miktarlarının yapay sinir ağları ile tahmini, Alanya’da bir uygulama. Akdeniz Üniversitesi, doktora tezi.</a></li>
       <li><a href="https://acikerisim.gtu.edu.tr/items/d86c9a0d-a072-4d2b-a5bc-b77e4fa4b4d6" rel="noopener">Aydın, B. (2025). Makine öğrenmesi teknikleri ile yemekhanelerde yemek talep tahmini. Gebze Teknik Üniversitesi, yüksek lisans tezi.</a></li>
       <li><a href="https://avesis.hacettepe.edu.tr/yayin/8283dca0-f836-43f7-88a0-25f7ea7bcdd1/predicting-food-demand-in-food-courts-by-decision-tree-approaches" rel="noopener">Bozkır, A. S., Sezer, E. A. (2010). Predicting food demand in food courts by decision tree approaches. WCIT 2010.</a></li>

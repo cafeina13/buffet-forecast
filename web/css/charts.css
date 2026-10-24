@@ -9,6 +9,13 @@
 .legend .lg-new { color: var(--clay); }
 .legend .lg-dish { color: var(--green); }
 .legend span { color: var(--ink); }
+.table-card { margin-top: 14px; overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+.data-table th, .data-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.data-table thead th { font-size: 13px; color: var(--muted); font-weight: 700; }
+.data-table tbody th { font-weight: 700; }
+.neighbour-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; font-size: 16px; }
+@media (min-width: 720px) { .neighbour-list { grid-template-columns: 1fr 1fr; } }
 .legend .lg-model::before { background: var(--green); }
 .legend .lg-chef::before, .legend .lg-new::before { background: var(--clay); }
 .legend .lg-dish::before { background: #7a9a8c; }

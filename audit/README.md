@@ -28,4 +28,5 @@ Brief: `brief.md`.
 
 | Audit | Date | Auditor | Result |
 | --- | --- | --- | --- |
-| 1 | 2026-10-24 | three partitioned agents, no hints | running |
+| 1 | 2026-10-24 | three partitioned agents, no hints | 43 findings, 4 errors (explanations, new-dish claim, guest drivers, embedding claim); fixed: `findings/audit1.md` |
+| 2 | 2026-10-24 | three partitioned agents, no hints | running |

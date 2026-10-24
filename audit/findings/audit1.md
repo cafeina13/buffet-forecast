@@ -77,4 +77,20 @@ Claude's checks: `../scripts/audit1/v_claude_part3.py`, `../scripts/audit1/v_cla
 
 Rejected: one sub-point of 1.3. Not changed: the contact placeholder (the student's decision).
 
+## Fixes applied (2026-10-24, deployed; record `2026-10-24-audit1-fixes`, models identical to `guest-rule`)
+
+- Text and labels: every accepted finding above, on the home page, the chef's screen, "Nasıl çalışır" and the README.
+- Explanations (2.2-2.6): SHAP no longer shown. Dish sentences give guests and the dish's own average consumption
+  per 100 guests; a temperature reason only when moving to a mild 27 °C changes the median by at least 5% in the
+  catalogue's expected direction. Guest drivers: events only, as forecast with the event on minus off.
+- Metrics (3.1, 3.2, 2.7-2.9, 2.11): train.py now reports the share of meals with at least one dish run out, the
+  share of dishes where demand exceeded the first cook, production, and simple guest baselines; the site shows
+  both stock-out views and the trade-off.
+- Map (3.3): replaced by a list of each new dish's nearest neighbours, with the spelling-based caveat.
+- Sliders (2.13): occupancy in points with in-house guests capped at capacity; temperature and child share kept
+  within the training range. Badge (2.12) only without history. Breakdown (2.14) adds up.
+- Tests (3.13): js_parity.py checks all 8 quantile models (1,680 rows), record given explicitly.
+- Not changed: 3.14 (first-meal share leak) documented in the README; 3.6 hard-coded assumptions listed in the
+  README, not moved.
+
 Noted for the other parts (not passed to their auditors): the monthly report compares at a fixed risk, and in July at 20% the model's stock-out rate (10.3%) is above the chef's (8.2%).
