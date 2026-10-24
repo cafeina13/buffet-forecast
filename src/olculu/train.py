@@ -59,9 +59,11 @@ def main():
     # Layer 1: guests per meal = presence rule x learned share who come to the buffet.
     guest_models = fit_guest_models(s_tr)
     s_tr["att_pred"] = oof_guest_median(s_tr)
-    g_te, crossed_g = predict_guests(guest_models, s_te)
+    g_te, _ = predict_guests(guest_models, s_te)
     s_te["att_pred"] = g_te[:, 1]
     open_te = s_te["date"] < cutoff
+    # Crossing is counted on the open weeks only; the blind weeks stay untouched in every metric.
+    _, crossed_g = predict_guests(guest_models, s_te[open_te])
 
     occ_only = fit_guest_models(s_tr, GUEST_FEATURES_OCC_ONLY, target="attendance")
     occ_pred = occ_only[0.5].predict(s_te[GUEST_FEATURES_OCC_ONLY])
@@ -149,6 +151,7 @@ def main():
     report = {"month": "Temmuz 2026 (sentetik test sezonu)", "chef": {
         "waste_kg": float(chef["waste"][july].sum()), "stockout_rate": float(chef["stockout"][july].mean()),
         "services_with_stockout": services_with_stockout(chef["stockout"][july], july),
+        "plan_short_rate": float(np.mean(y[july] > ev["plan_kg"].to_numpy()[july])),
         "production_kg": float(chef["production"][july].sum())}, "levels": []}
     for r in [0.2, 0.1, 0.05]:
         rec = round_up_half_unit(interpolate_quantile(q_kg[july], DISH_QUANTILES, 1 - r), units[july])
@@ -157,6 +160,7 @@ def main():
         report["levels"].append({
             "risk": r, "waste_kg": float(sim["waste"].sum()), "stockout_rate": float(sim["stockout"].mean()),
             "services_with_stockout": services_with_stockout(sim["stockout"], july),
+            "plan_short_rate": float(np.mean(y[july] > rec)),
             "production_kg": float(sim["production"].sum()),
             # Cost of the avoided waste only; the cost of extra stock-outs is not netted out.
             "avoided_kg": avoided, "avoided_try": chef_waste_try - float((sim["waste"] * price[july]).sum()),

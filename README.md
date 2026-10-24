@@ -16,7 +16,7 @@ Requires [uv](https://docs.astral.sh/uv/) and Node (Node only for the JS parity 
 ```
 uv sync
 uv run python -m olculu.synth --seed 42                 # training season (seed 42) + test season (seed 43, shifted parameters)
-uv run python -m olculu.train --name audit1-fixes       # trains, evaluates, writes experiments/<date>-<name>/ and web/data/*.json
+uv run python -m olculu.train --name audit2-fixes       # trains, evaluates, writes experiments/<date>-<name>/ and web/data/*.json
 uv run pytest                                           # leakage, time split, config sources
 uv run python tests/js_parity.py experiments/<date>-<name>   # browser model == LightGBM, every quantile (predictions and SHAP)
 ```
@@ -48,31 +48,38 @@ front-office counts -> presence rule x guest rate model -------+        -> risk 
   guests physically in the hotel at the meal from front-office records: excursions miss lunch, à la carte
   bookings and late-night arrivals miss dinner, early departures miss lunch or breakfast. LightGBM quantile
   regression (0.1/0.5/0.9) then learns the share of those guests who come to the buffet. Its inputs include
-  events, weather, occupancy and guest mix, but in the synthetic generator only match and themed nights change
-  that share, and those are the effects it learned (match −4.7% vs −6% in the generator, themed +4.0% vs +5%;
-  conference not learned, too few days). An earlier version learned everything from counts; a sensitivity check
+  events, weather, occupancy and guest mix, but in the synthetic generator only match nights, themed nights and
+  conference lunches change that share. It learned the first two (match −4.7% vs −6% in the generator, themed
+  +4.0% vs +5%) and not the conference effect (+10% in the generator; only 8 conference lunches in training,
+  fewer than the trees' minimum leaf size of 15). An earlier version learned everything from counts; a sensitivity check
   showed it reacted 2–5× too weakly to excursions and à la carte bookings, depending on the size of the change,
   so the rule was made explicit. Caveat: the synthetic generator uses the same rule, so its benefit on synthetic
   data is circular, and the learned rate adds little on top of it (see Results).
 - **Consumption model** (`models.fit_dish_models`): one LightGBM per quantile, target = kg per 100 predicted guests.
   The guest prediction used for training is out-of-fold (grouped by week), so the quantiles include guest-forecast error.
   Quantile crossing is fixed by sorting each row; the number of fixed rows is reported in `metrics.json`.
-- **Risk setting**: the chef picks one level for all dishes. It is the probability that demand exceeds the
-  first cook (the (1 − risk) quantile, interpolated in `models.interpolate_quantile`; `newsvendor.py` holds the
-  rounding and the service simulation). Refills of up to 12% of the plan follow during service, so the share
-  of dishes that actually run out is lower than the setting.
+- **Risk setting**: the chef picks one level for all dishes. It is the targeted probability that demand exceeds
+  the recommended total amount (the (1 − risk) quantile, interpolated in `models.interpolate_quantile`, rounded
+  up to half a unit; `newsvendor.py` holds the rounding and the service simulation). The quantiles are not yet
+  calibrated, so the realised rate differs (see Results). The evaluation assumes the whole recommended amount is
+  prepared and that the kitchen can cook up to 12% of the plan extra when demand exceeds it, at the right moment
+  and in the right amount; so the share of dishes that actually run out is lower than the setting. The demo's
+  batch schedule (below) only splits the plan and is not part of the evaluation.
 - **The models run in the browser.** `export_web.py` writes the trees as JSON; `web/js/model.js` evaluates
   them (and has an exact TreeSHAP). `tests/js_parity.py` checks every quantile model against LightGBM.
 - **Explanations** (`web/js/demo.js`): counterfactual, not SHAP. Each dish sentence gives the expected guests
-  and the dish's own average consumption per 100 guests so far in the season; a temperature reason is added only
+  and the dish's own average demand per 100 guests so far in the season (the stock-out-corrected training target,
+not raw consumption); a temperature reason is added only
   when changing the temperature to a mild 27 °C moves the median by at least 5% *and* in the direction the
   catalogue expects for that dish (catalogue field, used only for this check, never as a model input). Event
   effects on guests are the forecast with the event on minus off. SHAP was used in the first version; site
   audit 1 showed that on this synthetic data it attributed noise (temperature with the wrong sign on 110 of 409
   demo dishes, child share on breakfasts), so it is not shown. No LLM.
-- **Refills** (`web/js/demo.js`): rule-based. About 40% is cooked first; the rest follows in batches of about
-  a fifth, each scheduled 15 minutes before the tray is expected to be half empty, given an assumed arrival
-  profile (the generator's curve, with a match variant; not learned).
+- **Refill schedule** (`web/js/demo.js`): rule-based, splitting the recommended amount. About 40% first (rounded
+  up to whole units); the rest in batches of about a fifth, each scheduled 15 minutes before the start of the
+  15-minute slot in which the median consumption is expected to bring the buffet down to half a unit (never
+  before service start). Units that a median service would not need are shown as a reserve "if needed". The
+  arrival profile is assumed (the generator's curve, with a match variant; not learned).
 
 ### How stock-outs are handled (censored demand)
 
@@ -93,19 +100,21 @@ Known small leak: `first_meal_share` (a dish-model input) is generated as first-
 meal's actual attendance; a real system would divide by the forecast. The same-day temperature is also
 used as if forecast perfectly.
 
-## Results so far (synthetic, record `experiments/2026-10-24-audit1-fixes/`)
+## Results so far (synthetic, record `experiments/2026-10-24-audit2-fixes/`)
 
-See `metrics.json` in the record for every number. Stock-outs are counted two ways: the share of dishes
-served that ran out (after refills), and the share of meals in which at least one dish ran out.
+See `metrics.json` in the record for every number. "Waste" is buffet overproduction (prepared minus taken);
+plate waste is not modelled. Stock-outs are counted two ways: the share of dishes served that ran out (after
+extra cooking), and the share of meals in which at least one dish ran out.
 
-| Test season (open part) | Waste | Demand above first cook | Dishes run out | Meals with a dish run out |
+| Test season (open part) | Waste | Demand above the plan | Dishes run out | Meals with a dish run out |
 | --- | --- | --- | --- | --- |
 | Simulated chef | 65.5 t | 15.8% | 7.8% | 63.7% |
 | Model, 20% risk | 46.0 t | 17.0% | 7.4% | 69.4% |
 | Model, 10% risk | 63.6 t | 9.1% | 3.2% | 40.6% |
 | Model, 5% risk | 78.5 t | 5.5% | 1.8% | 26.8% |
 
-So the setting is a real trade-off: at 20% the model wastes about 30% less than the chef but more meals see a
+The "demand above the plan" column is the realised version of the setting (uncalibrated quantiles, plus rounding
+up to half units). So the setting is a real trade-off: at 20% the model wastes about 30% less than the chef but more meals see a
 dish run out; at 10% waste is about the chef's and dishes run out far less often.
 
 - Calibration is not done yet: q0.95 covered 92.7% instead of 95%, and the guest 10–90% interval covered 73%
@@ -122,7 +131,9 @@ dish run out; at 10% waste is about the chef's and dishes run out far less often
 
 Every control in the demo's scenario panel was checked first (vary it across its range on all demo services,
 confirm the forecast moves visibly and in the direction a chef would expect). Kept: occupancy (in points,
-in-house guests capped at capacity), temperature and share of children (both kept within the training range),
+capped at 100% and capacity, the effective change shown), temperature (kept within the training range), share
+of children (the slider stays within the training range, 14–26%; the demo week's own value, 29%, lies above it
+and the page says so),
 excursions, early departures, à la carte bookings, late-night arrivals, match night, themed night.
 Not shown: nationality mix (the generator gives dishes nationality affinities, but the dish model did not learn
 them: a Russian-heavy mix raised English breakfast items), conference groups (the rate model ignores them; too
@@ -130,9 +141,11 @@ few conference days), late arrivals at breakfast (too small an effect).
 
 ### Assumptions outside the config
 
-`config/synthetic.yaml` holds the main assumptions with sources. Some smaller ones are hard-coded in
-`synth/generator.py`: the shapes of the summer and temperature curves, noise levels on arrivals, departures,
-attendance and arrival profiles, the first-meal fractions, the attendance floor, the occupancy clip, the late
+`config/synthetic.yaml` holds the main assumptions with a source per parameter; `config/dishes.yaml` holds the
+dish catalogue (take rates, portions, affinities, temperature sensitivity) under one blanket "team assumption".
+Some smaller ones are hard-coded in
+`synth/generator.py`: the shapes of the summer and temperature curves, noise levels on arrivals, departures
+and arrival profiles, the first-meal fractions, the attendance floor, the occupancy clip, the late
 wave's timing, and the simulated chef's information (the previous same meal's attendance with 5% noise, and a
 noisy first guess for new dishes). Moving them into the config is planned.
 

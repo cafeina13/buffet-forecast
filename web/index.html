@@ -37,7 +37,7 @@
     <p class="lead">Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ.</p>
     <hr>
     <p class="tagline">Daha az pişir, büfe yine de boş kalmasın.</p>
-    <p class="hero-problem">Her şey dahil büfelerde üretim çoğu zaman “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlanıyor ve fazlası çöpe gidebiliyor. <span data-product-name>Ölçülü</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin ilk pişirilen miktarı aşma riskini tüm yemekler için tek bir ayarla seçer.</p>
+    <p class="hero-problem">Ele aldığımız sorun: her şey dahil büfelerde üretim “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlandığında fazlası çöpe gidebilir. <span data-product-name>Ölçülü</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin önerilen toplam miktarı aşması için kabul ettiği riski tüm yemekler için tek bir ayarla seçer.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="demo.html">Şefin ekranını deneyin</a>
       <a class="btn btn-ghost" href="#cozum">Nasıl işler?</a>
@@ -56,7 +56,7 @@
       <div class="card">
         <p class="step">1 · SERVİSTEN ÖNCE</p>
         <h3>Üretim planı</h3>
-        <p class="muted">Şef her yemek için önerilen miktarı ve beklenen aralığı tablette görür. İsterse tek dokunuşla düzeltir; son karar her zaman şefin.</p>
+        <p class="muted">Şef her yemek için önerilen miktarı ve beklenen aralığı tablette görür. İsterse birkaç dokunuşla düzeltir; son karar her zaman şefin.</p>
       </div>
       <div class="card">
         <p class="step">2 · SERVİS SIRASINDA</p>
@@ -71,12 +71,12 @@
       <div class="card">
         <p class="step">4 · AY SONUNDA</p>
         <h3>Otomatik rapor</h3>
-        <p class="muted">Önlenen atık (kg), maliyeti (TL), CO₂ eşdeğeri [1] ve tükenme oranları raporlanır.</p>
+        <p class="muted">Pilotta: ilk haftalarda ölçülen başlangıç atığına göre önlenen atık (kg), maliyeti (TL), CO₂ eşdeğeri [1] ve tükenme oranları raporlanır. Demodaki rapor, simüle bir şefle aynı risk ayarında yapılan bir karşılaştırmadır.</p>
       </div>
     </div>
     <div class="callout two">
       <p><b>Ekran için ek donanım gerekmez:</b> otelin mevcut tableti veya telefonu yeter.</p>
-      <p><b>Ama ölçüm gerekir:</b> artanlar mutfak terazisiyle ya da fotoğrafla ölçülecek; model de tasarruf hesabı da bu ölçümden beslenir.</p>
+      <p><b>Ama ölçüm gerekir:</b> artanlar mutfak terazisiyle ya da fotoğrafla ölçülecek; pilotta model de tasarruf hesabı da bu ölçümden beslenecek (prototipte bu ölçüm adımı simüle edilmedi).</p>
     </div>
   </div>
 </section>
@@ -98,24 +98,24 @@
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
           <h3>Misafir modeli</h3>
-          <p class="muted">Ön büro kayıtlarından (tur, a la carte, geç gelen ve erken ayrılan misafir sayıları) öğünde otelde kaç kişi olduğu bir kuralla hesaplanır; model bunların ne kadarının büfeye geleceğini öğrenir. Sentetik veride öğrenilen etkiler maç ve tema gecesi; kazancın çoğu kuraldan geliyor.</p>
+          <p class="muted">Ön büro kayıtlarından (tur, a la carte, geç gelen ve erken ayrılan misafir sayıları) öğünde otelde kaç kişi olduğu bir kuralla hesaplanır; model bunların ne kadarının büfeye geleceğini öğrenir. Sentetik veride model maç ve tema gecesi etkilerini öğrendi (kongreyi öğrenemedi); kazancın çoğu kuraldan geliyor, ama sentetik veri de aynı kuralla üretildiği için bu kazanç döngüsel, gerçek veride sınanacak.</p>
         </div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card">
         <p class="step">EĞİTİLEN MODEL 2</p>
         <h3>Tüketim modeli</h3>
-        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); bu düzeltmenin etkisi henüz ölçülemedi.</p>
+        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); sentetik testte bu düzeltmenin belirgin bir etkisi görülmedi.</p>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemek bu öğünde şimdiye kadar 100 misafir başına ortalama 8,4 kg tüketildi; sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve mutfak beklentisiyle aynı yöndeyse yazılır.</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin maç akşamı mercimek çorbası için: “580 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,4 kg (tükenen servisler düzeltilerek); sıcak hava (37 °C) talebi azaltıyor (ılık bir güne göre −%13).” Hava etkisi yalnızca büyükse ve mutfak beklentisiyle aynı yöndeyse yazılır.</p>
       </div>
     </div>
     <div class="callout">
-      <p><b>Başarı ölçütü:</b> aynı tükenme oranında şefin kendi planından ne kadar daha az atık. Yalnızca modelin hiç görmediği haftalarda, gerçek otel verisiyle ölçülecek.</p>
+      <p><b>Başarı ölçütü:</b> aynı tükenme oranında şefin kendi planından ne kadar daha az atık. Yalnızca modelin hiç görmediği haftalarda, gerçek otel verisiyle ölçülecek. (Demodaki aylık rapor ise aynı risk ayarında karşılaştırır; tükenme oranları orada ayrıca gösterilir.)</p>
       <p class="small muted">Türkiye’de öncül çalışmalar var: her şey dahil sistemde yiyecek-içecek miktarlarının yapay sinir ağlarıyla tahmini üzerine, Alanya’da uygulanmış bir doktora tezi [2]; yemekhane talebinin XGBoost, LSTM ve Prophet ile tahmin edildiği ve israfın %6,2 azaltılabileceğinin hesaplandığı bir yüksek lisans tezi [3]; yemekhane talebinde karar ağaçlarıyla R² 0,83’e varan doğruluk [4].</p>
     </div>
   </div>
@@ -126,7 +126,7 @@
     <div class="section-head">
       <p class="eyebrow">CANLI DEMO</p>
       <h2>Şefin ekranını kendiniz deneyin</h2>
-      <p class="lead">Gün ve öğünü seçin, riski değiştirin, “bu akşam maç var” deyin: iki model tarayıcınızda anında yeniden hesaplar. Her yemek için miktar, aralık, tazeleme saati ve kısa bir Türkçe gerekçe.</p>
+      <p class="lead">Gün ve öğünü seçin, hedeflenen riski değiştirin, “bu akşam maç var” deyin: iki model tarayıcınızda anında yeniden hesaplar. Her yemek için miktar, aralık, tazeleme saati ve kısa bir Türkçe gerekçe.</p>
     </div>
     <div class="hero-actions" style="margin-top:0">
       <a class="btn btn-primary" href="demo.html">Şefin ekranını açın</a>
@@ -135,7 +135,7 @@
     <div class="prototype-note" style="background:var(--green-2);border-color:var(--clay-light);margin-top:32px">
       <p class="eyebrow">PROTOTİP HAKKINDA</p>
       <h3>Bu prototip sentetik veriyle çalışıyor</h3>
-      <p>Henüz gerçek otel verimiz yok. Prototip, çoğu ekip varsayımı olan, birkaçının yönü literatürden alınmış varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
+      <p>Henüz gerçek otel verimiz yok. Prototip, çoğu ekip varsayımı olan, birkaçının yönü literatürdeki tabak atığı bulgularından esinlenmiş varsayımlarla üretilmiş sentetik veriyle akışı ve arayüzü gösteriyor. Bu bir doğruluk kanıtı değildir: sentetik veriyle eğitilen bir model, veriyi üretenin varsayımlarını geri öğrenir. Doğruluk rakamları yalnızca gerçek veriden ve ayrılmış haftalardan hesaplanacak.</p>
     </div>
   </div>
 </section>
@@ -178,7 +178,7 @@
       <li><a href="https://doi.org/10.1016/j.annale.2021.100010" rel="noopener">Juvan, E., Grün, B., Zabukovec Baruca, P., Dolnicar, S. (2021). Drivers of plate waste at buffets: A comprehensive conceptual model based on observational data and staff insights. Annals of Tourism Research Empirical Insights, 2(1), 100010.</a> <span>(şefin ekranındaki aylık rapordaki CO₂ katsayısı: 1 kg gıda atığı ≈ 1,9 kg CO₂ eşdeğeri, BIO Intelligence 2010 aktarımıyla)</span></li>
       <li><a href="https://tezara.org/theses/440587" rel="noopener">Erinci, F. (2016). Her şey dahil sisteminde yiyecek içecek miktarlarının yapay sinir ağları ile tahmini, Alanya’da bir uygulama. Akdeniz Üniversitesi, doktora tezi.</a></li>
       <li><a href="https://acikerisim.gtu.edu.tr/items/d86c9a0d-a072-4d2b-a5bc-b77e4fa4b4d6" rel="noopener">Aydın, B. (2025). Makine öğrenmesi teknikleri ile yemekhanelerde yemek talep tahmini. Gebze Teknik Üniversitesi, yüksek lisans tezi.</a></li>
-      <li><a href="https://avesis.hacettepe.edu.tr/yayin/8283dca0-f836-43f7-88a0-25f7ea7bcdd1/predicting-food-demand-in-food-courts-by-decision-tree-approaches" rel="noopener">Bozkır, A. S., Sezer, E. A. (2010). Predicting food demand in food courts by decision tree approaches. WCIT 2010.</a></li>
+      <li><a href="https://avesis.hacettepe.edu.tr/yayin/8283dca0-f836-43f7-88a0-25f7ea7bcdd1/predicting-food-demand-in-food-courts-by-decision-tree-approaches" rel="noopener">Bozkır, A. S., Sezer, E. A. (2010). Predicting food demand in food courts by decision tree approaches. Procedia Computer Science, 3 (WCIT 2010). doi:10.1016/j.procs.2010.12.125</a></li>
     </ol>
   </div>
 </section>

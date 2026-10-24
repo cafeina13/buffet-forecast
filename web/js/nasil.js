@@ -23,8 +23,8 @@
       g += `<line x1="${L}" x2="${W - R}" y1="${sy(y)}" y2="${sy(y)}" stroke="#e2dacb"/>`;
       g += `<text x="${L - 10}" y="${sy(y) + 5}" text-anchor="end" font-size="14" fill="#4a5752">${y} t</text>`;
     }
-    g += `<text x="${(L + W - R) / 2}" y="${H - 12}" text-anchor="middle" font-size="14" fill="#1e3a33">Servis edilen yemeklerin tükenen payı (tazeleme sonrası)</text>`;
-    g += `<text x="18" y="${(T + H - B) / 2}" text-anchor="middle" font-size="14" fill="#1e3a33" transform="rotate(-90 18 ${(T + H - B) / 2})">Toplam atık (ton)</text>`;
+    g += `<text x="${(L + W - R) / 2}" y="${H - 12}" text-anchor="middle" font-size="14" fill="#1e3a33">Servis edilen yemeklerin tükenen payı (ek pişirme sonrası)</text>`;
+    g += `<text x="18" y="${(T + H - B) / 2}" text-anchor="middle" font-size="14" fill="#1e3a33" transform="rotate(-90 18 ${(T + H - B) / 2})">Üretim fazlası (ton)</text>`;
     g += `<polyline fill="none" stroke="#1e3a33" stroke-width="3" points="${pts.map((p) => `${sx(p.x)},${sy(p.y)}`).join(" ")}"/>`;
     pts.forEach((p) => {
       g += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="7" fill="#1e3a33"><title>Risk ayarı %${nf0.format(p.r * 100)}: ${nf.format(p.y)} t atık, tükenen yemek payı %${nf.format(p.x)}</title></circle>`;
@@ -33,13 +33,13 @@
     g += `<circle cx="${sx(chef.x)}" cy="${sy(chef.y)}" r="10" fill="#a94e27"><title>Simüle şef: ${nf.format(chef.y)} t atık, tükenen yemek payı %${nf.format(chef.x)}</title></circle>`;
     g += `<text x="${sx(chef.x) + 14}" y="${sy(chef.y) + 5}" font-size="14" font-weight="700" fill="#a94e27">Klasik plan</text>`;
     document.getElementById("risk-chart").innerHTML =
-      `<svg viewBox="0 0 ${W} ${H}">${g}</svg><div class="legend"><span class="lg-model">Model; etiket: risk ayarı (talebin ilk pişirilen miktarı aşma olasılığı)</span><span class="lg-chef">Simüle şefin klasik planı</span></div>`;
+      `<svg viewBox="0 0 ${W} ${H}">${g}</svg><div class="legend"><span class="lg-model">Model; etiket: hedeflenen risk (talebin önerilen toplam miktarı aşma olasılığı)</span><span class="lg-chef">Simüle şefin klasik planı</span></div>`;
 
     // The same evaluation in a table, with the meal-level view: a meal counts if any dish ran out.
     const rows = [["Simüle şef", m.chef]].concat(
       m.risk_curve.filter((c) => [0.2, 0.1, 0.05].includes(c.risk)).map((c) => [`Model, %${nf0.format(c.risk * 100)} risk`, c]));
     document.getElementById("risk-table").innerHTML = `<table class="data-table">
-      <thead><tr><th></th><th>Toplam atık</th><th>Talebin ilk pişirimi aştığı yemekler</th><th>Tazelemeye rağmen tükenen yemekler</th><th>En az bir yemeği biten öğünler</th></tr></thead>
+      <thead><tr><th></th><th>Üretim fazlası</th><th>Talebin planı aştığı yemekler</th><th>Ek pişirmeye rağmen tükenen yemekler</th><th>En az bir yemeği biten öğünler</th></tr></thead>
       <tbody>${rows.map(([name, c]) => `<tr><th>${name}</th><td>${nf.format(c.waste_kg / 1000)} t</td><td>${pct(c.plan_short_rate)}</td><td>${pct(c.stockout_rate)}</td><td>${pct(c.services_with_stockout)}</td></tr>`).join("")}</tbody>
     </table>`;
 
@@ -54,9 +54,9 @@
     const card = (step, value, text) =>
       `<div class="card"><p class="step">${step}</p><p class="stat">${nf.format(value)}</p><p>${text}</p></div>`;
     document.getElementById("guest-cards").innerHTML =
-      card("EVDEKİ MİSAFİR × ÖĞÜNÜN ORTALAMA ORANI", g.mae_in_house_times_meal_rate, "kişi ortalama hata; en basit kural") +
-      card("ÖN BÜRO KURALI × ÖĞÜNÜN ORTALAMA ORANI", g.mae_presence_rule_times_meal_rate, "kişi ortalama hata; model yok") +
-      card("ÖN BÜRO KURALI + MODEL (MAÇ, TEMA GECESİ)", g.mae_full, "kişi ortalama hata; şefin ekranındaki tahmin");
+      card("OTELDE KONAKLAYAN MİSAFİR × ÖĞÜNÜN ORTALAMA ORANI", g.mae_in_house_times_meal_rate, "kişi ortalama mutlak hata; en basit kural") +
+      card("ÖN BÜRO KURALI × ÖĞÜNÜN ORTALAMA ORANI", g.mae_presence_rule_times_meal_rate, "kişi ortalama mutlak hata; model yok") +
+      card("ÖN BÜRO KURALI + MODEL (ÖĞRENİLEN: MAÇ, TEMA GECESİ)", g.mae_full, "kişi ortalama mutlak hata; şefin ekranındaki tahmin");
     document.getElementById("occ-only").textContent = nf.format(g.mae_occupancy_only);
   }
 

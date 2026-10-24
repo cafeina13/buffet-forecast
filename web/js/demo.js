@@ -212,7 +212,7 @@
   function explain(x, info, guests) {
     const parts = [`${nf0.format(guests)} misafir bekleniyor`];
     if (hasHistory(x)) {
-      parts.push(`bu yemek bu öğünde şimdiye kadar 100 misafir başına ortalama ${nf.format(x[dIdx.hist_per100])} kg tüketildi`);
+      parts.push(`bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama ${nf.format(x[dIdx.hist_per100])} kg (tükenen servisler düzeltilerek)`);
     } else {
       parts.push("bu yemeğin bu öğünde geçmişi yok, tahmin daha belirsiz");
     }
@@ -347,8 +347,9 @@
       const input = el("input", { type: "range", min: "0", max: String(max), step: "5",
         value: String(Math.round(sc.presence[c.key])), "data-key": c.key });
       input.addEventListener("input", (e) => { state.presence[c.key] = Number(e.target.value); render(); });
+      const recorded = Math.round(service.presence[c.key]);
       box.appendChild(el("label", { class: "slider" }, [
-        el("span", {}, [`${c.label} `, el("b", { "data-val": c.key }), el("span", { class: "base", text: ` (kayıtlı: ${base})` })]),
+        el("span", {}, [`${c.label} `, el("b", { "data-val": c.key }), el("span", { class: "base", text: ` (kayıtlı: ${recorded})` })]),
         input,
       ]));
     });
@@ -364,7 +365,17 @@
     document.querySelectorAll("#presence-controls [data-val]").forEach((b) => {
       b.textContent = `${nf0.format(sc.presence[b.dataset.val])} kişi`;
     });
+    const [lo, hi] = demo.support.child_share;
+    const outside = sc.child > hi + 1e-9 || sc.child < lo - 1e-9;
     document.getElementById("child-val").textContent = pct0(sc.child);
+    document.getElementById("child-note").textContent = outside
+      ? `(eğitim aralığı %${nf0.format(lo * 100)}–${nf0.format(hi * 100)} dışında; model bu aralığın dışında değişmez)` : "";
+    // Effective occupancy change after the 100% cap, in points.
+    const service = currentService();
+    const occ = service.guest_x[gIdx.occupancy];
+    const eff = Math.min(1, Math.max(0.05, occ + state.occ / 100)) - occ;
+    document.getElementById("occ-val").textContent = (state.occ > 0 ? "+" : "") + state.occ + " puan" +
+      (Math.abs(eff * 100 - state.occ) >= 0.5 ? ` (etkin: ${eff >= 0 ? "+" : "−"}${nf.format(Math.abs(eff * 100))} puan, en fazla %100)` : "");
   }
 
   function renderGuests(service, r) {
@@ -435,9 +446,11 @@
     r.dishes.forEach((d) => {
       const u = d.info.unit;
       const status = d.action ? d.action.status : null;
+      // An approved or adjusted amount stays fixed; say so when the live recommendation has moved since.
+      const stale = d.action && d.action.status !== "soldout" && d.action.units !== d.recUnits;
       const statusText = {
-        approved: "Onaylandı",
-        adjusted: `Düzeltildi: ${unitText(d.finalUnits, u)} (öneri ${unitText(d.recUnits, u)})`,
+        approved: stale ? `Onaylandı: ${unitText(d.finalUnits, u)}. Girdiler değişti, güncel öneri ${unitText(d.recUnits, u)}.` : "Onaylandı",
+        adjusted: `Düzeltildi: ${unitText(d.finalUnits, u)} (güncel öneri ${unitText(d.recUnits, u)})`,
         soldout: `Bitti olarak kaydedildi${d.action && d.action.time ? " · " + d.action.time : ""}. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak (bu demoda yalnızca tarayıcınızda tutulur).`,
       }[status] || "";
 
@@ -450,10 +463,10 @@
         el("p", { class: "dish-group" }, [GROUPS[d.info.group], d.isNew ? el("span", { class: "badge", text: "YENİ" }) : null]),
         el("h3", { class: "dish-name", text: d.info.name }),
         el("p", { class: "dish-qty" }, [el("b", { text: nf.format(d.finalUnits) }), ` ${u}`]),
-        el("p", { class: "dish-kg muted", text: `≈ ${nf.format(d.finalUnits * d.info.kg_per_unit)} kg · beklenen tüketim genelde ${nf.format(d.lowUnits)}–${nf.format(d.highUnits)} ${u}` }),
+        el("p", { class: "dish-kg muted", text: `≈ ${nf.format(d.finalUnits * d.info.kg_per_unit)} kg · beklenen talep genelde ${nf.format(d.lowUnits)}–${nf.format(d.highUnits)} ${u}` }),
         el("p", { class: "dish-refill", text: refillText(d) }),
         el("p", { class: "dish-reason", text: d.reason }),
-        el("p", { class: "dish-chef note", text: `Klasik plan (simüle şef): ${nf.format(d.chefUnits)} ${u}` }),
+        el("p", { class: "dish-chef note", text: `Klasik plan (simüle şef, kayıtlı gün; senaryodan etkilenmez): ${nf.format(d.chefUnits)} ${u}` }),
         el("div", { class: "dish-actions" }, [
           el("button", { type: "button", class: "act act-ok", "aria-pressed": String(status === "approved"),
             onclick: () => { saveAction(service, d.id, status === "approved" ? null : { status: "approved", units: d.recUnits }); render(); } }, "Onayla"),
@@ -542,6 +555,8 @@
     } else {
       tiles.appendChild(tile("Ek atık", `${nf0.format(-avoided)} kg`, "Bu kadar güvenli bir ayarda model şeften fazla pişirir ve fazla atar."));
     }
+    tiles.appendChild(tile("Talebin planı aştığı yemekler", `${pct(lvl.plan_short_rate)}`,
+      `Hedeflenen: %${nf0.format(state.risk * 100)}. Simüle şef: ${pct(rep.chef.plan_short_rate)}`));
     tiles.appendChild(tile("Tükenen yemek oranı", `${pct(lvl.stockout_rate)}`,
       `Servis edilen yemeklerin tükenen payı. Simüle şef: ${pct(rep.chef.stockout_rate)}`));
     tiles.appendChild(tile("En az bir yemeği biten öğün", `${pct0(lvl.services_with_stockout)}`,
@@ -555,7 +570,7 @@
     else tradeoff = "Bu ayarda yemek daha az bitiyor ama atık şeften fazla: riski yükseltmek bu dengeyi değiştirir.";
     box.appendChild(el("p", { class: "report-tradeoff", text: tradeoff }));
     box.appendChild(el("p", { class: "note", text:
-      `Risk ayarı, talebin ilk pişirilen miktarı aşma olasılığıdır; servis içinde planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar tazeleme yapılabildiği için yemeğin gerçekten bitme oranı bundan düşüktür. Modelin aralıkları henüz kalibre değil (ör. %95'lik değer talebi %${nf0.format(demo.metrics.dish.coverage["0.95"] * 100)} oranında karşılıyor). Sentetik test sezonunda, modelin görmediği günlerde, aynı tazeleme kuralı hem şefe hem modele uygulanarak hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
+      `Risk ayarı, talebin önerilen toplam miktarı aşması için hedeflenen olasılıktır; modelin aralıkları henüz kalibre olmadığı için gerçekleşen oran biraz daha yüksek (yukarıdaki ilk kutu). Rapor şu varsayımla hesaplandı: önerilen miktarın tamamı servis boyunca hazırlanır; talep bunu aşarsa mutfak, planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar ek pişirme yapar (ek pişirme, gerektiği anda ve gerektiği kadar). Aynı kural simüle şefe de uygulandı. Ekrandaki parti zamanlaması ve “yedek (gerekirse)” kısmı bu hesaba katılmadı; yedeğin yalnızca gerektiğinde pişirilmesi atığı burada gösterilenden düşük tutabilir, zamanında hazırlanamazsa tükenmeyi artırabilir. Sentetik test sezonunda, modelin görmediği günlerde hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
   }
 
   function renderTabs() {

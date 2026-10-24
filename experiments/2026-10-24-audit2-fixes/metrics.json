@@ -1,0 +1,142 @@
+{
+  "note": "Synthetic data. Not evidence of accuracy.",
+  "embeddings": "tfidf",
+  "guest": {
+    "mae_full": 13.102672216913675,
+    "mae_occupancy_only": 17.859252179988957,
+    "coverage_q10_q90": 0.7253886010362695,
+    "mae_in_house_times_meal_rate": 16.920707019577545,
+    "mae_presence_rule_times_meal_rate": 14.03748727668925
+  },
+  "quantile_crossing_rows": {
+    "guest": 0,
+    "dish": 235
+  },
+  "dish": {
+    "coverage": {
+      "0.1": 0.0991825613079019,
+      "0.5": 0.4891008174386921,
+      "0.8": 0.7759309718437783,
+      "0.9": 0.8755676657584015,
+      "0.95": 0.9267029972752043
+    },
+    "pinball": {
+      "0.1": 0.6382914339802609,
+      "0.5": 1.5952170438701534,
+      "0.8": 1.2241118841134222,
+      "0.9": 0.802861990256124,
+      "0.95": 0.5078329415795225
+    },
+    "mae_median_kg": 3.190434087740307,
+    "rows": 11010
+  },
+  "risk_curve": [
+    {
+      "risk": 0.5,
+      "waste_kg": 20889.08,
+      "stockout_rate": 0.24795640326975477,
+      "services_with_stockout": 0.9792746113989638,
+      "plan_short_rate": 0.4225249772933697
+    },
+    {
+      "risk": 0.4,
+      "waste_kg": 28235.725,
+      "stockout_rate": 0.17129881925522253,
+      "services_with_stockout": 0.924006908462867,
+      "plan_short_rate": 0.3245231607629428
+    },
+    {
+      "risk": 0.3,
+      "waste_kg": 36771.585,
+      "stockout_rate": 0.11335149863760217,
+      "services_with_stockout": 0.8221070811744386,
+      "plan_short_rate": 0.2393278837420527
+    },
+    {
+      "risk": 0.2,
+      "waste_kg": 45967.81999999999,
+      "stockout_rate": 0.07393278837420526,
+      "services_with_stockout": 0.694300518134715,
+      "plan_short_rate": 0.17048138056312442
+    },
+    {
+      "risk": 0.15,
+      "waste_kg": 54595.314999999995,
+      "stockout_rate": 0.04940962761126249,
+      "services_with_stockout": 0.5509499136442142,
+      "plan_short_rate": 0.1262488646684832
+    },
+    {
+      "risk": 0.1,
+      "waste_kg": 63604.13999999999,
+      "stockout_rate": 0.03169845594913715,
+      "services_with_stockout": 0.4058721934369603,
+      "plan_short_rate": 0.09100817438692098
+    },
+    {
+      "risk": 0.05,
+      "waste_kg": 78512.875,
+      "stockout_rate": 0.017983651226158037,
+      "services_with_stockout": 0.26770293609671847,
+      "plan_short_rate": 0.05467756584922798
+    }
+  ],
+  "chef": {
+    "waste_kg": 65541.09,
+    "stockout_rate": 0.0782016348773842,
+    "services_with_stockout": 0.6373056994818653,
+    "plan_short_rate": 0.15776566757493188
+  },
+  "censoring": {
+    "coverage_q90_aware_all": 0.8755676657584015,
+    "coverage_q90_naive_all": 0.8671207992733878,
+    "coverage_q90_aware_soldout_prone": 0.8489583333333334,
+    "coverage_q90_naive_soldout_prone": 0.8541666666666666,
+    "n_soldout_prone_rows": 192
+  },
+  "monthly_report": {
+    "month": "Temmuz 2026 (sentetik test sezonu)",
+    "chef": {
+      "waste_kg": 12421.765,
+      "stockout_rate": 0.08222222222222222,
+      "services_with_stockout": 0.6666666666666666,
+      "plan_short_rate": 0.16444444444444445,
+      "production_kg": 48435.18000000001
+    },
+    "levels": [
+      {
+        "risk": 0.2,
+        "waste_kg": 7578.105,
+        "stockout_rate": 0.10333333333333333,
+        "services_with_stockout": 0.8279569892473119,
+        "plan_short_rate": 0.22666666666666666,
+        "production_kg": 43412.119999999995,
+        "avoided_kg": 4843.66,
+        "avoided_try": 710667.3999999999,
+        "avoided_co2_kg": 9202.954
+      },
+      {
+        "risk": 0.1,
+        "waste_kg": 10952.23,
+        "stockout_rate": 0.04111111111111111,
+        "services_with_stockout": 0.5161290322580645,
+        "plan_short_rate": 0.12111111111111111,
+        "production_kg": 47143.100000000006,
+        "avoided_kg": 1469.5349999999999,
+        "avoided_try": 150387.59999999986,
+        "avoided_co2_kg": 2792.1164999999996
+      },
+      {
+        "risk": 0.05,
+        "waste_kg": 13509.71,
+        "stockout_rate": 0.02722222222222222,
+        "services_with_stockout": 0.40860215053763443,
+        "plan_short_rate": 0.07722222222222222,
+        "production_kg": 49825.71000000001,
+        "avoided_kg": -1087.9449999999997,
+        "avoided_try": -255301.5,
+        "avoided_co2_kg": -2067.0954999999994
+      }
+    ]
+  }
+}
