@@ -1,10 +1,10 @@
-# Traycast (prototype)
+# TrayCast (prototype)
 
 > **These results come from semi-synthetic data and are not evidence of accuracy.**
 > Guest flow, weather and match nights are real; dish demand is simulated, and a model trained on simulated
 > demand learns back the assumptions of whoever generated it.
 
-Traycast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of
+TrayCast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of
 all-inclusive resorts, and suggests refill times during service with a simple rule. This repository holds the
 data generator, the two models, and the static prototype website.
 
