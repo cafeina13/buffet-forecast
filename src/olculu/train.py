@@ -71,6 +71,14 @@ def main():
         "coverage_q10_q90": float(np.mean((s_te.loc[open_te, "attendance"] >= g_te[open_te, 0])
                                           & (s_te.loc[open_te, "attendance"] <= g_te[open_te, 2]))),
     }
+    # Simple baselines: how much of the gain is the presence rule, and how much the learned rate.
+    meal_rate = (s_tr["attendance"] / s_tr["in_house"]).groupby(s_tr["meal"]).mean()
+    present_rate = s_tr.groupby("meal")["rate"].mean()
+    ote = s_te[open_te]
+    guest_metrics["mae_in_house_times_meal_rate"] = float(
+        (ote["in_house"] * ote["meal"].map(meal_rate) - ote["attendance"]).abs().mean())
+    guest_metrics["mae_presence_rule_times_meal_rate"] = float(
+        (ote["present"] * ote["meal"].map(present_rate) - ote["attendance"]).abs().mean())
 
     # Layer 2: per-dish consumption per 100 predicted guests.
     static, vecs = dish_static(catalogue, args.embeddings)
@@ -92,14 +100,28 @@ def main():
     mae_median = float(np.mean(np.abs(y - q_kg[:, 1])))
 
     units = ev["dish_id"].map(unit_kg).to_numpy()
+    service_key = [ev["date"].to_numpy(), ev["meal"].to_numpy()]
+
+    def services_with_stockout(stockout, mask=None):
+        """Share of meal services in which at least one dish ran out."""
+        so = pd.Series(stockout)
+        keys = [k if mask is None else k[mask] for k in service_key]
+        return float(so.groupby(keys).any().mean())
+
     chef = simulate(ev["plan_kg"].to_numpy(), y, units, refill)
     curve = []
     for r in RISKS:
         rec = round_up_half_unit(interpolate_quantile(q_kg, DISH_QUANTILES, 1 - r), units)
         sim = simulate(rec, y, units, refill)
         curve.append({"risk": r, "waste_kg": float(sim["waste"].sum()),
-                      "stockout_rate": float(sim["stockout"].mean())})
-    chef_point = {"waste_kg": float(chef["waste"].sum()), "stockout_rate": float(chef["stockout"].mean())}
+                      # Share of dish-servings that ran out after refills (not a share of meals).
+                      "stockout_rate": float(sim["stockout"].mean()),
+                      "services_with_stockout": services_with_stockout(sim["stockout"]),
+                      # Share of dish-servings where demand exceeded the first cook (before refills).
+                      "plan_short_rate": float(np.mean(y > rec))})
+    chef_point = {"waste_kg": float(chef["waste"].sum()), "stockout_rate": float(chef["stockout"].mean()),
+                  "services_with_stockout": services_with_stockout(chef["stockout"]),
+                  "plan_short_rate": float(np.mean(y > ev["plan_kg"].to_numpy()))}
 
     # Naive variant (stock-outs ignored), for the censoring comparison.
     f_tr_naive = attach_guest_pred(build_dish_frame(train["servings"], train["services"], train["hourly"],
@@ -125,13 +147,18 @@ def main():
     price = np.array([costs[g] for g in groups])
     chef_waste_try = float((chef["waste"][july] * price[july]).sum())
     report = {"month": "Temmuz 2026 (sentetik test sezonu)", "chef": {
-        "waste_kg": float(chef["waste"][july].sum()), "stockout_rate": float(chef["stockout"][july].mean())}, "levels": []}
+        "waste_kg": float(chef["waste"][july].sum()), "stockout_rate": float(chef["stockout"][july].mean()),
+        "services_with_stockout": services_with_stockout(chef["stockout"][july], july),
+        "production_kg": float(chef["production"][july].sum())}, "levels": []}
     for r in [0.2, 0.1, 0.05]:
         rec = round_up_half_unit(interpolate_quantile(q_kg[july], DISH_QUANTILES, 1 - r), units[july])
         sim = simulate(rec, y[july], units[july], refill)
         avoided = report["chef"]["waste_kg"] - float(sim["waste"].sum())
         report["levels"].append({
             "risk": r, "waste_kg": float(sim["waste"].sum()), "stockout_rate": float(sim["stockout"].mean()),
+            "services_with_stockout": services_with_stockout(sim["stockout"], july),
+            "production_kg": float(sim["production"].sum()),
+            # Cost of the avoided waste only; the cost of extra stock-outs is not netted out.
             "avoided_kg": avoided, "avoided_try": chef_waste_try - float((sim["waste"] * price[july]).sum()),
             "avoided_co2_kg": avoided * co2,
         })
@@ -158,10 +185,16 @@ def main():
     s_te.head(60)[GUEST_FEATURES].to_csv(model_dir / "guest_rows_sample.csv", index=False)
     print(json.dumps(metrics, indent=2, ensure_ascii=False))
 
-    export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, metrics, record.name)
+    # Ranges seen in training, so the demo's sliders stay where the models have data.
+    support = {
+        "temperature": [float(s_tr["temperature"].min()), float(s_tr["temperature"].max())],
+        "child_share": [float(s_tr["child_share"].min()), float(s_tr["child_share"].max())],
+        "capacity_guests": float(cfg["hotel"]["rooms"] * cfg["hotel"]["guests_per_room"]),
+    }
+    export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, metrics, record.name, support)
 
 
-def export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, metrics, record_name):
+def export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, metrics, record_name, support):
     WEB_DATA_DIR.mkdir(parents=True, exist_ok=True)
     write_json(WEB_DATA_DIR / "model-guests.json", quantile_models_json(guest_models, GUEST_FEATURES), exact=True)
     write_json(WEB_DATA_DIR / "model-dishes.json", quantile_models_json(dish_models, DISH_FEATURES), exact=True)
@@ -201,19 +234,34 @@ def export(cfg, catalogue, guest_models, dish_models, s_te, f_te, cutoff, vecs, 
     ids = [d["id"] for d in catalogue["dishes"]]
     near = embeddings.nearest(vecs, 3)
     neighbour_names = {ids[i]: [dishes[ids[j]]["name"] for j in near[i]] for i in range(len(ids))}
+    neighbour_ids = {ids[i]: [ids[j] for j in near[i]] for i in range(len(ids))}
+    groups = catalogue["groups"]
+
+    def heat_direction(d):
+        """Kitchen expectation for hot days: +1 more demand, -1 less, 0 no clear direction.
+
+        Taken from the catalogue's temperature sensitivity; used only to decide whether a
+        temperature reason may be shown, never as a model input.
+        """
+        sens = d.get("temp_sensitivity", groups[d["group"]]["temp_sensitivity"])
+        return 0 if abs(sens) < 0.5 else (1 if sens > 0 else -1)
+
     write_json(WEB_DATA_DIR / "demo.json", {
         "record": record_name,
         "hotel": "Kurgusal Demo Resort",
         "max_refill_share": cfg["service"]["max_refill_share"],
         "slot_minutes": mcfg["slot_minutes"],
         "co2_per_kg": cfg["costs"]["co2_per_kg_waste"],
+        "support": support,
         "dishes": {k: {"name": d["name"], "group": d["group"], "unit": d["unit"],
                        "kg_per_unit": d["kg_per_unit"], "ingredients": d["ingredients"],
-                       "new": d["freq"] == "new", "neighbours": neighbour_names[k]} for k, d in dishes.items()},
+                       "new": d["freq"] == "new", "heat": heat_direction(d),
+                       "neighbours": neighbour_names[k], "neighbour_ids": neighbour_ids[k]}
+                   for k, d in dishes.items()},
         "map": [{"id": d["id"], "x": float(xy[i, 0]), "y": float(xy[i, 1])} for i, d in enumerate(catalogue["dishes"])],
         "profiles": profiles,
         "services": services,
-        "metrics": {k: metrics[k] for k in ["risk_curve", "chef", "monthly_report", "guest", "censoring"]},
+        "metrics": {k: metrics[k] for k in ["risk_curve", "chef", "monthly_report", "guest", "censoring", "dish"]},
     })
 
 

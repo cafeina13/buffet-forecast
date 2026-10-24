@@ -41,9 +41,11 @@
     ],
   };
   const PRESENCE_KEYS = ["in_house", "arrivals_night", "departures_early", "departures_very_early", "excursions", "alacarte"];
-  // Only features the synthetic generator actually drives are used in explanations. Weekday and
-  // nationality stay in the model (they matter in real hotels) but any credit SHAP gives them here is noise.
-  const GUEST_EXPLAINED = ["occupancy", "child_share", "temperature", "event_match", "event_themed", "event_conference"];
+  // Reasons are counterfactual (the forecast with the input changed), not SHAP shares: on this
+  // synthetic data the models learned weak inputs (temperature, child share, nationality) unreliably,
+  // and SHAP faithfully attributed that noise (site audit 1, findings 2.3-2.6).
+  const MIN_TEMP_EFFECT = 0.05; // a temperature reason needs at least a 5% effect on the median
+  const MILD_DAY_C = 27;        // reference "mild day" for the temperature comparison
 
   let demo, G, D, gIdx, dIdx;
   const state = {
@@ -126,9 +128,22 @@
   }
 
   // ---------- model ----------
+  // Occupancy slider moves occupancy by points; counts scale with it, in-house guests capped at capacity.
+  function occupancyFactor(service) {
+    const occ = service.guest_x[gIdx.occupancy];
+    const target = Math.min(1, Math.max(0.05, occ + state.occ / 100));
+    return target / occ;
+  }
+
   function basePresence(service) {
-    const f = 1 + state.occ / 100;
-    return Object.fromEntries(PRESENCE_KEYS.map((k) => [k, service.presence[k] * f]));
+    const f = occupancyFactor(service);
+    const p = Object.fromEntries(PRESENCE_KEYS.map((k) => [k, service.presence[k] * f]));
+    p.in_house = Math.min(p.in_house, demo.support.capacity_guests);
+    return p;
+  }
+
+  function clamp(v, [lo, hi]) {
+    return Math.min(hi, Math.max(lo, v));
   }
 
   function scenario(service) {
@@ -159,8 +174,8 @@
 
   function guestVector(service, sc) {
     const x = service.guest_x.slice();
-    x[gIdx.occupancy] = Math.min(1, x[gIdx.occupancy] * (1 + sc.occ / 100));
-    x[gIdx.temperature] += sc.temp;
+    x[gIdx.occupancy] = Math.min(1, x[gIdx.occupancy] * occupancyFactor(service));
+    x[gIdx.temperature] = clamp(x[gIdx.temperature] + sc.temp, demo.support.temperature);
     x[gIdx.child_share] = sc.child;
     setEvents(x, gIdx, sc);
     return x;
@@ -168,60 +183,53 @@
 
   function dishVector(dish, sc) {
     const x = dish.x.slice();
-    x[dIdx.temperature] += sc.temp;
+    x[dIdx.temperature] = clamp(x[dIdx.temperature] + sc.temp, demo.support.temperature);
     x[dIdx.child_share] = sc.child;
     setEvents(x, dIdx, sc);
     return x;
   }
 
-  function guestDrivers(x, phi, present) {
-    const items = [];
-    GUEST_EXPLAINED.forEach((name) => {
-      const i = gIdx[name];
-      const people = phi[i] * present;
-      if (Math.abs(people) < 3) return;
-      const v = x[i];
-      let label = null;
-      if (name === "event_match" && v === 1) label = "maç akşamı";
-      else if (name === "event_themed" && v === 1) label = "tema gecesi";
-      else if (name === "event_conference" && v === 1) label = "kongre";
-      else if (name === "temperature") label = `hava ${nf0.format(v)} °C`;
-      else if (name === "occupancy") label = `doluluk ${pct0(v)}`;
-      else if (name === "child_share") label = `çocuklu misafir ${pct0(v)}`;
-      if (label) items.push({ label, people });
-    });
-    items.sort((a, b) => Math.abs(b.people) - Math.abs(a.people));
-    return items.slice(0, 2);
+  function hasHistory(x) {
+    return x[dIdx.hist_per100] !== null && x[dIdx.hist_per100] !== undefined;
   }
 
-  function explain(dish, x, phi, info, guests, units) {
-    const parts = [];
-    const candidates = [];
-    D.features.forEach((name, i) => {
-      if (Math.abs(phi[i]) < 1e-9) return;
-      let text = null;
-      const v = x[i];
-      const dir = phi[i] > 0 ? "talebi artırıyor" : "talebi düşürüyor";
-      if (name === "temperature") text = `hava ${nf0.format(v)} °C, ${dir}`;
-      // Menu competition is only worth saying when it lowers this dish's share.
-      else if (name === "n_similar" && v >= 1 && phi[i] < 0) text = `menüde ${nf0.format(v)} benzer yemek daha var, ${dir}`;
-      else if (name === "event_match" && v === 1) text = `akşam maç var, ${dir}`;
-      else if (name === "event_themed" && v === 1) text = `tema gecesi var, ${dir}`;
-      else if (name === "event_conference" && v === 1) text = `kongre grubu öğlene katılıyor, ${dir}`;
-      else if (name === "child_share") text = `çocuklu misafir payı ${pct0(v)}, ${dir}`;
-      else if (name === "first_meal_share") text = `otele yeni gelenlerin payı ${pct0(v)}, ${dir}`;
-      // Weekday and nationality are deliberately not explained (see GUEST_EXPLAINED).
-      if (text) candidates.push({ text, w: Math.abs(phi[i]) });
-    });
-    candidates.sort((a, b) => b.w - a.w);
-    candidates.slice(0, 2).forEach((c) => parts.push(c.text));
-    const head = `Bugün ${unitText(units, info.unit)}: ${nf0.format(guests)} misafir bekleniyor`;
-    let sentence = parts.length ? `${head}; ${parts.join("; ")}.` : `${head}.`;
-    const histMissing = x[dIdx.hist_per100] === null || x[dIdx.hist_per100] === undefined;
-    if (histMissing) {
-      sentence += ` Yeni yemek: tahmin, benzer yemeklerden (${info.neighbours.slice(0, 2).join(", ")}) geliyor.`;
+  // Event effect on guests: the forecast with the event switched off, minus with it on.
+  function guestDrivers(gx, present, sc) {
+    const items = [];
+    for (const [flag, label] of [["event_match", "maç akşamı"], ["event_themed", "tema gecesi"]]) {
+      if (gx[gIdx[flag]] !== 1) continue;
+      const off = gx.slice();
+      off[gIdx[flag]] = 0;
+      const withEvent = M.predict(G.models[1], gx) * present;
+      const without = M.predict(G.models[1], off) * present;
+      items.push({ label, people: withEvent - without, without });
     }
-    return sentence;
+    return items;
+  }
+
+  // One sentence per dish: guests, the dish's own recent consumption, and temperature only when the
+  // model's effect is large enough and points the way a kitchen would expect.
+  function explain(x, info, guests) {
+    const parts = [`${nf0.format(guests)} misafir bekleniyor`];
+    if (hasHistory(x)) {
+      parts.push(`bu yemek bu öğünde şimdiye kadar 100 misafir başına ortalama ${nf.format(x[dIdx.hist_per100])} kg tüketildi`);
+    } else {
+      parts.push("bu yemeğin bu öğünde geçmişi yok, tahmin daha belirsiz");
+    }
+    const t = x[dIdx.temperature];
+    if (info.heat !== 0 && Math.abs(t - MILD_DAY_C) >= 3) {
+      const mild = x.slice();
+      mild[dIdx.temperature] = MILD_DAY_C;
+      const now = M.predict(D.models[1], x);
+      const ref = M.predict(D.models[1], mild);
+      const effect = ref > 0 ? (now - ref) / ref : 0;
+      const expected = info.heat * Math.sign(t - MILD_DAY_C);
+      if (Math.abs(effect) >= MIN_TEMP_EFFECT && Math.sign(effect) === expected) {
+        const word = t > MILD_DAY_C ? "sıcak" : "serin";
+        parts.push(`${word} hava (${nf0.format(t)} °C) talebi ${effect > 0 ? "artırıyor" : "azaltıyor"} (ılık bir güne göre ${effect > 0 ? "+" : "−"}%${nf0.format(Math.abs(effect) * 100)})`);
+      }
+    }
+    return parts.join("; ") + ".";
   }
 
   function refillPlan(totalUnits, medianKg, unitKg, profile) {
@@ -258,8 +266,7 @@
     const rates = M.predictQuantiles(G, gx);
     const gq = rates.map((r) => Math.max(0, r * present));
     const guests = gq[1];
-    const gShap = M.shap(G.models[1], gx, gx.length);
-    const drivers = guestDrivers(gx, gShap.phi, present);
+    const drivers = guestDrivers(gx, present, sc);
     const prof = demo.profiles[service.meal];
     const profile = { slots: prof.slots, shares: sc.match ? prof.match : prof.normal };
     const level = 1 - state.risk;
@@ -270,14 +277,13 @@
       const q = M.predictQuantiles(D, x).map((r) => Math.max(0, (r * guests) / 100));
       const recKg = interp(D.quantiles, q, level);
       const recUnits = roundHalfUp(recKg / info.kg_per_unit);
-      const s = M.shap(D.models[1], x, x.length);
       const action = loadAction(service, d.id);
       const finalUnits = action && action.units ? action.units : recUnits;
       return {
-        id: d.id, info, q, recKg, recUnits, finalUnits, action,
+        id: d.id, info, q, recKg, recUnits, finalUnits, action, isNew: !hasHistory(x),
         lowUnits: roundHalf(q[0] / info.kg_per_unit), highUnits: roundHalf(interp(D.quantiles, q, 0.9) / info.kg_per_unit),
         chefUnits: d.chef_plan_kg / info.kg_per_unit,
-        reason: explain(d, x, s.phi, info, guests, recUnits),
+        reason: explain(x, info, guests),
         refill: refillPlan(finalUnits, q[1], info.kg_per_unit, profile),
       };
     });
@@ -317,7 +323,7 @@
 
     document.getElementById("match-wrap").hidden = state.meal !== "dinner";
     document.getElementById("themed-wrap").hidden = state.meal !== "dinner";
-    document.getElementById("occ-val").textContent = (state.occ > 0 ? "+" : "") + state.occ + "%";
+    document.getElementById("occ-val").textContent = (state.occ > 0 ? "+" : "") + state.occ + " puan";
     document.getElementById("temp-val").textContent = (state.temp > 0 ? "+" : "") + state.temp + " °C";
   }
 
@@ -346,7 +352,12 @@
         input,
       ]));
     });
-    document.getElementById("child").value = String(Math.round(sc.child * 100));
+    // Child share only within the range seen in training; outside it the models are flat.
+    const child = document.getElementById("child");
+    const [lo, hi] = demo.support.child_share;
+    child.min = String(Math.ceil(lo * 100));
+    child.max = String(Math.floor(hi * 100));
+    child.value = String(Math.round(sc.child * 100));
   }
 
   function updateScenarioLabels(sc) {
@@ -367,17 +378,22 @@
       lunch: [["excursions", "turda"], ["departures_early", "öğleden önce ayrılıyor"]],
       dinner: [["alacarte", "a la carte’ta"], ["arrivals_night", "gece geç geliyor"]],
     }[service.meal];
-    const lines = [el("li", { text: `Otelde ${nf0.format(p.in_house)} misafir` })];
+    // Shown with rounded counts that add up; the model uses the unrounded values.
+    const shown = { in_house: Math.round(p.in_house) };
+    const lines = [el("li", { text: `Otelde ${nf0.format(shown.in_house)} misafir` })];
+    let presentShown = shown.in_house;
     minus.forEach(([k, label]) => {
-      if (p[k] >= 0.5) lines.push(el("li", { text: `− ${nf0.format(p[k])} ${label}` }));
+      const v = Math.round(p[k]);
+      if (v >= 1) lines.push(el("li", { text: `− ${nf0.format(v)} ${label}` }));
+      presentShown -= v;
     });
-    lines.push(el("li", { text: `= ${nf0.format(r.present)} kişi öğünde otelde` }));
-    lines.push(el("li", { class: "total", text: `× ${pct0(r.rate)} büfeye gelir (model) = ${nf0.format(r.guests)}` }));
+    lines.push(el("li", { text: `= ${nf0.format(presentShown)} kişi öğünde otelde` }));
+    lines.push(el("li", { class: "total", text: `× ${pct(r.rate)} büfeye gelir (model) ≈ ${nf0.format(r.guests)}` }));
     const list = document.getElementById("guest-breakdown");
     list.innerHTML = "";
     lines.forEach((li) => list.appendChild(li));
     document.getElementById("guest-drivers").textContent = r.drivers.length
-      ? "Katılımı etkileyen: " + r.drivers.map((d) => `${d.label} ${d.people > 0 ? "+" : "−"}${nf0.format(Math.abs(d.people))} kişi`).join(" · ")
+      ? r.drivers.map((d) => `${d.label[0].toLocaleUpperCase("tr-TR") + d.label.slice(1)}: ${d.people > 0 ? "+" : "−"}${nf0.format(Math.abs(d.people))} kişi (olmasaydı ≈ ${nf0.format(d.without)})`).join(" · ")
       : "";
 
     const tag = document.getElementById("event-tag");
@@ -402,7 +418,7 @@
         bars += `<text x="${x + bw / 2}" y="${h - 5}" text-anchor="middle" font-size="12" fill="var(--muted)">${fmtTime(r.profile.slots[i])}</text>`;
       }
     });
-    box.innerHTML = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Servis boyunca saat saat beklenen misafir gelişi">${bars}</svg>`;
+    box.innerHTML = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Servis boyunca 15 dakikalık dilimlerde varsayılan misafir gelişi">${bars}</svg>`;
   }
 
   function refillText(d) {
@@ -422,7 +438,7 @@
       const statusText = {
         approved: "Onaylandı",
         adjusted: `Düzeltildi: ${unitText(d.finalUnits, u)} (öneri ${unitText(d.recUnits, u)})`,
-        soldout: `Bitti olarak kaydedildi${d.action && d.action.time ? " · " + d.action.time : ""}. Model bu servisi “en az bu kadar yenirdi” diye öğrenir.`,
+        soldout: `Bitti olarak kaydedildi${d.action && d.action.time ? " · " + d.action.time : ""}. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak (bu demoda yalnızca tarayıcınızda tutulur).`,
       }[status] || "";
 
       const step = (delta) => () => {
@@ -431,7 +447,7 @@
         render();
       };
       const card = el("article", { class: `dish ${status ? "is-" + status : ""}` }, [
-        el("p", { class: "dish-group" }, [GROUPS[d.info.group], d.info.new ? el("span", { class: "badge", text: "YENİ" }) : null]),
+        el("p", { class: "dish-group" }, [GROUPS[d.info.group], d.isNew ? el("span", { class: "badge", text: "YENİ" }) : null]),
         el("h3", { class: "dish-name", text: d.info.name }),
         el("p", { class: "dish-qty" }, [el("b", { text: nf.format(d.finalUnits) }), ` ${u}`]),
         el("p", { class: "dish-kg muted", text: `≈ ${nf.format(d.finalUnits * d.info.kg_per_unit)} kg · beklenen tüketim genelde ${nf.format(d.lowUnits)}–${nf.format(d.highUnits)} ${u}` }),
@@ -465,9 +481,10 @@
     if (state.clock > r.profile.slots.length - 1) state.clock = 0;
     slider.value = String(state.clock);
     const now = r.profile.slots[state.clock];
-    const arrived = r.profile.shares.slice(0, state.clock + 1).reduce((a, b) => a + b, 0);
+    // Guests who arrived before this time (slots that have already ended).
+    const arrived = r.profile.shares.slice(0, state.clock).reduce((a, b) => a + b, 0);
     document.getElementById("clock-val").textContent =
-      `${fmtTime(now)} · gelen misafir ≈ ${nf0.format(arrived * r.guests)} (${pct(arrived)})`;
+      `${fmtTime(now)} · bu saate kadar gelen ≈ ${nf0.format(arrived * r.guests)} kişi (${pct0(arrived)}, varsayılan profile göre)`;
 
     const nowList = document.getElementById("refill-now");
     const nextList = document.getElementById("refill-next");
@@ -512,22 +529,33 @@
     const avoided = lvl.avoided_kg;
     const positive = avoided > 0;
     box.appendChild(el("p", { class: "report-head" }, [
-      el("b", { text: rep.month }), ` · bitme riski ${pct(state.risk)} · simüle şef planıyla karşılaştırma`]));
+      el("b", { text: rep.month }), ` · risk ayarı ${pct0(state.risk)} · simüle şef planıyla karşılaştırma`]));
     const tiles = el("div", { class: "report-tiles" });
     const tile = (label, value, note) => el("div", { class: "report-tile" }, [
       el("p", { class: "control-label", text: label }), el("p", { class: "report-value", text: value }),
       note ? el("p", { class: "note", text: note }) : null]);
     if (positive) {
       tiles.appendChild(tile("Önlenen atık", `${nf0.format(avoided)} kg`));
-      tiles.appendChild(tile("Tasarruf", `${nf0.format(lvl.avoided_try)} TL`, "Yemek grubuna göre kg maliyeti varsayımı"));
-      tiles.appendChild(tile("CO₂ eşdeğeri", `${nf0.format(lvl.avoided_co2_kg)} kg`, "Önlenen atık × 1,9"));
+      tiles.appendChild(tile("Önlenen atığın maliyeti", `${nf0.format(lvl.avoided_try)} TL`,
+        "Yemek grubuna göre kg maliyeti varsayımı; tükenmenin maliyeti dahil değil"));
+      tiles.appendChild(tile("Önlenen CO₂ eşdeğeri", `${nf0.format(lvl.avoided_co2_kg)} kg`, "Önlenen atık × 1,9"));
     } else {
-      tiles.appendChild(tile("Ek üretim", `${nf0.format(-avoided)} kg`, "Bu kadar güvenli bir ayarda model şeften fazla pişirir."));
+      tiles.appendChild(tile("Ek atık", `${nf0.format(-avoided)} kg`, "Bu kadar güvenli bir ayarda model şeften fazla pişirir ve fazla atar."));
     }
-    tiles.appendChild(tile("Tükenen servis oranı", `${pct(lvl.stockout_rate)}`, `Simüle şef: ${pct(rep.chef.stockout_rate)}`));
+    tiles.appendChild(tile("Tükenen yemek oranı", `${pct(lvl.stockout_rate)}`,
+      `Servis edilen yemeklerin tükenen payı. Simüle şef: ${pct(rep.chef.stockout_rate)}`));
+    tiles.appendChild(tile("En az bir yemeği biten öğün", `${pct0(lvl.services_with_stockout)}`,
+      `Simüle şef: ${pct0(rep.chef.services_with_stockout)}`));
     box.appendChild(tiles);
+    const fewerOut = lvl.services_with_stockout < rep.chef.services_with_stockout;
+    const lessWaste = positive;
+    let tradeoff;
+    if (lessWaste && fewerOut) tradeoff = "Bu ayarda model hem daha az atık üretiyor hem de şeften daha az öğünde yemek bitiyor.";
+    else if (lessWaste) tradeoff = "Bu ayarda atık azalıyor ama şeften daha fazla öğünde en az bir yemek bitiyor: riski düşürmek bu dengeyi değiştirir.";
+    else tradeoff = "Bu ayarda yemek daha az bitiyor ama atık şeften fazla: riski yükseltmek bu dengeyi değiştirir.";
+    box.appendChild(el("p", { class: "report-tradeoff", text: tradeoff }));
     box.appendChild(el("p", { class: "note", text:
-      "Sentetik test sezonunda, modelin görmediği günlerde hesaplandı. Aynı tazeleme kuralı hem şefe hem modele uygulandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir." }));
+      `Risk ayarı, talebin ilk pişirilen miktarı aşma olasılığıdır; servis içinde planın en fazla %${nf0.format(demo.max_refill_share * 100)}'si kadar tazeleme yapılabildiği için yemeğin gerçekten bitme oranı bundan düşüktür. Modelin aralıkları henüz kalibre değil (ör. %95'lik değer talebi %${nf0.format(demo.metrics.dish.coverage["0.95"] * 100)} oranında karşılıyor). Sentetik test sezonunda, modelin görmediği günlerde, aynı tazeleme kuralı hem şefe hem modele uygulanarak hesaplandı. Ölçüm sonucu değildir; gerçek rakam ancak pilot otelde ölçülebilir.` }));
   }
 
   function renderTabs() {

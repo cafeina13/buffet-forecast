@@ -53,8 +53,9 @@
           </div>
           <div class="control">
             <p class="ozg-tag">ÖZGÜNLÜK 3 · Ne kadar pişirelim?</p>
-            <p class="control-label">Her yemek için kabul edilen bitme riski</p>
-            <div class="segmented" id="risk-seg" role="radiogroup" aria-label="Bitme riski"></div>
+            <p class="control-label">Kabul edilen risk: talebin ilk pişirilen miktarı aşması (her yemek için)</p>
+            <div class="segmented" id="risk-seg" role="radiogroup" aria-label="Kabul edilen risk"></div>
+            <p class="note risk-note">Tazeleme payı sayesinde yemeğin gerçekten bitme oranı bundan düşüktür; ayrıntı “Aylık rapor”da.</p>
           </div>
         </div>
       </section>
@@ -70,7 +71,7 @@
           <p class="guest-drivers" id="guest-drivers"></p>
         </div>
         <div class="guest-flow">
-          <p class="control-label">Saat saat geliş (tahmin)</p>
+          <p class="control-label">Geliş profili (15 dakikalık dilimler; varsayılan, henüz öğrenilmiyor)</p>
           <div id="flow-chart" class="flow-chart"></div>
         </div>
       </section>
@@ -85,11 +86,11 @@
               <input type="range" id="occ" min="-25" max="25" step="5" value="0">
             </label>
             <label class="slider">
-              <span>Hava sıcaklığı <b id="temp-val"></b></span>
+              <span>Hava sıcaklığı <b id="temp-val"></b> <span class="base">(eğitim verisindeki aralıkta tutulur)</span></span>
               <input type="range" id="temp" min="-8" max="8" step="1" value="0">
             </label>
             <label class="slider">
-              <span>Çocuklu misafir payı <b id="child-val"></b></span>
+              <span>Misafirler içinde çocuk payı <b id="child-val"></b></span>
               <input type="range" id="child" min="5" max="40" step="1" value="15">
             </label>
           </div>
@@ -121,7 +122,7 @@
       <section id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
         <div class="ozg-strip">
           <p class="ozg-tag">ÖZGÜNLÜK 2 · Gerçekte ne kadar yenirdi?</p>
-          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez; model o servisi “en az bu kadar yenirdi” diye öğrenir ve biten yemeği bir dahaki sefere daha az önermez.</p>
+          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez: gözlenen tüketim olduğundan düşük kalır. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak; amaç biten yemeğin her sezon daha az önerilmesini önlemek. Bu prototipte düzeltmenin etkisi henüz ölçülemedi ve bu demoda kayıt yalnızca tarayıcınızda tutulur.</p>
         </div>
         <div class="dish-grid" id="dish-grid"></div>
       </section>
@@ -129,7 +130,7 @@
       <section id="panel-live" role="tabpanel" aria-labelledby="tab-live" hidden>
         <div class="ozg-strip">
           <p class="ozg-tag">ÖZGÜNLÜK 1 · Servis içinde ne zaman?</p>
-          <p class="small">Tazeleme saatleri, saat saat beklenen misafir akışından gelir. Maç akşamı yemek erkene kayar, maçtan sonra geç bir dalga gelir. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
+          <p class="small">Tazeleme saatleri bir kuralla hesaplanır: önce miktarın %40’ı, sonra yaklaşık beşte birlik partiler; her parti, tepsinin yarısının boşalması beklenen saatten 15 dakika önce. Geliş profili şimdilik varsayılandır (maç akşamı erkene kayar, maçtan sonra geç bir dalga gelir); pilotta kasa verisinden öğrenilecek. Biten tepsiyi buradan da <b>Bitti</b> olarak kaydedebilirsiniz (özgünlük 2).</p>
         </div>
         <div class="live-head">
           <label class="slider wide">

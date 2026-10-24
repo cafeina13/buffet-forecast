@@ -37,7 +37,7 @@
     <p class="lead">Her şey dahil büfelerde her yemekten ne kadar ve ne zaman pişirileceğini tahmin eden yapay zekâ.</p>
     <hr>
     <p class="tagline">Daha az pişir, büfe yine de boş kalmasın.</p>
-    <p class="hero-problem">Her şey dahil büfelerde üretim, misafirin ne kadar yiyeceğine göre değil, “büfe boş kalmasın” korkusuyla şefin deneyimine göre planlanıyor ve fazlası çöpe gidiyor. <span data-product-name>Ölçülü</span>, her yemek için ne kadar pişirileceğini ve ne zaman tazeleneceğini tahmin eder; her yemeğin bitme riskini şef kendisi seçer.</p>
+    <p class="hero-problem">Her şey dahil büfelerde üretim çoğu zaman “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlanıyor ve fazlası çöpe gidebiliyor. <span data-product-name>Ölçülü</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin ilk pişirilen miktarı aşma riskini tüm yemekler için tek bir ayarla seçer.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="demo.html">Şefin ekranını deneyin</a>
       <a class="btn btn-ghost" href="#cozum">Nasıl işler?</a>
@@ -60,13 +60,13 @@
       </div>
       <div class="card">
         <p class="step">2 · SERVİS SIRASINDA</p>
-        <h3>Saatlik tazeleme</h3>
-        <p class="muted">Misafir akışına göre hangi tepsinin ne zaman tazeleneceği önerilir: az ve sık üretim. Tepsi biterse tek dokunuşla kaydedilir.</p>
+        <h3>Servis içi tazeleme</h3>
+        <p class="muted">Misafir geliş profiline göre hangi tepsinin ne zaman tazeleneceği bir kuralla önerilir: az ve sık üretim. Tepsi biterse tek dokunuşla kaydedilir.</p>
       </div>
       <div class="card">
         <p class="step">3 · SERVİS SONRASI</p>
         <h3>Artanları ölçme</h3>
-        <p class="muted">Artanlar tartılır veya fotoğraflanır (ölçüm yöntemi karar aşamasında). Sonuç modele döner; model her gün kendini düzeltir.</p>
+        <p class="muted">Artanlar tartılır veya fotoğraflanır (ölçüm yöntemi karar aşamasında). Pilotta bu ölçümler modele geri dönecek; bu döngü henüz kurulmadı.</p>
       </div>
       <div class="card">
         <p class="step">4 · AY SONUNDA</p>
@@ -86,14 +86,14 @@
     <div class="section-head">
       <p class="eyebrow">YAPAY ZEKÂ</p>
       <h2>Üç parça, açıklanabilir öneriler</h2>
-      <p class="lead">İki eğitilen model ve hazır bir metin modeli birlikte çalışır.</p>
+      <p class="lead">İki eğitilen model ve bir yemek benzerliği ölçüsü birlikte çalışır.</p>
     </div>
     <div class="flow">
       <div class="flow-inputs">
         <div class="card">
-          <p class="step">HAZIR METİN MODELİ</p>
-          <h3>Yemek embedding’i</h3>
-          <p class="muted">Yemeğin adından ve malzemelerinden bir vektör. Menüye yeni giren yemek, benzer yemeklerden ilk günden tahmin alır.</p>
+          <p class="step">YEMEK BENZERLİĞİ</p>
+          <h3>Yemek vektörü</h3>
+          <p class="muted">Yemeğin adından ve malzemelerinden harf dizisi benzerliğiyle (TF-IDF) bir vektör. Bu prototipte model benzer yemeklerin tüketimini neredeyse kullanmıyor; hazır bir dil modeliyle deneme mentorlukta yapılacak.</p>
         </div>
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
