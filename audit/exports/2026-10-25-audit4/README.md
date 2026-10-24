@@ -1,10 +1,10 @@
-# Traycast (prototype)
+# TrayCast (prototype)
 
 > **These results come from semi-synthetic data and are not evidence of accuracy.**
 > Guest flow, weather and match nights are real; dish demand is simulated, and a model trained on simulated
 > demand learns back the assumptions of whoever generated it.
 
-Traycast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of
+TrayCast (formerly the working name Ölçülü) forecasts how much of each dish to cook at the open buffets of
 all-inclusive resorts, and suggests refill times during service with a simple rule. This repository holds the
 data generator, the two models, and the static prototype website.
 
@@ -18,15 +18,18 @@ Requires [uv](https://docs.astral.sh/uv/) and Node (Node only for the JS parity 
 uv sync
 uv run python -m olculu.synth.fetch                     # downloads the real inputs into data/raw/ (see below)
 uv run python -m olculu.synth --seed 42 --grounded      # semi-synthetic training season (2016) + test season (2024 calendar)
-uv run python -m olculu.train --name grounded-final     # trains, evaluates, writes experiments/<date>-<name>/ and web/data/*.json
+uv run python -m olculu.train --embeddings berturk --name grounded-berturk   # trains, evaluates, writes experiments/<date>-<name>/ and web/data/*.json
 uv run pytest                                           # see "Tests" below
 uv run python tests/js_parity.py experiments/<date>-<name>   # browser model == LightGBM, every quantile (predictions and SHAP)
 ```
 
 Without `--grounded` the generator builds the earlier fully synthetic seasons (2026). `--name` sets the experiment
-record's folder; the default (`baseline`) would overwrite an earlier record of the same day. `--embeddings st`
-uses `sentence-transformers` (`uv sync --extra embeddings`) instead of the offline character n-gram TF-IDF. The
-site uses TF-IDF; the pretrained model has not been run yet.
+record's folder; the default (`baseline`) would overwrite an earlier record of the same day. `--embeddings`
+picks the dish vector: `berturk` (used by the site; Turkish sentence-similarity BERTurk,
+`emrecan/bert-base-turkish-cased-mean-nli-stsb-tr`), `minilm` (multilingual MiniLM), `category` (one-hot dish
+group) or `tfidf` (offline character n-gram TF-IDF, the default and fallback). The pretrained models need
+`uv sync --extra embeddings` and download once from Hugging Face. `uv run python -m olculu.compare_embeddings`
+compares the backends' neighbours; `audit/scripts/embedding_summary.py` summarises one training record per backend.
 
 ## Semi-synthetic data
 
@@ -65,7 +68,7 @@ No keys or account details are stored in the code.
 ## Architecture
 
 ```
-dish name + ingredients -> TF-IDF dish vector -----------------+
+dish name + ingredients -> BERTurk dish vector ----------------+
                                                                +-> consumption model (LightGBM quantiles 0.1/0.5/0.8/0.9/0.95)
 front-office counts -> presence rule x guest rate model -------+        -> risk setting -> quantity; refill rule; Turkish reason
 ```
@@ -93,7 +96,7 @@ front-office counts -> presence rule x guest rate model -------+        -> risk 
   up to half a unit; `newsvendor.py` holds the rounding and the service simulation). The realised rate differs
   from the setting through two effects in opposite directions: the quantiles are not yet calibrated (demand
   exceeds the unrounded quantile more often than the setting, 22.3% at 20%), and rounding up to half units makes
-  it exceed less often (16.9% at 20%). The evaluation assumes the whole recommended amount is prepared and that
+  it exceed less often (17.1% at 20%). The evaluation assumes the whole recommended amount is prepared and that
   the kitchen can cook up to 12% of the plan extra when demand exceeds it, at the right moment and in whole units;
   so the share of dishes that actually run out is lower than the setting. The demo's batch schedule (below) only
   splits the plan and is not part of the evaluation.
@@ -133,7 +136,7 @@ Known small leak: `first_meal_share` (a dish-model input) is generated as first-
 meal's actual attendance; a real system would divide by the forecast. The same-day temperature is also
 used as if forecast perfectly.
 
-## Results so far (semi-synthetic, record `experiments/2026-10-24-grounded-final/`)
+## Results so far (semi-synthetic, record `experiments/2026-10-25-grounded-berturk/`)
 
 The evaluation numbers below are in `metrics.json` in the record (`risk_curve`, `chef`, `season_report` with a
 per-month breakdown, `guest`, `censoring`, `method_facts`). A few method facts (the 2–5× sensitivity of an
@@ -145,29 +148,34 @@ dish ran out. Test season, open part: 1 April–10 August 2024, 396 meals.
 | Test season (open part) | Waste | Demand above the plan | Dishes run out | Meals with a dish run out |
 | --- | --- | --- | --- | --- |
 | Simulated chef | 40.4 t | 17.5% | 9.5% | 71.2% |
-| Model, 20% risk | 29.8 t | 16.9% | 6.9% | 67.7% |
-| Model, 10% risk | 40.0 t | 9.9% | 3.6% | 48.5% |
-| Model, 5% risk | 49.3 t | 5.5% | 1.9% | 29.8% |
+| Model, 20% risk | 29.7 t | 17.1% | 7.2% | 70.2% |
+| Model, 10% risk | 40.1 t | 9.8% | 3.6% | 50.3% |
+| Model, 5% risk | 49.6 t | 5.7% | 2.0% | 31.1% |
 
 At 20% the model wastes about 26% less than the chef and runs out less often on both measures; at 10% its waste is
 about the chef's and dishes run out far less often. The result varies by month: at 10% the model's waste ranges
-from 9.3% below the chef's (August) to 5.0% above it (June); at 10% over the season it wastes 0.4 t less but costs
+from 11.3% below the chef's (August) to 6.2% above it (June); at 10% over the season it wastes 0.3 t less but costs
 about 160 thousand TL more, because its extra waste falls on dearer dishes.
 
-- Calibration is not done yet: q0.95 covered 92.1% instead of 95%, and the guest 10–90% interval covered 69%
+- Calibration is not done yet: q0.95 covered 91.8% instead of 95%, and the guest 10–90% interval covered 69%
   instead of 80%. Conformal calibration is planned for the mentoring period.
 - Guest model, mean absolute error per meal: 20.2 (in-house guests × the meal's average rate), 15.2 (presence
   rule × the meal's average rate), 14.1 (presence rule + rate model). A LightGBM on meal, in-house guests and
   occupancy only reached 21.2. Most of the gain is the rule, which is circular here.
-- Censoring-aware vs naive: on dishes that often sell out, q0.9 covers 86.8% with the correction vs 85.1% without
+- Censoring-aware vs naive: on dishes that often sell out, q0.9 covers 86.2% with the correction vs 84.6% without
   (363 dish-servings). Small, but in the expected direction; the fully synthetic version showed no difference.
   The feedback-loop experiment is still to be done.
 - Child share: with real, day-to-day varying child shares the dish model learns the child effect in the right
   direction. Probe (`audit/scripts/audit3/child_probe.py`) on an earlier semi-synthetic record: +6.4% learned vs
   +5.2% in the generator, wrong sign on 1% of dishes; on the fully synthetic data, where the child share was a
   smooth seasonal curve, the sign was wrong on about a fifth of dishes.
-- New dishes: the dish-similarity input (`knn_per100`) barely moves the forecast, and the TF-IDF neighbours are
-  spelling-based (Pelmeni's neighbours include Dondurma).
+- Dish vectors: four backends compared (records `experiments/2026-10-25-emb-*`, neighbours in
+  `experiments/2026-10-25-embedding-neighbours/`). Share of each dish's 3 nearest neighbours in its own group:
+  TF-IDF 51.7%, BERTurk 53.7%, MiniLM 38.8%, category 100% (by construction). Median error on the 95
+  dish-servings without history: TF-IDF 27.7%, BERTurk 26.4%, MiniLM 26.1%, category 27.6%; overall error and
+  waste are practically the same. The site uses BERTurk because its neighbours read better (Pelmeni → Mantı;
+  TF-IDF put Dondurma among them), not because it forecasts better; it still makes weak matches (Revani → Mantı).
+  The dish-similarity input (`knn_per100`, 1.3% of the median model's gain) barely moves the forecast.
 
 ### What the demo lets visitors change, and what it hides
 
@@ -219,6 +227,6 @@ Audits 1–3 covered the fully synthetic version; this semi-synthetic version ha
 ## Not done yet (mentoring period)
 
 Conformal calibration (CQR, per meal and day type), the five-way model comparison harness, the hierarchical
-meal-total model, the feedback-loop experiment and chart, the embedding vs category vs TF-IDF comparison on new
-dishes, the sentence-transformers run, a learned arrival profile, real nationality mix (e.g. Antalya monthly
+meal-total model, the feedback-loop experiment and chart, the embedding comparison on real new
+dishes, a learned arrival profile, real nationality mix (e.g. Antalya monthly
 statistics), and opening the blind test once.

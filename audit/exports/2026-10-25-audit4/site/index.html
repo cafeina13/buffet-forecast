@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Traycast</title>
+<title>TrayCast</title>
 <meta name="description" content="Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ. Prototip; yarı sentetik veri.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="./" data-product-name>Traycast</a>
+    <a class="brand" href="./" data-product-name>TrayCast</a>
     <nav class="nav" aria-label="Bölümler">
       <a href="#cozum">Çözüm</a>
       <a href="#yapay-zeka">Yapay zekâ</a>
@@ -33,11 +33,11 @@
 <section class="dark hero">
   <div class="wrap">
     <p class="eyebrow">Bİ’DÜŞÜNSEN BULURSUN 2026 · YAPAY ZEKÂ İLE SÜRDÜRÜLEBİLİR GELECEĞİ TASARLA</p>
-    <h1 data-product-name>Traycast</h1>
+    <h1 data-product-name>TrayCast</h1>
     <p class="lead">Her şey dahil büfelerde her yemekten ne kadar pişirileceğini tahmin eden yapay zekâ.</p>
     <hr>
     <p class="tagline">Daha az pişir, büfe yine de boş kalmasın.</p>
-    <p class="hero-problem">Ele aldığımız sorun: her şey dahil büfelerde üretim “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlandığında fazlası çöpe gidebilir. <span data-product-name>Traycast</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin önerilen toplam miktarı aşması için kabul ettiği riski tüm yemekler için tek bir ayarla seçer.</p>
+    <p class="hero-problem">Ele aldığımız sorun: her şey dahil büfelerde üretim “büfe boş kalmasın” kaygısıyla şefin deneyimine göre planlandığında fazlası çöpe gidebilir. <span data-product-name>TrayCast</span>, her yemek için ne kadar pişirileceğini tahmin eder ve tazeleme saatlerini bir kuralla önerir; şef, talebin önerilen toplam miktarı aşması için kabul ettiği riski tüm yemekler için tek bir ayarla seçer.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="demo.html">Şefin ekranını deneyin</a>
       <a class="btn btn-ghost" href="#cozum">Nasıl işler?</a>
@@ -50,7 +50,7 @@
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">ÇÖZÜM</p>
-      <h2>Bir servis <span data-product-name>Traycast</span> ile nasıl işler?</h2>
+      <h2>Bir servis <span data-product-name>TrayCast</span> ile nasıl işler?</h2>
     </div>
     <div class="grid grid-4">
       <div class="card">
@@ -93,7 +93,7 @@
         <div class="card">
           <p class="step">YEMEK BENZERLİĞİ</p>
           <h3>Yemek vektörü</h3>
-          <p class="muted">Yemeğin adından ve malzemelerinden harf dizisi benzerliğiyle (TF-IDF) bir vektör. Bu prototipte model benzer yemeklerin tüketimini neredeyse kullanmıyor; hazır bir dil modeliyle deneme mentorlukta yapılacak.</p>
+          <p class="muted">Yemeğin adı ve malzemeleri, Türkçe cümle benzerliği için eğitilmiş hazır bir dil modeliyle (BERTurk) vektöre çevriliyor. Bu prototipte model benzer yemeklerin tüketim ortalamasını neredeyse kullanmıyor; vektörün kendisi küçük bir girdi.</p>
         </div>
         <div class="card">
           <p class="step">EĞİTİLEN MODEL 1</p>
@@ -105,13 +105,13 @@
       <div class="card">
         <p class="step">EĞİTİLEN MODEL 2</p>
         <h3>Tüketim modeli</h3>
-        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); yarı sentetik testte sık tükenen yemeklerde küçük bir iyileşme görüldü (%85,1 → %86,8, 363 yemek servisi; ipucu, kanıt değil).</p>
+        <p class="muted">Her yemek için olası tüketimin aralığı (LightGBM, quantile hedefi). Tükenen servislerde gözlenen tüketim, tükenme saatine göre yukarı ölçeklenir (en fazla 2 kat); yarı sentetik testte sık tükenen yemeklerde küçük bir iyileşme görüldü (%84,6 → %86,2, 363 yemek servisi; ipucu, kanıt değil).</p>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
       <div class="card output">
         <p class="step">ŞEFİN EKRANI</p>
         <h3>Miktar ve gerekçe</h3>
-        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin 29 Haziran 2024’teki Almanya–Danimarka maçı akşamı mercimek çorbası için: “568 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,6 kg (tükenen servisler düzeltilerek); sıcak hava (36 °C) talebi azaltıyor (ılık bir güne göre −%18).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; simüle edilen yemek talebi de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
+        <p>Seçilen riske göre miktar, kuralla tazeleme saatleri ve kısa bir Türkçe gerekçe; örneğin 29 Haziran 2024’teki Almanya–Danimarka maçı akşamı mercimek çorbası için: “568 misafir bekleniyor; bu yemeğin bu öğündeki talebi şimdiye kadar 100 misafir başına ortalama 8,6 kg (tükenen servisler düzeltilerek); sıcak hava (36 °C) talebi azaltıyor (ılık bir güne göre −%21).” Hava etkisi yalnızca büyükse ve yemek kataloğundaki beklenen yönle (ekip varsayımı) aynıysa yazılır; simüle edilen yemek talebi de aynı varsayımla üretildiği için bu süzgeç pilotta gerçek veriyle yeniden sınanmalı.</p>
       </div>
     </div>
     <div class="callout">
@@ -192,7 +192,7 @@
   <div class="wrap">
     <p><b>YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
     <p>Bu sitedeki demo ve grafikler yarı sentetik veriyle üretilmiştir: misafir akışı, hava ve maçlar gerçek kaynaklardan, yemek talebi simülasyondan. Demo otel kurgusaldır.</p>
-    <p><span data-product-name>Traycast</span> · 2026</p>
+    <p><span data-product-name>TrayCast</span> · 2026</p>
   </div>
 </footer>
 
