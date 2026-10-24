@@ -36,7 +36,7 @@ def predict_quantiles(models: dict, X: pd.DataFrame) -> tuple[np.ndarray, int]:
     return fixed, n_crossed
 
 
-GUEST_PARAMS = dict(n_estimators=200, learning_rate=0.04, num_leaves=7, min_child_samples=15)
+GUEST_PARAMS = dict(n_estimators=200, learning_rate=0.04, num_leaves=7, min_child_samples=8)
 
 
 def fit_guest_models(services: pd.DataFrame, features=GUEST_FEATURES, target="rate", seed=0):

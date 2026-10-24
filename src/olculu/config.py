@@ -32,6 +32,11 @@ def load_synthetic_raw(path: Path = CONFIG_DIR / "synthetic.yaml") -> dict:
         return yaml.safe_load(f)
 
 
+def load_grounding(path: Path = CONFIG_DIR / "grounding.yaml") -> dict:
+    with open(path, encoding="utf-8") as f:
+        return _strip(yaml.safe_load(f))
+
+
 def load_dishes(path: Path = CONFIG_DIR / "dishes.yaml") -> dict:
     with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)

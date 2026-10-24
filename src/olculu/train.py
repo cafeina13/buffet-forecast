@@ -32,9 +32,15 @@ def load_run(name):
     return {t: pd.read_csv(d / f"{t}.csv") for t in ["services", "servings", "hourly"]}
 
 
-def blind_cutoff(cfg):
-    end = date.fromisoformat(cfg["season"]["end"])
+def blind_cutoff(cfg, end=None):
+    """First day of the blind weeks. `end` is the test season's last day (from data/test/meta.json)."""
+    end = date.fromisoformat(str(end or cfg["season"]["end"]))
     return pd.Timestamp(end - timedelta(weeks=cfg["season"]["blind_test_weeks"]) + timedelta(days=1))
+
+
+def run_meta(name):
+    path = DATA_DIR / name / "meta.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"mode": "synthetic"}
 
 
 def attach_guest_pred(frame, services, pred_col):
@@ -51,7 +57,8 @@ def main():
     dishes = {d["id"]: d for d in catalogue["dishes"]}
     unit_kg = {k: d["kg_per_unit"] for k, d in dishes.items()}
     refill = cfg["service"]["max_refill_share"]
-    cutoff = blind_cutoff(cfg)
+    test_meta = run_meta("test")
+    cutoff = blind_cutoff(cfg, test_meta.get("end"))
 
     train, test = load_run("train"), load_run("test")
     s_tr, s_te = prepare_services(train["services"]), prepare_services(test["services"])
@@ -172,7 +179,8 @@ def main():
         return out
 
     all_rows = np.ones(len(ev), dtype=bool)
-    report = {"period": f"{ev['date'].min().date()}..{ev['date'].max().date()}", **report_for(all_rows),
+    report = {"period": f"{ev['date'].min().date()}..{ev['date'].max().date()}", "mode": test_meta["mode"],
+              **report_for(all_rows),
               "months": [{"month": int(m), **report_for(month == m)} for m in sorted(set(month))]}
 
     # Method facts quoted on the site, computed here so every number has a record.

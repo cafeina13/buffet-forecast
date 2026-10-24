@@ -63,7 +63,9 @@ def _menu_for(dishes, meal, d: date, rng):
         if freq == "daily":
             on = True
         elif freq == "new":
-            on = d >= date.fromisoformat(dish["new_from"]) and rng.random() < dish["new_prob"]
+            # Month and day only, so a dish "new from mid-July" is new in any season's year.
+            start = date.fromisoformat(dish["new_from"])
+            on = (d.month, d.day) >= (start.month, start.day) and rng.random() < dish["new_prob"]
         elif "weekly" in freq:
             on = d.weekday() in freq["weekly"]
         else:
@@ -73,13 +75,17 @@ def _menu_for(dishes, meal, d: date, rng):
     return menu
 
 
-def generate(cfg: dict, catalogue: dict, seed: int) -> dict[str, pd.DataFrame]:
+def generate(cfg: dict, catalogue: dict, seed: int, grounding: dict | None = None) -> dict[str, pd.DataFrame]:
+    """grounding: real per-day inputs from synth.grounding.season_inputs (semi-synthetic mode), or None."""
     rng = np.random.default_rng(seed)
     dishes = catalogue["dishes"]
     groups = catalogue["groups"]
 
-    start = date.fromisoformat(cfg["season"]["start"])
-    end = date.fromisoformat(cfg["season"]["end"])
+    if grounding:
+        start, end = grounding["start"], grounding["end"]
+    else:
+        start = date.fromisoformat(cfg["season"]["start"])
+        end = date.fromisoformat(cfg["season"]["end"])
     n_days = (end - start).days + 1
 
     hotel, occ, mix = cfg["hotel"], cfg["occupancy"], cfg["guest_mix"]
@@ -107,6 +113,13 @@ def generate(cfg: dict, catalogue: dict, seed: int) -> dict[str, pd.DataFrame]:
 
         arrivals = in_house / hotel["avg_stay_nights"] * rng.lognormal(0, 0.15)
         departures = in_house / hotel["avg_stay_nights"] * rng.lognormal(0, 0.15)
+        real = grounding["days"].get(d) if grounding else None
+        if real:
+            # Real resort pattern (scaled) replaces the synthetic occupancy, arrivals, departures and children.
+            in_house = int(round(real["in_house"]))
+            occupancy = min(1.0, in_house / (hotel["rooms"] * hotel["guests_per_room"]))
+            arrivals, departures = real["arrivals"], real["departures"]
+            child_share = real["child_share"]
         night_arrivals = arrivals * arr["night_arrival_share"] * rng.lognormal(0, 0.2)
         day_arrivals = arrivals - night_arrivals
         early_dep = departures * arr["early_departure_share"]
@@ -121,6 +134,11 @@ def generate(cfg: dict, catalogue: dict, seed: int) -> dict[str, pd.DataFrame]:
 
         temp = tcfg["april_mean"] + (tcfg["august_mean"] - tcfg["april_mean"]) * _seasonal_01(t, 122, 90)
         temp = float(temp + rng.normal(0, tcfg["noise_sd"]))
+        if real:
+            # Real match nights and real temperature; themed nights stay random on the other evenings.
+            match = real["match"]
+            themed = (not match) and rng.random() < ev["themed_night_prob"]
+            temp = real["temperature"]
 
         for meal in MEALS:
             if meal == "breakfast":

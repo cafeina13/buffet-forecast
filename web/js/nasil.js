@@ -48,8 +48,14 @@
 
     const c20 = m.risk_curve.find((c) => c.risk === 0.2);
     const c10 = m.risk_curve.find((c) => c.risk === 0.1);
+    // Wording follows the data: say "more" or "fewer" from the numbers, never assume a direction.
+    const wasteDiff = (c) => {
+      const d = 1 - c.waste_kg / m.chef.waste_kg;
+      return d >= 0 ? `%${nf0.format(d * 100)} daha az` : `%${nf0.format(-d * 100)} daha fazla`;
+    };
+    const mealsVsChef = (c) => (c.services_with_stockout <= m.chef.services_with_stockout ? "daha düşük" : "daha yüksek");
     document.getElementById("risk-note").textContent =
-      `Denge gerçek: %20 ayarında model şeften %${nf0.format((1 - c20.waste_kg / m.chef.waste_kg) * 100)} daha az atık üretiyor ama en az bir yemeği biten öğün payı daha yüksek (${pct(c20.services_with_stockout)} / şef ${pct(m.chef.services_with_stockout)}). %10 ayarında atık şefe yakın (%${nf0.format((1 - c10.waste_kg / m.chef.waste_kg) * 100)} daha az) ve yemek bitmesi belirgin biçimde daha az (en az bir yemeği biten öğün payı ${pct(c10.services_with_stockout)}). Bu rakamlar sentetik verinin varsayımlarından gelir; ölçüm sonucu değildir.`;
+      `Denge gerçek: %20 ayarında model şeften ${wasteDiff(c20)} atık üretiyor; en az bir yemeği biten öğün payı şeften ${mealsVsChef(c20)} (${pct(c20.services_with_stockout)} / şef ${pct(m.chef.services_with_stockout)}). %10 ayarında atık şefe yakın (${wasteDiff(c10)}) ve yemek bitmesi belirgin biçimde daha az (en az bir yemeği biten öğün payı ${pct(c10.services_with_stockout)}). Bu rakamlar yarı sentetik veriden gelir; ölçüm sonucu değildir.`;
   }
 
   function guestCards(m) {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Traycast · Şefin ekranı</title>
-<meta name="description" content="Şefin ekranı: sentetik veriyle eğitilmiş model tarayıcınızda çalışır.">
+<meta name="description" content="Şefin ekranı: yarı sentetik veriyle eğitilmiş model tarayıcınızda çalışır.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@500;600&display=swap">
@@ -14,7 +14,7 @@
 </head>
 <body data-page-title="Şefin ekranı" class="demo-page">
 
-<div class="synthetic-banner" role="note">SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
+<div class="synthetic-banner" role="note">YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</div>
 
 <header class="site-header">
   <div class="wrap">
@@ -34,7 +34,7 @@
         <p class="eyebrow" id="hotel-name">KURGUSAL DEMO RESORT</p>
         <h1 class="demo-title">Şefin ekranı</h1>
       </div>
-      <p class="muted small">Model şu anda tarayıcınızda çalışıyor. Kurgusal bir otelin sentetik verisiyle eğitildi; rakamlar ölçüm sonucu değildir.</p>
+      <p class="muted small">Model şu anda tarayıcınızda çalışıyor. Otel kurgusal; misafir akışı gerçek bir resortun anonim rezervasyonlarından, hava ve maç akşamları gerçek (2024), yemek talebi simülasyon. Rakamlar ölçüm sonucu değildir.</p>
     </div>
 
     <div id="loading" class="loading">Model yükleniyor…</div>
@@ -108,7 +108,7 @@
           </div>
           <div class="whatif-foot">
             <button type="button" class="btn-small" id="reset">Sıfırla</button>
-            <p class="note">Milliyet karışımı ve kongre grupları da modelde var, ama sentetik veride etkileri güvenilir öğrenilemediği için burada gösterilmiyor.</p>
+            <p class="note">Milliyet karışımı modelde var ama hâlâ simülasyon ve yemeklere etkisi güvenilir öğrenilemedi; kongre etkisi az gün olduğu için zayıf öğrenildi. İkisi de burada gösterilmiyor.</p>
           </div>
         </div>
       </details>
@@ -122,9 +122,9 @@
       <section id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
         <div class="ozg-strip">
           <p class="ozg-tag">ÖZGÜNLÜK 2 · Gerçekte ne kadar yenirdi?</p>
-          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez: gözlenen tüketim olduğundan düşük kalır. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak; amaç biten yemeğin her sezon daha az önerilmesini önlemek. Sentetik veride bu düzeltmenin belirgin bir etkisi görülmedi; gerçek etkisi pilotta ölçülecek. Bu demoda kayıt yalnızca tarayıcınızda tutulur.</p>
+          <p class="small">Bir tepsi biterse <b>Bitti</b>’ye dokunun. Tepsi bitince gerçek talep görünmez: gözlenen tüketim olduğundan düşük kalır. Pilotta bu kayıt, o servisin talebini tükenme saatine göre yukarı düzeltmek için kullanılacak; amaç biten yemeğin her sezon daha az önerilmesini önlemek. Yarı sentetik testte düzeltme, sık tükenen yemeklerde aralığın talebi karşılama oranını biraz artırdı (%85,1’den %86,8’e; 363 yemek servisi, kanıt değil ipucu); gerçek etkisi pilotta ölçülecek. Bu demoda kayıt yalnızca tarayıcınızda tutulur.</p>
         </div>
-        <p class="note plan-note">Gerekçeler: beklenen misafir sayısı ve yemeğin bu öğündeki ortalama talebi. Hava etkisi yalnızca gün 27 °C’den en az 3 °C farklıysa, ılık bir güne göre etki en az %5 ise ve yemek kataloğundaki beklenen yönle (ekip varsayımı; sentetik veri de aynı varsayımla üretildi) aynıysa yazılır; katalogda sıcaklığa belirgin tepkisi olmayan yemeklerde hiç yazılmaz.</p>
+        <p class="note plan-note">Gerekçeler: beklenen misafir sayısı ve yemeğin bu öğündeki ortalama talebi. Hava etkisi yalnızca gün 27 °C’den en az 3 °C farklıysa, ılık bir güne göre etki en az %5 ise ve yemek kataloğundaki beklenen yönle (ekip varsayımı; simüle edilen yemek talebi de aynı varsayımla üretildi) aynıysa yazılır; katalogda sıcaklığa belirgin tepkisi olmayan yemeklerde hiç yazılmaz.</p>
         <div class="dish-grid" id="dish-grid"></div>
       </section>
 
@@ -162,8 +162,8 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p><b>SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
-    <p>Demo otel kurgusaldır; gerçek bir otelin, markanın veya kişinin verisi kullanılmamıştır.</p>
+    <p><b>YARI SENTETİK VERİ · Prototip · Ölçüm sonucu değildir</b></p>
+    <p>Demo otel kurgusaldır. Misafir akışı, adı açıklanmayan bir Portekiz resort otelinin kamuya açık, anonim rezervasyon kayıtlarından ölçeklendi (Antonio ve ark. 2019, CC BY 4.0); hava Open-Meteo, maçlar openfootball. Kaynaklar “Nasıl çalışır” sayfasında.</p>
   </div>
 </footer>
 
