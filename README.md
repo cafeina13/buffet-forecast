@@ -63,6 +63,9 @@ cd web && vercel deploy --prod
 ```
 
 `web/.vercelignore` keeps local files (`.env*`, `_*.html` preview helpers) out of the deployment.
+Two helpers are kept for checks: `web/_phone.html?u=demo.html` shows a page in a 390 px frame (headless browsers
+will not go below about 500 px), and `web/_toggle-test.html` clicks through the demo's controls and prints what each
+one changes. Open them from a local server in `web/` (e.g. `uv run python -m http.server -d web`).
 No keys or account details are stored in the code.
 
 ## Architecture

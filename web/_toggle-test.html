@@ -1,0 +1,37 @@
+<!doctype html><body><pre id="out" style="font:13px monospace;white-space:pre-wrap"></pre>
+<iframe id="f" src="demo.html" style="width:1100px;height:300px"></iframe>
+<script>
+const out = document.getElementById('out');
+const log = (s) => out.textContent += s + "\n";
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+document.getElementById('f').onload = async () => {
+  await wait(2500);
+  const w = document.getElementById('f').contentWindow, d = w.document;
+  const errs = [];
+  w.addEventListener('error', (e) => errs.push(e.message));
+  const q = (s) => d.querySelector(s);
+  const all = (s) => [...d.querySelectorAll(s)];
+  const guest = () => `guests=${q('#guest-number').textContent} | ${all('#guest-breakdown li').map(l=>l.textContent).join(' ; ')} | ${q('#guest-drivers').textContent}`;
+  log('DINNER match day: ' + guest());
+  all('.dish').slice(0, 4).forEach((c) => log('  ' + c.querySelector('.dish-name').textContent + ' | ' + c.querySelector('.dish-reason').textContent));
+  log('  temp reasons on page: ' + all('.dish-reason').filter(r => r.textContent.includes('hava')).map(r => r.closest('.dish').querySelector('.dish-name').textContent + ': ' + r.textContent.split('; ').pop()).join(' || '));
+  log('  YENİ badges: ' + all('.badge').length);
+  q('#match').click(); log('match off: ' + guest());
+  q('#themed').click(); log('themed on: ' + guest());
+  d.querySelectorAll('#meal-seg .seg')[1].click();
+  log('LUNCH: ' + guest());
+  log('  new-dish cards: ' + all('.dish').filter(c => c.querySelector('.badge')).map(c => c.querySelector('.dish-name').textContent + ' | ' + c.querySelector('.dish-reason').textContent).join(' || '));
+  q('#tab-report').click();
+  log('REPORT: ' + q('#report').textContent.slice(0, 900));
+  const risk = q('#risk');
+  log('  slider at start: ' + q('#risk-val').textContent + ' | ' + q('#risk-effect').textContent + ' | marker: ' + q('#chef-marker').textContent + ' left=' + q('#chef-marker').style.left);
+  [5, 13, 20, 27, 30].forEach(v => { risk.value = String(v); risk.dispatchEvent(new w.Event('input'));
+    log('  risk ' + v + ': ' + q('#risk-val').textContent + ' | ' + q('#risk-effect').textContent + ' || tiles: ' + all('.report-tile .report-value').map(t => t.textContent).join(' / ') + ' || ' + q('.report-tradeoff').textContent + ' || months: ' + all('.month-table tbody tr').length); });
+  q('#tab-live').click();
+  const clk = q('#clock'); clk.value = '0'; clk.dispatchEvent(new w.Event('input')); log('LIVE t0: ' + q('#clock-val').textContent);
+  clk.value = '3'; clk.dispatchEvent(new w.Event('input')); log('LIVE t3: ' + q('#clock-val').textContent);
+  const occ = q('#occ'); occ.value = '25'; occ.dispatchEvent(new w.Event('input')); log('occ +25: ' + guest());
+  log('child slider min/max/value: ' + q('#child').min + '/' + q('#child').max + '/' + q('#child').value);
+  log('ERRORS: ' + (errs.join(' ; ') || 'none'));
+};
+</script></body>
