@@ -2,7 +2,6 @@
 // Renaming the product is a one-line change here.
 window.SITE_CONFIG = {
   productName: "TrayCast",
-  // Left empty on purpose: the site shows a placeholder until the team picks a contact address.
-  contactEmail: "",
+  contactEmail: "smtdmiiir@gmail.com",
   demoHotelName: "Kurgusal Demo Resort",
 };
