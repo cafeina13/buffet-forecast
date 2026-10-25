@@ -1,5 +1,5 @@
-# Real-world inputs for the semi-synthetic seasons (olculu.synth.grounding).
-# Every entry has a source; files are downloaded by `python -m olculu.synth.fetch` into data/raw/.
+# Real-world inputs for the semi-synthetic seasons traycast.synth.grounding).
+# Every entry has a source; files are downloaded by `python -m traycast.synth.fetch` into data/raw/.
 grounding:
   peak_occupancy: {value: 0.96, source: "team assumption: the resort's busiest night of the season is scaled to 96% occupancy", type: assumption}
   evening_kickoff_from_cest: {value: 18, source: "design: kick-off 18:00 CEST = 19:00 Antalya or later falls in dinner service", type: design}
